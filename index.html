@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>                          
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pray With Me</title>
@@ -268,8 +268,8 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
 <script>
 // ── CONFIG ──
 const CFG = {
-  HEYGEN_KEY: sk_V2_hgu_k24gBMvByMP_difwSWGqfwx9FQfNNiYeF2ktXJGnRt8j,
-  ELEVEN_KEY: sk_6d3be27c77752e921b9e829f65ecc38e56cf7cc6c1340dde
+  HEYGEN_KEY: 'YOUR_HEYGEN_API_KEY',
+  ELEVEN_KEY: 'YOUR_ELEVENLABS_API_KEY'
 };
 
 // ── STATE ──
@@ -362,7 +362,8 @@ function go(id){
 
 // ── SELECTIONS ──
 function pick(btn,key,val){
-  btn.closest('.grid').querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
+  const grid=btn.closest('.g2,.g3,.g4,.grid');
+  if(grid) grid.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   S[key]=val;
   checkButtons();
@@ -370,7 +371,8 @@ function pick(btn,key,val){
 }
 
 function pickName(btn,key,val){
-  btn.closest('.grid').querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
+  const grid=btn.closest('.g2,.g3,.g4,.grid');
+  if(grid) grid.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   S[key]=val;
   checkNames();
