@@ -529,7 +529,7 @@ function showPrayer(p,minister,videoUrl,len){
 
 // ── HEYGEN ──
 async function genVideo(avatarId,voiceId,script){
-  const r=await fetch('https://api.heygen.com/v2/video/generate',{
+  const r=await fetch(CFG.HEYGEN+'/api/heygen/v2/video/generate',{
     method:'POST',
     headers:{'Content-Type':'application/json','X-Api-Key':CFG.HEYGEN},
     body:JSON.stringify({video_inputs:[{character:{type:'avatar',avatar_id:avatarId,avatar_style:'normal'},voice:{type:'elevenlabs',voice_id:voiceId,input_text:script},background:{type:'color',value:'#1A1008'}}],dimension:{width:1280,height:720}})
