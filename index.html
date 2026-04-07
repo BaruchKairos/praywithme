@@ -542,7 +542,7 @@ async function genVideo(avatarId,voiceId,script){
 async function pollVideo(videoId){
   for(let i=0;i<30;i++){
     await new Promise(r=>setTimeout(r,3000));
-    const r=await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`,{headers:{'X-Api-Key':CFG.HEYGEN}});
+    const r=await fetch(CFG.HEYGEN+`/api/heygen/v1/video_status.get?video_id=${videoId}`,{
     const d=await r.json();
     if(d.data?.status==='completed') return d.data.video_url;
     if(d.data?.status==='failed') throw new Error('Video failed');
