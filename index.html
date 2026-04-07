@@ -552,7 +552,7 @@ async function pollVideo(videoId){
 
 // ── ELEVENLABS ──
 async function genAudio(voiceId,text){
-  const r=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,{
+  const r=await fetch(CFG.ELEVEN+`/api/elevenlabs/v1/text-to-speech/${voiceId}`,{
     method:'POST',
     headers:{'Content-Type':'application/json','xi-api-key':CFG.ELEVEN},
     body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.75,similarity_boost:.85,style:.5,use_speaker_boost:true}})
