@@ -1,4 +1,597 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pray With Me</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#8B6914;--cream:#FAF6EF;--deep:#1A1008;--stone:#6B5E4E}
+html,body{height:100%;background:var(--deep);color:var(--cream);font-family:'Lato',sans-serif;font-weight:300;overflow-x:hidden}
+.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 20% 20%,#2a1a05 0%,#0e0804 50%,#000 100%)}
+.app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+header{width:100%;text-align:center;padding:40px 24px 20px}
+.cross{font-size:26px;color:var(--gold);display:block;margin-bottom:12px;animation:glow 4s ease-in-out infinite}
+@keyframes glow{0%,100%{text-shadow:0 0 10px rgba(201,168,76,.3)}50%{text-shadow:0 0 30px rgba(201,168,76,.8)}}
+.title{font-family:'Cinzel',serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:600;letter-spacing:.15em;background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--gold-light);opacity:.8;margin-top:8px}
+.divider{width:160px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto;opacity:.6}
+.screen{display:none;width:100%;max-width:680px;padding:0 24px 60px;animation:up .5s ease both}
+.screen.active{display:block}
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.sec-title{font-family:'Cinzel',serif;font-size:.95rem;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.sec-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--gold-light);opacity:.75;margin-bottom:22px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:22px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:22px}
+.btn-choice{background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:13px 10px;color:var(--cream);cursor:pointer;font-family:'Lato',sans-serif;font-size:.82rem;text-align:center;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:5px}
+.btn-choice:hover{background:rgba(201,168,76,.12);border-color:rgba(201,168,76,.5);transform:translateY(-2px)}
+.btn-choice.sel{background:rgba(201,168,76,.18);border-color:var(--gold);color:var(--gold-light);box-shadow:0 0 18px rgba(201,168,76,.15)}
+.btn-choice .icon{font-size:1.4rem}
+.btn-choice .lbl{font-weight:400}
+.btn-choice .sub{font-size:.68rem;opacity:.55}
+.btn-primary{width:100%;padding:17px;background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--gold-dark));background-size:200%;border:none;border-radius:8px;color:var(--deep);font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;letter-spacing:.2em;cursor:pointer;transition:all .4s;margin-top:8px}
+.btn-primary:hover{background-position:100%;box-shadow:0 8px 30px rgba(201,168,76,.3);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-back{background:none;border:none;color:rgba(201,168,76,.45);font-family:'Lato',sans-serif;font-size:.82rem;cursor:pointer;margin-top:14px;display:block;text-align:center;width:100%;transition:color .3s}
+.btn-back:hover{color:var(--gold)}
+.textarea{width:100%;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:18px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.1rem;line-height:1.7;resize:vertical;min-height:130px;outline:none;margin-bottom:10px}
+.textarea::placeholder{color:rgba(201,168,76,.35);font-style:italic}
+.textarea:focus{border-color:rgba(201,168,76,.6)}
+.len-hint{font-size:.73rem;color:rgba(201,168,76,.4);text-align:right;margin-bottom:14px}
+.loading{text-align:center;padding:60px 20px}
+.loading-cross{font-size:3rem;color:var(--gold);animation:glow 1.5s ease-in-out infinite;display:block;margin-bottom:18px}
+.loading-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;color:var(--gold-light);opacity:.7}
+.loading-dots::after{content:'';animation:dots 1.5s steps(4,end) infinite}
+@keyframes dots{0%,20%{content:''}25%,45%{content:'.'}50%,70%{content:'..'}75%,100%{content:'...'}}
+.minister-bar{background:rgba(201,168,76,.05);border:1px solid rgba(201,168,76,.15);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.m-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dark),var(--gold));display:flex;align-items:center;justify-content:center;font-size:1.7rem;flex-shrink:0}
+.m-name{font-family:'Cinzel',serif;font-size:.9rem;color:var(--gold-light);margin-bottom:3px}
+.m-desc{font-size:.75rem;color:rgba(201,168,76,.5)}
+.prayer-box{background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:26px;margin-bottom:22px;position:relative;overflow:hidden}
+.prayer-box::before{content:'\201C';position:absolute;top:8px;left:14px;font-family:'Cormorant Garamond',serif;font-size:5rem;color:rgba(201,168,76,.07);line-height:1}
+.verse-badge{display:inline-block;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:4px;padding:3px 10px;font-family:'Cinzel',serif;font-size:.67rem;letter-spacing:.14em;color:var(--gold);margin-bottom:12px}
+.prayer-text{font-family:'Cormorant Garamond',serif;font-size:1.12rem;line-height:1.9;color:var(--cream);position:relative;z-index:1}
+.vblock{margin-bottom:14px;font-style:italic;color:var(--gold-light);border-left:2px solid rgba(201,168,76,.4);padding-left:14px}
+.prayer-close{margin-top:16px;padding-top:14px;border-top:1px solid rgba(201,168,76,.15);font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.14em;color:var(--gold);opacity:.7;text-align:right}
+.action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.btn-sec{padding:13px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.22);border-radius:8px;color:var(--gold-light);font-family:'Lato',sans-serif;font-size:.78rem;cursor:pointer;transition:all .25s;text-align:center}
+.btn-sec:hover{background:rgba(201,168,76,.15);border-color:var(--gold)}
+.free-banner{background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.18);border-radius:8px;padding:10px 14px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;font-size:.77rem}
+.free-banner .lbl{color:var(--stone)}
+.free-banner .cnt{color:var(--gold);font-family:'Cinzel',serif}
+.sub-box-inner{background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.3);border-radius:12px;padding:22px;text-align:center;margin-top:20px}
+.sub-grid{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin:16px 0}
+.sub-card{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:14px;position:relative}
+.sub-card.feat{background:rgba(201,168,76,.15);border-color:var(--gold)}
+.sub-badge{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--deep);font-size:.58rem;font-family:'Cinzel',serif;letter-spacing:.1em;padding:2px 8px;border-radius:3px;white-space:nowrap}
+.sub-price{font-family:'Cinzel',serif;font-size:1rem;color:var(--gold)}
+.sub-period{font-size:.66rem;color:var(--stone);margin-top:3px}
+.deeper-screen{text-align:center}
+.deeper-glow{width:100px;height:100px;margin:0 auto 24px;position:relative}
+.ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(201,168,76,.3);animation:ripple 3s ease-out infinite}
+.ring:nth-child(2){animation-delay:1s}
+.ring:nth-child(3){animation-delay:2s}
+@keyframes ripple{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.5);opacity:0}}
+.deeper-face{position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,var(--gold-dark),var(--gold));display:flex;align-items:center;justify-content:center;font-size:2.6rem}
+.btn-deeper{width:100%;padding:18px;background:linear-gradient(135deg,#7a5010,var(--gold),#e8c86a,var(--gold),#7a5010);background-size:200%;border:none;border-radius:8px;color:var(--deep);font-family:'Cinzel',serif;font-size:.95rem;font-weight:600;letter-spacing:.18em;cursor:pointer;transition:all .5s;margin-bottom:12px}
+.btn-deeper:hover{background-position:100%;box-shadow:0 8px 40px rgba(201,168,76,.4);transform:translateY(-2px)}
+.btn-no-thanks{background:none;border:none;color:rgba(201,168,76,.35);font-family:'Lato',sans-serif;font-size:.78rem;cursor:pointer;width:100%;text-align:center;padding:10px}
+@media(max-width:480px){.g3{grid-template-columns:1fr 1fr}.g4{grid-template-columns:1fr 1fr}.action-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="app">
+<header>
+  <span class="cross">✦ ✝ ✦</span>
+  <h1 class="title">Pray With Me</h1>
+  <p class="tagline">A sacred space, personalized for you</p>
+  <div class="divider"></div>
+</header>
+
+<!-- TRADITION -->
+<div class="screen active" id="s-tradition">
+  <div class="free-banner"><span class="lbl">✦ 1 FREE PRAYER THIS MONTH</span><span class="cnt">1 remaining</span></div>
+  <div class="sec-title">Your Faith Tradition</div>
+  <div class="sec-sub">What is your faith tradition?</div>
+  <div class="g2">
+    <button class="btn-choice" onclick="selTradition(this,'catholic')"><span class="icon">⛪</span><span class="lbl">Catholic</span></button>
+    <button class="btn-choice" onclick="selTradition(this,'protestant')"><span class="icon">✝️</span><span class="lbl">Protestant</span><span class="sub">Baptist, Methodist, etc.</span></button>
+    <button class="btn-choice" onclick="selTradition(this,'evangelical')"><span class="icon">📖</span><span class="lbl">Evangelical</span><span class="sub">Pentecostal, Charismatic</span></button>
+    <button class="btn-choice" onclick="selTradition(this,'orthodox-christian')"><span class="icon">☦️</span><span class="lbl">Orthodox Christian</span></button>
+    <button class="btn-choice" onclick="selTradition(this,'messianic-jewish')"><span class="icon">✡️</span><span class="lbl">Messianic Jewish</span><span class="sub">Believers in Yeshua</span></button>
+    <button class="btn-choice" onclick="selTradition(this,'orthodox-jewish')"><span class="icon">🕍</span><span class="lbl">Orthodox Jewish</span></button>
+    <button class="btn-choice" onclick="selTradition(this,'conservative-jewish')"><span class="icon">🔯</span><span class="lbl">Conservative / Reform Jewish</span></button>
+    <button class="btn-choice" onclick="selTradition(this,'nondenominational')"><span class="icon">🕊️</span><span class="lbl">Non-Denominational</span></button>
+    <button class="btn-choice" onclick="selTradition(this,'other')"><span class="icon">🙏</span><span class="lbl">Other / Interfaith</span></button>
+  </div>
+  <button class="btn-primary" id="btn-trad" disabled onclick="nextTradition()">CONTINUE</button>
+</div>
+
+<!-- NAMES -->
+<div class="screen" id="s-names">
+  <div class="sec-title">Sacred Names</div>
+  <div class="sec-sub">How would you like to address God and Jesus?</div>
+  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">REFER TO GOD AS</div>
+  <div class="g3" id="god-grid">
+    <button class="btn-choice" onclick="selName(this,'god','God')"><span class="lbl">God</span></button>
+    <button class="btn-choice" onclick="selName(this,'god','Lord')"><span class="lbl">Lord</span></button>
+    <button class="btn-choice" onclick="selName(this,'god','Father')"><span class="lbl">Father</span></button>
+    <button class="btn-choice" onclick="selName(this,'god','Abba')"><span class="lbl">Abba</span></button>
+    <button class="btn-choice" onclick="selName(this,'god','The Almighty')"><span class="lbl">The Almighty</span></button>
+    <button class="btn-choice" onclick="selName(this,'god','Heavenly Father')"><span class="lbl">Heavenly Father</span></button>
+  </div>
+  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">REFER TO JESUS AS</div>
+  <div class="g3" id="jesus-grid">
+    <button class="btn-choice" onclick="selName(this,'jesus','Jesus')"><span class="lbl">Jesus</span></button>
+    <button class="btn-choice" onclick="selName(this,'jesus','Jesus Christ')"><span class="lbl">Jesus Christ</span></button>
+    <button class="btn-choice" onclick="selName(this,'jesus','Yeshua')"><span class="lbl">Yeshua</span></button>
+    <button class="btn-choice" onclick="selName(this,'jesus','The Messiah')"><span class="lbl">The Messiah</span></button>
+    <button class="btn-choice" onclick="selName(this,'jesus','Christ')"><span class="lbl">Christ</span></button>
+    <button class="btn-choice" onclick="selName(this,'jesus','Yeshua HaMashiach')"><span class="lbl">Yeshua HaMashiach</span></button>
+  </div>
+  <button class="btn-primary" id="btn-names" disabled onclick="go('s-minister')">CONTINUE</button>
+  <button class="btn-back" onclick="go('s-tradition')">← Back</button>
+</div>
+
+<!-- MINISTER -->
+<div class="screen" id="s-minister">
+  <div class="sec-title">Your Minister</div>
+  <div class="sec-sub">Who will pray with you today?</div>
+  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">TITLE</div>
+  <div class="g3" id="title-grid">
+    <button class="btn-choice" onclick="selField(this,'title','Pastor')"><span class="lbl">Pastor</span></button>
+    <button class="btn-choice" onclick="selField(this,'title','Reverend')"><span class="lbl">Reverend</span></button>
+    <button class="btn-choice" onclick="selField(this,'title','Father')"><span class="lbl">Father</span></button>
+    <button class="btn-choice" onclick="selField(this,'title','Minister')"><span class="lbl">Minister</span></button>
+    <button class="btn-choice" onclick="selField(this,'title','Elder')"><span class="lbl">Elder</span></button>
+    <button class="btn-choice" onclick="selField(this,'title','Chaplain')"><span class="lbl">Chaplain</span></button>
+  </div>
+  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">GENDER</div>
+  <div class="g2">
+    <button class="btn-choice" onclick="selField(this,'gender','male')"><span class="icon">👨</span><span class="lbl">Male</span></button>
+    <button class="btn-choice" onclick="selField(this,'gender','female')"><span class="icon">👩</span><span class="lbl">Female</span></button>
+  </div>
+  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">VOICE STYLE</div>
+  <div class="g2">
+    <button class="btn-choice" onclick="selField(this,'voice','warm')"><span class="icon">🕊️</span><span class="lbl">Warm & Gentle</span></button>
+    <button class="btn-choice" onclick="selField(this,'voice','powerful')"><span class="icon">🔥</span><span class="lbl">Powerful & Bold</span></button>
+    <button class="btn-choice" onclick="selField(this,'voice','traditional')"><span class="icon">📜</span><span class="lbl">Traditional & Reverent</span></button>
+    <button class="btn-choice" onclick="selField(this,'voice','contemporary')"><span class="icon">✨</span><span class="lbl">Contemporary</span></button>
+  </div>
+  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">APPEARANCE</div>
+  <div class="g3">
+    <button class="btn-choice" onclick="selField(this,'appearance','light')"><span class="icon">👤</span><span class="sub">Light</span></button>
+    <button class="btn-choice" onclick="selField(this,'appearance','medium')"><span class="icon">👤</span><span class="sub">Medium</span></button>
+    <button class="btn-choice" onclick="selField(this,'appearance','tan')"><span class="icon">👤</span><span class="sub">Tan</span></button>
+    <button class="btn-choice" onclick="selField(this,'appearance','dark')"><span class="icon">👤</span><span class="sub">Dark</span></button>
+    <button class="btn-choice" onclick="selField(this,'appearance','east-asian')"><span class="icon">👤</span><span class="sub">East Asian</span></button>
+    <button class="btn-choice" onclick="selField(this,'appearance','south-asian')"><span class="icon">👤</span><span class="sub">South Asian</span></button>
+    <button class="btn-choice" onclick="selField(this,'appearance','southeast-asian')"><span class="icon">👤</span><span class="sub">SE Asian</span></button>
+    <button class="btn-choice" onclick="selField(this,'appearance','african')"><span class="icon">👤</span><span class="sub">African</span></button>
+  </div>
+  <button class="btn-primary" id="btn-min" disabled onclick="go('s-request')">CONTINUE</button>
+  <button class="btn-back" onclick="backMin()">← Back</button>
+</div>
+
+<!-- REQUEST -->
+<div class="screen" id="s-request">
+  <div class="sec-title">Your Request</div>
+  <div class="sec-sub">What would you like prayer for today?</div>
+  <div class="g3" style="margin-bottom:16px;">
+    <button class="btn-choice" onclick="selTopic(this,'Healing & Health')"><span class="icon">💚</span><span class="lbl">Healing</span></button>
+    <button class="btn-choice" onclick="selTopic(this,'Grief & Loss')"><span class="icon">🤍</span><span class="lbl">Grief & Loss</span></button>
+    <button class="btn-choice" onclick="selTopic(this,'Anxiety & Peace')"><span class="icon">🕊️</span><span class="lbl">Anxiety & Peace</span></button>
+    <button class="btn-choice" onclick="selTopic(this,'Guidance & Decisions')"><span class="icon">🌟</span><span class="lbl">Guidance</span></button>
+    <button class="btn-choice" onclick="selTopic(this,'Relationships & Family')"><span class="icon">❤️</span><span class="lbl">Family</span></button>
+    <button class="btn-choice" onclick="selTopic(this,'Gratitude & Praise')"><span class="icon">🙌</span><span class="lbl">Gratitude</span></button>
+    <button class="btn-choice" onclick="selTopic(this,'Financial Hardship')"><span class="icon">🌾</span><span class="lbl">Provision</span></button>
+    <button class="btn-choice" onclick="selTopic(this,'Strength & Courage')"><span class="icon">⚔️</span><span class="lbl">Strength</span></button>
+    <button class="btn-choice" onclick="selTopic(this,'Spiritual Growth')"><span class="icon">📖</span><span class="lbl">Spiritual Growth</span></button>
+  </div>
+  <textarea class="textarea" id="prayer-req" placeholder="Tell your minister what's on your heart…" oninput="checkReq()"></textarea>
+  <div class="len-hint" id="len-hint">✦ Your minister will offer a brief blessing — 15 to 30 seconds</div>
+  <button class="btn-primary" id="btn-req" disabled onclick="deliver()">RECEIVE YOUR PRAYER</button>
+  <button class="btn-back" onclick="go('s-minister')">← Back</button>
+</div>
+
+<!-- PRAYER -->
+<div class="screen" id="s-prayer">
+  <div id="loading-area" class="loading">
+    <span class="loading-cross">✦</span>
+    <div class="loading-text" id="loading-text">Your minister is preparing your blessing<span class="loading-dots"></span></div>
+  </div>
+  <div id="prayer-area" style="display:none;">
+    <div id="video-wrap" style="display:none;margin-bottom:18px;border-radius:12px;overflow:hidden;"></div>
+    <div class="minister-bar">
+      <div class="m-avatar" id="m-avatar">🙏</div>
+      <div><div class="m-name" id="m-name">Your Minister</div><div class="m-desc" id="m-desc">Praying with you today</div></div>
+    </div>
+    <div class="prayer-box">
+      <div class="verse-badge" id="v-badge">SCRIPTURE</div>
+      <div class="prayer-text" id="prayer-text"></div>
+      <div class="prayer-close" id="prayer-close">— Amen</div>
+    </div>
+    <div class="action-row">
+      <button class="btn-sec" onclick="copyPrayer()">📋 Copy</button>
+      <button class="btn-sec" onclick="sharePrayer()">🔗 Share</button>
+      <button class="btn-sec" onclick="startOver()">🙏 Pray Again</button>
+      <button class="btn-sec" onclick="toggleSub()">⭐ Subscribe</button>
+    </div>
+    <div id="sub-box" style="display:none;">
+      <div class="sub-box-inner">
+        <div style="font-family:'Cinzel',serif;font-size:.9rem;color:var(--gold);letter-spacing:.15em;margin-bottom:6px;">UNLOCK UNLIMITED PRAYER</div>
+        <div class="sub-grid">
+          <div class="sub-card"><div class="sub-price">$4.99</div><div class="sub-period">PER MONTH</div></div>
+          <div class="sub-card feat"><div class="sub-badge">MOST FAITHFUL</div><div class="sub-price">$111</div><div class="sub-period">PER YEAR</div></div>
+        </div>
+        <button class="btn-primary" style="margin-top:0;" onclick="alert('Subscription coming soon! 🙏')">BEGIN YOUR JOURNEY</button>
+        <div style="font-size:.66rem;color:var(--stone);margin-top:8px;">Cancel anytime · Churches contact Baruch Kairos Group for licensing</div>
+      </div>
+    </div>
+    <div id="deeper-nudge" style="display:none;margin-top:18px;">
+      <div style="text-align:center;padding:18px;background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.2);border-radius:12px;">
+        <div style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.2em;color:var(--gold);margin-bottom:6px;">YOUR MINISTER HAS MORE</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--gold-light);opacity:.8;margin-bottom:14px;line-height:1.5;">An extended prayer has been prepared personally for you</div>
+        <button class="btn-deeper" onclick="go('s-deeper')">✦ &nbsp; GO DEEPER — $1.11 &nbsp; ✦</button>
+        <div style="font-size:.68rem;color:rgba(201,168,76,.4);">Credited toward any subscription within 30 days</div>
+      </div>
+    </div>
+  </div>
+  <button class="btn-back" style="margin-top:20px;" onclick="startOver()">← Pray Again</button>
+</div>
+
+<!-- GO DEEPER -->
+<div class="screen deeper-screen" id="s-deeper">
+  <div class="deeper-glow"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="deeper-face" id="deeper-face">🙏</div></div>
+  <div style="font-family:'Cinzel',serif;font-size:1rem;letter-spacing:.15em;color:var(--gold);margin-bottom:14px;">YOUR MINISTER HAS MORE</div>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;line-height:1.85;color:var(--cream);opacity:.9;margin-bottom:24px;padding:0 8px;">We hope and pray this blessing touched your heart today.<br><br>Your minister has prepared <em style="color:var(--gold-light);">a full extended prayer spoken personally over you.</em></div>
+  <div style="background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.3);border-radius:14px;padding:22px;margin-bottom:18px;">
+    <div style="font-family:'Cinzel',serif;font-size:2.4rem;font-weight:600;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;">$1.11</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:rgba(201,168,76,.6);margin-bottom:14px;">for your extended personal prayer</div>
+    <div style="font-size:.75rem;color:rgba(201,168,76,.5);line-height:1.6;">If you subscribe within <strong style="color:var(--gold-light);font-weight:400;">30 days</strong>, your $1.11 is credited — first month just <strong style="color:var(--gold-light);font-weight:400;">$3.88</strong></div>
+  </div>
+  <button class="btn-deeper" onclick="deliverExtended()">✦ &nbsp; HEAR MY EXTENDED PRAYER &nbsp; ✦</button>
+  <button class="btn-no-thanks" onclick="go('s-prayer')">No thank you — return to my blessing</button>
+</div>
+
+</div>
+
+<script>
+// ── API KEYS ──
+const CFG={
+  HEYGEN:'https://fd6475ee-da3b-45ab-a302-11f1dd27026d-00-3cjvbau4zdiw7.worf.replit.dev',
+  ELEVEN:'https://fd6475ee-da3b-45ab-a302-11f1dd27026d-00-3cjvbau4zdiw7.worf.replit.dev'
+};
+
+// ── STATE ──
+const S={tradition:'',god:'God',jesus:'Jesus',title:'',gender:'',voice:'',appearance:'',topic:'',lastPrayer:null};
+
+// ── MINISTERS ──
+const MINISTERS=[
+  {id:1, avatarId:'60b80b8ca51b4c8f8fc0521c0704f560',voiceId:'6Qxy5k2hvoNF2omYzGNz',gender:'male',  appearance:'light',         style:'powerful',    name:'Bold Male Charismatic'},
+  {id:2, avatarId:'f9cc36641d5d4debb75a21a2d65c624a',voiceId:'gcdNeREzHPJpCf9wnB0l',gender:'male',  appearance:'light',         style:'traditional', name:'Senior Male Catholic'},
+  {id:3, avatarId:'3deac6acca9d4357a2bc97a971fe2b79',voiceId:'hHJeN9sMjsoS5lyD1gZP',gender:'male',  appearance:'medium',        style:'warm',        name:'Male Evangelical'},
+  {id:4, avatarId:'b598091703ae434082748d29439352d4',voiceId:'10NkTYmU7tSz3Kkl3Lex',gender:'male',  appearance:'medium',        style:'contemporary',name:'Young American Male'},
+  {id:5, avatarId:'cadb2f5a25954b3da93e08024f0cbf6b',voiceId:'hILdTfuUq4LRBMrxHERr',gender:'male',  appearance:'dark',          style:'powerful',    name:'Baptist Minister Male'},
+  {id:6, avatarId:'bbcac9d6807f43a0ab5236ea7e6efa0d',voiceId:'Pc6mkcSQXB2l3WmfeKVS',gender:'male',  appearance:'dark',          style:'warm',        name:'Male Non Denominational'},
+  {id:7, avatarId:'8c52bb7102784c8d9abb96c87249829b',voiceId:'86ZLAUcyPNBrbdJKn3u6',gender:'male',  appearance:'tan',           style:'warm',        name:'Male Tan Catholic Hispanic'},
+  {id:8, avatarId:'c807ecb51b2448ebabcac939f710e79f',voiceId:'2h7ex7B1yGrkcLFI8zUO',gender:'male',  appearance:'tan',           style:'traditional', name:'Male Tan Orthodox Christian'},
+  {id:9, avatarId:'b0e8eb5d14904ae885c2af2775866c41',voiceId:'lVOAYogEKnZjOSNDGKcv',gender:'female',appearance:'light',         style:'warm',        name:'Female Light Non-Denominational'},
+  {id:10,avatarId:'4577018d458d46418f9d0a2805bf9089',voiceId:'RILOU7YmBhvwJGDGjNmP',gender:'female',appearance:'light',         style:'traditional', name:'Female Light Catholic'},
+  {id:11,avatarId:'61e1ad250b12480fb2c21f28eda45d1c',voiceId:'75MqelvgFq5upx0r44WK',gender:'female',appearance:'medium',        style:'contemporary',name:'Female Medium Evangelical'},
+  {id:12,avatarId:'2cf69599ad8440f18a86c2cd3d809237',voiceId:'1wGbFxmAM3Fgw63G1zZJ',gender:'female',appearance:'medium',        style:'warm',        name:'Female Medium Protestant'},
+  {id:13,avatarId:'861136f1f71645ed9c3b15fd8e867ce0',voiceId:'NQMJRVvPew6HsaebYnZj',gender:'female',appearance:'dark',          style:'powerful',    name:'Female Dark Non Denominational'},
+  {id:14,avatarId:'629ff000d2894223be515c91c9674a75',voiceId:'M6ic45wruJGWAxLFEMNK',gender:'female',appearance:'dark',          style:'warm',        name:'Female Dark Baptist'},
+  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'W1EJxHy9vl73xgPIKgpn',gender:'male',  appearance:'light',         style:'traditional', name:'Male Orthodox Messianic'},
+  {id:16,avatarId:'a34fab9e9e814cd781b3fd7e766fdd5d',voiceId:'8WaMCGQzWsKvf7sGPqjE',gender:'female',appearance:'tan',           style:'contemporary',name:'Female Tan Non Denominational'},
+  {id:17,avatarId:'ae263dd8f441408e89c08d061c122973',voiceId:'sla02gCKN0hNfNn9ORJN',gender:'male',  appearance:'east-asian',    style:'warm',        name:'Male East Asian Non Denom'},
+  {id:18,avatarId:'b41bdaa4d2024392bd68c1300a0beb85',voiceId:'WIX8boagHAO6uMUqxXLz',gender:'female',appearance:'east-asian',    style:'contemporary',name:'Female East Asian Evangelical'},
+  {id:19,avatarId:'8435c4bc32b246b5973398aafec8ebb1',voiceId:'LrnwgcdTLxc99sutUxGU',gender:'male',  appearance:'south-asian',   style:'powerful',    name:'Male South Asian Protestant'},
+  {id:20,avatarId:'5fe8e4b41ec8433e927384d01fe1bfec',voiceId:'ykMqqjWs4pQdCIvGPn0z',gender:'female',appearance:'southeast-asian',style:'warm',       name:'Female Southeast Asian Catholic'},
+  {id:21,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'7DHxEfwQzXWuiEldRcxx',gender:'male',  appearance:'southeast-asian',style:'traditional',name:'Male Southeast Asian Non Denom'},
+  {id:22,avatarId:'2381a1ba36f2484d9ecdbc0d6633fcd7',voiceId:'vYENaCJHl4vFKNDYPr8y',gender:'female',appearance:'south-asian',   style:'warm',        name:'Female South Asian Non Denom'},
+  {id:23,avatarId:'19cec4989fe64b69bdd274f91fd8628c',voiceId:'SHr8L8YJLn64BwfXPWk2',gender:'male',  appearance:'african',       style:'warm',        name:'African Male Non Denom'},
+  {id:24,avatarId:'d0528d7ff1ab4dda9850c5e9c0f39227',voiceId:'D9xwB6HNBJ9h4YvQFWuE',gender:'female',appearance:'african',       style:'warm',        name:'Female African Non Denom'},
+  {id:25,avatarId:'b598091703ae434082748d29439352d4',voiceId:'USAEIpDoTqdUaYNLaLAV',gender:'male',  appearance:'light',         style:'contemporary',name:'Male Youth White American'},
+  {id:26,avatarId:'16c7741063dd42ceaf2bb26a478878d4',voiceId:'bQxW1c7YCr6VQgQhw8KX',gender:'male',  appearance:'dark',          style:'contemporary',name:'Male Youth African American'},
+  {id:27,avatarId:'4e977090e89944019926fb671c058dce',voiceId:'DkVHY251JcjFstLRlihO',gender:'male',  appearance:'east-asian',    style:'contemporary',name:'Youth Asian American Male'},
+  {id:28,avatarId:'86a4cede82c249f3a0c09a810be5b675',voiceId:'EkK5I93UQWFDigLMpZcX',gender:'male',  appearance:'light',         style:'charismatic', name:'Bold Male Charismatic Alt'},
+  {id:29,avatarId:'f2840943593b4076981c64a81ff67dc1',voiceId:'75DchiXtNUXnu3lra8pV',gender:'male',  appearance:'light',         style:'warm',        name:'Male Southern Christian'},
+  {id:30,avatarId:'2e50a5e538d749ce99fb6551c7614576',voiceId:'4NejU5DwQjevnR6mh3mb',gender:'female',appearance:'light',         style:'charismatic', name:'Female Bold Charismatic'},
+  {id:31,avatarId:'f9c3e3777d2d43ccaf08acb9cc2a2615',voiceId:'c4TutCiAuWP4vwb1xebb',gender:'female',appearance:'light',         style:'warm',        name:'Female Southern Christian'},
+  {id:32,avatarId:'20faab0817ea456081376d8da117fabe',voiceId:'CXAc4DNZL6wonQQNlNgZ',gender:'male',  appearance:'dark',          style:'warm',        name:'Alternate Male Bald'},
+  {id:33,avatarId:'d9dcd4e82f324551b5facf1053f66dc9',voiceId:'TJz0pp7opUc4JvMXMXob',gender:'female',appearance:'dark',          style:'warm',        name:'Alternate Female'},
+  {id:34,avatarId:'c1d8e2eeb3dd4d8cb37cb4a2be7a89f1',voiceId:'AsHHje51j2aYdrvLDHfG',gender:'male',  appearance:'tan',           style:'warm',        name:'Alternate Male Hispanic'},
+  {id:35,avatarId:'77d77b293e7047a3994b52eaa729c189',voiceId:'FGLJyeekUzxl8M3CTG9M',gender:'female',appearance:'tan',           style:'warm',        name:'Alternate Female Hispanic'},
+];
+
+// ── NAVIGATION ──
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── SELECTION HELPERS ──
+function clearGrid(el){
+  el.parentElement.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
+}
+
+function selTradition(btn,val){
+  clearGrid(btn);
+  btn.classList.add('sel');
+  S.tradition=val;
+  document.getElementById('btn-trad').disabled=false;
+}
+
+function selName(btn,key,val){
+  clearGrid(btn);
+  btn.classList.add('sel');
+  S[key]=val;
+  document.getElementById('btn-names').disabled=!(S.god&&S.jesus);
+}
+
+function selField(btn,key,val){
+  clearGrid(btn);
+  btn.classList.add('sel');
+  S[key]=val;
+  document.getElementById('btn-min').disabled=!(S.title&&S.gender&&S.voice&&S.appearance);
+}
+
+function selTopic(btn,val){
+  clearGrid(btn);
+  btn.classList.add('sel');
+  S.topic=val;
+  checkReq();
+}
+
+function checkReq(){
+  const v=document.getElementById('prayer-req').value.trim();
+  document.getElementById('btn-req').disabled=v.length<5&&!S.topic;
+  const w=v.trim().split(/\s+/).filter(Boolean).length;
+  const hint=document.getElementById('len-hint');
+  if(w===0&&S.topic) hint.textContent='✦ Your minister will offer a brief blessing — 15 to 30 seconds';
+  else if(w<20) hint.textContent='✦ Your minister will offer a personal prayer — about 1 minute';
+  else hint.textContent='✦ Your minister will offer a full extended prayer — 1 to 2 minutes';
+}
+
+function nextTradition(){
+  const needsNames=['catholic','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
+  if(needsNames){
+    if(S.tradition==='messianic-jewish'){S.god='Adonai';S.jesus='Yeshua';}
+    go('s-names');
+  } else {
+    go('s-minister');
+  }
+}
+
+function backMin(){
+  const needsNames=['catholic','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
+  go(needsNames?'s-names':'s-tradition');
+}
+
+// ── BEST MINISTER MATCH ──
+function getBest(){
+  let pool=[...MINISTERS];
+  if(S.gender) pool=pool.filter(m=>m.gender===S.gender);
+  if(pool.length===0) pool=[...MINISTERS];
+  if(S.appearance) pool=pool.filter(m=>m.appearance===S.appearance)||pool;
+  if(pool.length===0) pool=[...MINISTERS];
+  if(S.voice){
+    const v=pool.filter(m=>m.style===S.voice||m.style.includes(S.voice));
+    if(v.length>0) pool=v;
+  }
+  return pool[0]||MINISTERS[0];
+}
+
+// ── PRAYER LENGTH ──
+function getLen(){
+  const v=document.getElementById('prayer-req').value.trim();
+  const w=v.split(/\s+/).filter(Boolean).length;
+  if(w===0&&S.topic) return 'short';
+  if(w<20) return 'personal';
+  return 'extended';
+}
+
+// ── DELIVER PRAYER ──
+async function deliver(){
+  const req=document.getElementById('prayer-req').value.trim()||S.topic;
+  const len=getLen();
+  const minister=getBest();
+  go('s-prayer');
+  document.getElementById('loading-area').style.display='block';
+  document.getElementById('prayer-area').style.display='none';
+  document.getElementById('deeper-nudge').style.display='none';
+  await runPrayer(req,len,minister);
+}
+
+async function deliverExtended(){
+  const req=document.getElementById('prayer-req').value.trim()||S.topic;
+  const minister=getBest();
+  go('s-prayer');
+  document.getElementById('loading-area').style.display='block';
+  document.getElementById('prayer-area').style.display='none';
+  document.getElementById('deeper-nudge').style.display='none';
+  await runPrayer(req,'extended',minister);
+}
+
+async function runPrayer(req,len,minister){
+  const msgs={short:'Your minister is preparing your blessing',personal:'Your minister is praying over your request',extended:'Your minister is preparing your extended prayer'};
+  setLoad(msgs[len]);
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1200,
+        system:buildSys(len,minister),
+        messages:[{role:'user',content:buildPrompt(req,len)}]
+      })
+    });
+    const data=await res.json();
+    const raw=data.content?.[0]?.text||'';
+    let p;
+    try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}
+    catch{p={verse:'Philippians 4:6-7',verseText:'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.',prayer:raw,closing:'Amen.'};}
+
+    const script=`${p.verseText}\n\n${p.prayer}\n\n${p.closing}`;
+    const hasKeys=true;
+    let videoUrl=null;
+
+    if(hasKeys){
+      try{
+        setLoad('Your minister is finding their voice…');
+        await genAudio(minister.voiceId,script);
+        setLoad('Your minister is appearing for you…');
+        const vid=await genVideo(minister.avatarId,minister.voiceId,script);
+        setLoad('Almost ready…');
+        videoUrl=await pollVideo(vid);
+      }catch(e){console.warn('Video error:',e);}
+    }
+
+    showPrayer(p,minister,videoUrl,len);
+    S.lastPrayer={p,minister,len};
+
+  }catch(e){
+    console.error(e);
+    const fb=getFallback(req,len);
+    showPrayer(fb,minister,null,len);
+  }
+}
+
+function setLoad(msg){
+  document.getElementById('loading-text').innerHTML=msg+'<span class="loading-dots"></span>';
+}
+
+// ── SYSTEM PROMPT ──
+function buildSys(len,minister){
+  const t=S.tradition;
+  const isM=t==='messianic-jewish';
+  const isJ=t.includes('jewish')&&!isM;
+  const god=S.god||'God';
+  const jesus=S.jesus||'Jesus';
+  const words={short:70,personal:140,extended:280}[len];
+  const time={short:'15-30 seconds',personal:'45-60 seconds',extended:'90-120 seconds'}[len];
+
+  let sc='';
+  if(isJ) sc=`Draw ONLY from the Hebrew Bible (Tanakh). Refer to God as HaShem or Adonai. NEVER reference Jesus or New Testament. Paraphrase scripture.`;
+  else if(isM) sc=`Draw from Tanakh and New Testament. Refer to God as "${god}" and Jesus as "${jesus}". Paraphrase scripture.`;
+  else sc=`Draw from Old and New Testament. Refer to God as "${god}" and Jesus as "${jesus}". Paraphrase scripture.`;
+
+  const depth={
+    short:`Write approximately ${words} words. Brief blessing: address God, scripture reference, direct blessing, close.`,
+    personal:`Write approximately ${words} words. Personal prayer: address God, acknowledge their need, weave scripture, speak blessing, close. 2-3 paragraphs.`,
+    extended:`Write approximately ${words} words. Full extended prayer: reverent opening, deep engagement with their need, scripture throughout, building intensity, specific blessings, full benediction. 4-5 paragraphs.`
+  }[len];
+
+  return `You are the most beloved Spirit-filled minister anyone has encountered. Pray with deep sincerity, warmth, and authority. Tradition: ${t}. Voice: ${minister.style}.\n\n${sc}\n\n${depth}\n\nSpoken aloud this runs approximately ${time}.\n\nRespond ONLY with valid JSON:\n{"verse":"Reference","verseText":"Brief paraphrase","prayer":"Full prayer","closing":"Closing"}`;
+}
+
+function buildPrompt(req,len){
+  const d={short:'Offer a brief powerful blessing.',personal:'Pray personally and specifically for this person.',extended:'Pray a full deep extended prayer addressing every dimension of their need.'};
+  return `${d[len]} Their need: ${req}. Speak directly to them. Paraphrase scripture. Pray in English.`;
+}
+
+// ── SHOW PRAYER ──
+function showPrayer(p,minister,videoUrl,len){
+  document.getElementById('m-avatar').textContent=minister.gender==='female'?'👩':'👨';
+  document.getElementById('deeper-face').textContent=minister.gender==='female'?'👩':'👨';
+  document.getElementById('m-name').textContent=`${S.title||minister.name}`;
+  document.getElementById('m-desc').textContent=`Baruch Kairos Group · Pray With Me™`;
+  document.getElementById('v-badge').textContent=p.verse||'SCRIPTURE';
+
+  const vw=document.getElementById('video-wrap');
+  if(videoUrl){
+    vw.style.display='block';
+    vw.innerHTML=`<video width="100%" autoplay controls style="border-radius:12px;width:100%;display:block;"><source src="${videoUrl}" type="video/mp4"></video>`;
+  } else {
+    vw.style.display='none';
+  }
+
+  const lines=(p.prayer||'').split('\n').filter(x=>x.trim());
+  document.getElementById('prayer-text').innerHTML=
+    `<p class="vblock">"${p.verseText}"<br><span style="font-size:.82rem;opacity:.7;">— ${p.verse}</span></p>`+
+    lines.map(l=>`<p style="margin-bottom:13px;">${l}</p>`).join('');
+  document.getElementById('prayer-close').textContent=p.closing||'— Amen';
+
+  document.getElementById('loading-area').style.display='none';
+  document.getElementById('prayer-area').style.display='block';
+
+  if(len!=='extended'){
+    setTimeout(()=>{document.getElementById('deeper-nudge').style.display='block';},3500);
+  }
+}
+
+// ── HEYGEN ──
+async function genVideo(avatarId,voiceId,script){
+  const r=await fetch(CFG.HEYGEN+'/api/heygen/v2/video/generate',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','X-Api-Key':CFG.HEYGEN},
+    body:JSON.stringify({video_inputs:[{character:{type:'avatar',avatar_id:avatarId,avatar_style:'normal'},voice:{type:'elevenlabs',voice_id:voiceId,input_text:script},background:{type:'color',value:'#1A1008'}}],dimension:{width:1280,height:720}})
+  });
+  const d=await r.json();
+  if(d.error) throw new Error(d.error.message);
+  return d.data?.video_id;
+}
+
+async function pollVideo(videoId){
+  for(let i=0;i<30;i++){
+    await new Promise(r=>setTimeout(r,3000));
+    const r=await fetch(CFG.HEYGEN+`/api/heygen/v1/video_status.get?video_id=${videoId}`,{headers:{'X-Api-Key':CFG.HEYGEN}});
+    const d=await r.json();
+    if(d.data?.status==='completed') return d.data.video_url;
+    if(d.data?.status==='failed') throw new Error('Video failed');
+  }
+  throw new Error('Timeout');
+}
+
+// ── ELEVENLABS ──
+async function genAudio(voiceId,text){
+  const r=await fetch(CFG.ELEVEN+`/api/elevenlabs/v1/text-to-speech/${voiceId}`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','xi-api-key':CFG.ELEVEN},
+    body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.75,similarity_boost:.85,style:.5,use_speaker_boost:true}})
+  });
+  if(!r.ok) throw new Error('ElevenLabs failed');
+  return URL.createObjectURL(await r.blob());
+}
+
+// ── FALLBACK ──
+function getFallback(req,len){
+  const god=S.god||'Lord';const jesus=S.jesus||'Jesus';
+  const prayers={
+    short:`${god}, we lift up Your beloved child right now. Meet them in this moment of need regarding ${req}. Let Your peace guard their heart and mind.`,
+    personal:`${god}, we come before You on behalf of Your beloved child.\n\nYou see the weight they carry regarding ${req}. You know every fear, every hope, every unspoken word.\n\nLet Your peace flood their heart right now. You who began a good work will be faithful to complete it.`,
+    extended:`${god}, we come boldly before Your throne of grace on behalf of Your beloved child.\n\nYou see every dimension of what they carry regarding ${req}. You know the fears they have not spoken aloud. You hold their tomorrow in hands that have never failed.\n\nYour Word declares that You are close to the brokenhearted. So right now we speak that Word over this precious life.\n\nWe ask for supernatural peace that passes all understanding. We ask for provision beyond what they can imagine. We ask for Your presence so near they could reach out and touch it.\n\nYou are faithful. You have always been faithful. And You will be faithful in this.`
+  };
+  return {verse:'Philippians 4:6-7',verseText:'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.',prayer:prayers[len],closing:`In the precious name of ${jesus} — Amen.`};
+}
+
+// ── ACTIONS ──
+function copyPrayer(){navigator.clipboard.writeText(document.getElementById('prayer-text').innerText).then(()=>alert('Prayer copied 🙏'));}
+function sharePrayer(){const t=document.getElementById('prayer-text').innerText;if(navigator.share)navigator.share({title:'Pray With Me',text:t,url:window.location.href});else copyPrayer();}
+function toggleSub(){const b=document.getElementById('sub-box');b.style.display=b.style.display==='none'?'block':'none';}
+
+function startOver(){
+  S.tradition='';S.title='';S.gender='';S.voice='';S.appearance='';S.topic='';
+  document.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
+  document.getElementById('prayer-req').value='';
+  document.getElementById('sub-box').style.display='none';
+  document.getElementById('video-wrap').style.display='none';
+  document.getElementById('video-wrap').innerHTML='';
+  document.getElementById('deeper-nudge').style.display='none';
+  document.getElementById('btn-trad').disabled=true;
+  document.getElementById('btn-min').disabled=true;
+  go('s-tradition');
+}
+</script>
+</body>
+</html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
