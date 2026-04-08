@@ -234,7 +234,7 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
     <div id="deeper-nudge" style="display:none;margin-top:18px;">
       <div style="text-align:center;padding:18px;background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.2);border-radius:12px;">
         <div style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.2em;color:var(--gold);margin-bottom:6px;">YOUR MINISTER HAS MORE</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--gold-light);opacity:.8;margin-bottom:14px;line-height:1.5;">An extended prayer has been prepared personally for you</div>
+        <div style="font-family:'Cormorant Garamath',serif;font-style:italic;font-size:.95rem;color:var(--gold-light);opacity:.8;margin-bottom:14px;line-height:1.5;">An extended prayer has been prepared personally for you</div>
         <button class="btn-deeper" onclick="go('s-deeper')">✦ &nbsp; GO DEEPER — $1.11 &nbsp; ✦</button>
         <div style="font-size:.68rem;color:rgba(201,168,76,.4);">Credited toward any subscription within 30 days</div>
       </div>
@@ -260,99 +260,81 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
 </div>
 
 <script>
-// ── API KEYS ──
-const CFG={
-  HEYGEN:'https://fd6475ee-da3b-45ab-a302-11f1dd27026d-00-3cjvbau4zdiw7.worf.replit.dev',
-  ELEVEN:'https://fd6475ee-da3b-45ab-a302-11f1dd27026d-00-3cjvbau4zdiw7.worf.replit.dev',
-  ANTHROPIC:'https://fd6475ee-da3b-45ab-a302-11f1dd27026d-00-3cjvbau4zdiw7.worf.replit.dev'
-};
+const PROXY='https://fd6475ee-da3b-45ab-a302-11f1dd27026d-00-3cjvbau4zdiw7.worf.replit.dev';
 
-// ── STATE ──
 const S={tradition:'',god:'God',jesus:'Jesus',title:'',gender:'',voice:'',appearance:'',topic:'',lastPrayer:null};
 
-// ── MINISTERS ──
 const MINISTERS=[
-  {id:1, avatarId:'60b80b8ca51b4c8f8fc0521c0704f560',voiceId:'6Qxy5k2hvoNF2omYzGNz',gender:'male',  appearance:'light',         style:'powerful',    name:'Bold Male Charismatic'},
-  {id:2, avatarId:'f9cc36641d5d4debb75a21a2d65c624a',voiceId:'gcdNeREzHPJpCf9wnB0l',gender:'male',  appearance:'light',         style:'traditional', name:'Senior Male Catholic'},
-  {id:3, avatarId:'3deac6acca9d4357a2bc97a971fe2b79',voiceId:'hHJeN9sMjsoS5lyD1gZP',gender:'male',  appearance:'medium',        style:'warm',        name:'Male Evangelical'},
-  {id:4, avatarId:'b598091703ae434082748d29439352d4',voiceId:'10NkTYmU7tSz3Kkl3Lex',gender:'male',  appearance:'medium',        style:'contemporary',name:'Young American Male'},
-  {id:5, avatarId:'cadb2f5a25954b3da93e08024f0cbf6b',voiceId:'hILdTfuUq4LRBMrxHERr',gender:'male',  appearance:'dark',          style:'powerful',    name:'Baptist Minister Male'},
-  {id:6, avatarId:'bbcac9d6807f43a0ab5236ea7e6efa0d',voiceId:'Pc6mkcSQXB2l3WmfeKVS',gender:'male',  appearance:'dark',          style:'warm',        name:'Male Non Denominational'},
-  {id:7, avatarId:'8c52bb7102784c8d9abb96c87249829b',voiceId:'86ZLAUcyPNBrbdJKn3u6',gender:'male',  appearance:'tan',           style:'warm',        name:'Male Tan Catholic Hispanic'},
-  {id:8, avatarId:'c807ecb51b2448ebabcac939f710e79f',voiceId:'2h7ex7B1yGrkcLFI8zUO',gender:'male',  appearance:'tan',           style:'traditional', name:'Male Tan Orthodox Christian'},
-  {id:9, avatarId:'b0e8eb5d14904ae885c2af2775866c41',voiceId:'lVOAYogEKnZjOSNDGKcv',gender:'female',appearance:'light',         style:'warm',        name:'Female Light Non-Denominational'},
-  {id:10,avatarId:'4577018d458d46418f9d0a2805bf9089',voiceId:'RILOU7YmBhvwJGDGjNmP',gender:'female',appearance:'light',         style:'traditional', name:'Female Light Catholic'},
-  {id:11,avatarId:'61e1ad250b12480fb2c21f28eda45d1c',voiceId:'75MqelvgFq5upx0r44WK',gender:'female',appearance:'medium',        style:'contemporary',name:'Female Medium Evangelical'},
-  {id:12,avatarId:'2cf69599ad8440f18a86c2cd3d809237',voiceId:'1wGbFxmAM3Fgw63G1zZJ',gender:'female',appearance:'medium',        style:'warm',        name:'Female Medium Protestant'},
-  {id:13,avatarId:'861136f1f71645ed9c3b15fd8e867ce0',voiceId:'NQMJRVvPew6HsaebYnZj',gender:'female',appearance:'dark',          style:'powerful',    name:'Female Dark Non Denominational'},
-  {id:14,avatarId:'629ff000d2894223be515c91c9674a75',voiceId:'M6ic45wruJGWAxLFEMNK',gender:'female',appearance:'dark',          style:'warm',        name:'Female Dark Baptist'},
-  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'W1EJxHy9vl73xgPIKgpn',gender:'male',  appearance:'light',         style:'traditional', name:'Male Orthodox Messianic'},
-  {id:16,avatarId:'a34fab9e9e814cd781b3fd7e766fdd5d',voiceId:'8WaMCGQzWsKvf7sGPqjE',gender:'female',appearance:'tan',           style:'contemporary',name:'Female Tan Non Denominational'},
-  {id:17,avatarId:'ae263dd8f441408e89c08d061c122973',voiceId:'sla02gCKN0hNfNn9ORJN',gender:'male',  appearance:'east-asian',    style:'warm',        name:'Male East Asian Non Denom'},
-  {id:18,avatarId:'b41bdaa4d2024392bd68c1300a0beb85',voiceId:'WIX8boagHAO6uMUqxXLz',gender:'female',appearance:'east-asian',    style:'contemporary',name:'Female East Asian Evangelical'},
-  {id:19,avatarId:'8435c4bc32b246b5973398aafec8ebb1',voiceId:'LrnwgcdTLxc99sutUxGU',gender:'male',  appearance:'south-asian',   style:'powerful',    name:'Male South Asian Protestant'},
-  {id:20,avatarId:'5fe8e4b41ec8433e927384d01fe1bfec',voiceId:'ykMqqjWs4pQdCIvGPn0z',gender:'female',appearance:'southeast-asian',style:'warm',       name:'Female Southeast Asian Catholic'},
-  {id:21,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'7DHxEfwQzXWuiEldRcxx',gender:'male',  appearance:'southeast-asian',style:'traditional',name:'Male Southeast Asian Non Denom'},
-  {id:22,avatarId:'2381a1ba36f2484d9ecdbc0d6633fcd7',voiceId:'vYENaCJHl4vFKNDYPr8y',gender:'female',appearance:'south-asian',   style:'warm',        name:'Female South Asian Non Denom'},
-  {id:23,avatarId:'19cec4989fe64b69bdd274f91fd8628c',voiceId:'SHr8L8YJLn64BwfXPWk2',gender:'male',  appearance:'african',       style:'warm',        name:'African Male Non Denom'},
-  {id:24,avatarId:'d0528d7ff1ab4dda9850c5e9c0f39227',voiceId:'D9xwB6HNBJ9h4YvQFWuE',gender:'female',appearance:'african',       style:'warm',        name:'Female African Non Denom'},
-  {id:25,avatarId:'b598091703ae434082748d29439352d4',voiceId:'USAEIpDoTqdUaYNLaLAV',gender:'male',  appearance:'light',         style:'contemporary',name:'Male Youth White American'},
-  {id:26,avatarId:'16c7741063dd42ceaf2bb26a478878d4',voiceId:'bQxW1c7YCr6VQgQhw8KX',gender:'male',  appearance:'dark',          style:'contemporary',name:'Male Youth African American'},
-  {id:27,avatarId:'4e977090e89944019926fb671c058dce',voiceId:'DkVHY251JcjFstLRlihO',gender:'male',  appearance:'east-asian',    style:'contemporary',name:'Youth Asian American Male'},
-  {id:28,avatarId:'86a4cede82c249f3a0c09a810be5b675',voiceId:'EkK5I93UQWFDigLMpZcX',gender:'male',  appearance:'light',         style:'charismatic', name:'Bold Male Charismatic Alt'},
-  {id:29,avatarId:'f2840943593b4076981c64a81ff67dc1',voiceId:'75DchiXtNUXnu3lra8pV',gender:'male',  appearance:'light',         style:'warm',        name:'Male Southern Christian'},
-  {id:30,avatarId:'2e50a5e538d749ce99fb6551c7614576',voiceId:'4NejU5DwQjevnR6mh3mb',gender:'female',appearance:'light',         style:'charismatic', name:'Female Bold Charismatic'},
-  {id:31,avatarId:'f9c3e3777d2d43ccaf08acb9cc2a2615',voiceId:'c4TutCiAuWP4vwb1xebb',gender:'female',appearance:'light',         style:'warm',        name:'Female Southern Christian'},
-  {id:32,avatarId:'20faab0817ea456081376d8da117fabe',voiceId:'CXAc4DNZL6wonQQNlNgZ',gender:'male',  appearance:'dark',          style:'warm',        name:'Alternate Male Bald'},
-  {id:33,avatarId:'d9dcd4e82f324551b5facf1053f66dc9',voiceId:'TJz0pp7opUc4JvMXMXob',gender:'female',appearance:'dark',          style:'warm',        name:'Alternate Female'},
-  {id:34,avatarId:'c1d8e2eeb3dd4d8cb37cb4a2be7a89f1',voiceId:'AsHHje51j2aYdrvLDHfG',gender:'male',  appearance:'tan',           style:'warm',        name:'Alternate Male Hispanic'},
-  {id:35,avatarId:'77d77b293e7047a3994b52eaa729c189',voiceId:'FGLJyeekUzxl8M3CTG9M',gender:'female',appearance:'tan',           style:'warm',        name:'Alternate Female Hispanic'},
+  {id:1, avatarId:'60b80b8ca51b4c8f8fc0521c0704f560',voiceId:'6Qxy5k2hvoNF2omYzGNz',gender:'male',  appearance:'light',          style:'powerful',    name:'Bold Male Charismatic'},
+  {id:2, avatarId:'f9cc36641d5d4debb75a21a2d65c624a',voiceId:'gcdNeREzHPJpCf9wnB0l',gender:'male',  appearance:'light',          style:'traditional', name:'Senior Male Catholic'},
+  {id:3, avatarId:'3deac6acca9d4357a2bc97a971fe2b79',voiceId:'hHJeN9sMjsoS5lyD1gZP',gender:'male',  appearance:'medium',         style:'warm',        name:'Male Evangelical'},
+  {id:4, avatarId:'b598091703ae434082748d29439352d4',voiceId:'10NkTYmU7tSz3Kkl3Lex',gender:'male',  appearance:'medium',         style:'contemporary',name:'Young American Male'},
+  {id:5, avatarId:'cadb2f5a25954b3da93e08024f0cbf6b',voiceId:'hILdTfuUq4LRBMrxHERr',gender:'male',  appearance:'dark',           style:'powerful',    name:'Baptist Minister Male'},
+  {id:6, avatarId:'bbcac9d6807f43a0ab5236ea7e6efa0d',voiceId:'Pc6mkcSQXB2l3WmfeKVS',gender:'male',  appearance:'dark',           style:'warm',        name:'Male Non Denominational'},
+  {id:7, avatarId:'8c52bb7102784c8d9abb96c87249829b',voiceId:'86ZLAUcyPNBrbdJKn3u6',gender:'male',  appearance:'tan',            style:'warm',        name:'Male Tan Catholic Hispanic'},
+  {id:8, avatarId:'c807ecb51b2448ebabcac939f710e79f',voiceId:'2h7ex7B1yGrkcLFI8zUO',gender:'male',  appearance:'tan',            style:'traditional', name:'Male Tan Orthodox Christian'},
+  {id:9, avatarId:'b0e8eb5d14904ae885c2af2775866c41',voiceId:'lVOAYogEKnZjOSNDGKcv',gender:'female',appearance:'light',          style:'warm',        name:'Female Light Non-Denominational'},
+  {id:10,avatarId:'4577018d458d46418f9d0a2805bf9089',voiceId:'RILOU7YmBhvwJGDGjNmP',gender:'female',appearance:'light',          style:'traditional', name:'Female Light Catholic'},
+  {id:11,avatarId:'61e1ad250b12480fb2c21f28eda45d1c',voiceId:'75MqelvgFq5upx0r44WK',gender:'female',appearance:'medium',         style:'contemporary',name:'Female Medium Evangelical'},
+  {id:12,avatarId:'2cf69599ad8440f18a86c2cd3d809237',voiceId:'1wGbFxmAM3Fgw63G1zZJ',gender:'female',appearance:'medium',         style:'warm',        name:'Female Medium Protestant'},
+  {id:13,avatarId:'861136f1f71645ed9c3b15fd8e867ce0',voiceId:'NQMJRVvPew6HsaebYnZj',gender:'female',appearance:'dark',           style:'powerful',    name:'Female Dark Non Denominational'},
+  {id:14,avatarId:'629ff000d2894223be515c91c9674a75',voiceId:'M6ic45wruJGWAxLFEMNK',gender:'female',appearance:'dark',           style:'warm',        name:'Female Dark Baptist'},
+  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'W1EJxHy9vl73xgPIKgpn',gender:'male',  appearance:'light',          style:'traditional', name:'Male Orthodox Messianic'},
+  {id:16,avatarId:'a34fab9e9e814cd781b3fd7e766fdd5d',voiceId:'8WaMCGQzWsKvf7sGPqjE',gender:'female',appearance:'tan',            style:'contemporary',name:'Female Tan Non Denominational'},
+  {id:17,avatarId:'ae263dd8f441408e89c08d061c122973',voiceId:'sla02gCKN0hNfNn9ORJN',gender:'male',  appearance:'east-asian',     style:'warm',        name:'Male East Asian Non Denom'},
+  {id:18,avatarId:'b41bdaa4d2024392bd68c1300a0beb85',voiceId:'WIX8boagHAO6uMUqxXLz',gender:'female',appearance:'east-asian',     style:'contemporary',name:'Female East Asian Evangelical'},
+  {id:19,avatarId:'8435c4bc32b246b5973398aafec8ebb1',voiceId:'LrnwgcdTLxc99sutUxGU',gender:'male',  appearance:'south-asian',    style:'powerful',    name:'Male South Asian Protestant'},
+  {id:20,avatarId:'5fe8e4b41ec8433e927384d01fe1bfec',voiceId:'ykMqqjWs4pQdCIvGPn0z',gender:'female',appearance:'southeast-asian',style:'warm',        name:'Female Southeast Asian Catholic'},
+  {id:21,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'7DHxEfwQzXWuiEldRcxx',gender:'male',  appearance:'southeast-asian',style:'traditional', name:'Male Southeast Asian Non Denom'},
+  {id:22,avatarId:'2381a1ba36f2484d9ecdbc0d6633fcd7',voiceId:'vYENaCJHl4vFKNDYPr8y',gender:'female',appearance:'south-asian',    style:'warm',        name:'Female South Asian Non Denom'},
+  {id:23,avatarId:'19cec4989fe64b69bdd274f91fd8628c',voiceId:'SHr8L8YJLn64BwfXPWk2',gender:'male',  appearance:'african',        style:'warm',        name:'African Male Non Denom'},
+  {id:24,avatarId:'d0528d7ff1ab4dda9850c5e9c0f39227',voiceId:'D9xwB6HNBJ9h4YvQFWuE',gender:'female',appearance:'african',        style:'warm',        name:'Female African Non Denom'},
+  {id:25,avatarId:'b598091703ae434082748d29439352d4',voiceId:'USAEIpDoTqdUaYNLaLAV',gender:'male',  appearance:'light',          style:'contemporary',name:'Male Youth White American'},
+  {id:26,avatarId:'16c7741063dd42ceaf2bb26a478878d4',voiceId:'bQxW1c7YCr6VQgQhw8KX',gender:'male',  appearance:'dark',           style:'contemporary',name:'Male Youth African American'},
+  {id:27,avatarId:'4e977090e89944019926fb671c058dce',voiceId:'DkVHY251JcjFstLRlihO',gender:'male',  appearance:'east-asian',     style:'contemporary',name:'Youth Asian American Male'},
+  {id:28,avatarId:'86a4cede82c249f3a0c09a810be5b675',voiceId:'EkK5I93UQWFDigLMpZcX',gender:'male',  appearance:'light',          style:'charismatic', name:'Bold Male Charismatic Alt'},
+  {id:29,avatarId:'f2840943593b4076981c64a81ff67dc1',voiceId:'75DchiXtNUXnu3lra8pV',gender:'male',  appearance:'light',          style:'warm',        name:'Male Southern Christian'},
+  {id:30,avatarId:'2e50a5e538d749ce99fb6551c7614576',voiceId:'4NejU5DwQjevnR6mh3mb',gender:'female',appearance:'light',          style:'charismatic', name:'Female Bold Charismatic'},
+  {id:31,avatarId:'f9c3e3777d2d43ccaf08acb9cc2a2615',voiceId:'c4TutCiAuWP4vwb1xebb',gender:'female',appearance:'light',          style:'warm',        name:'Female Southern Christian'},
+  {id:32,avatarId:'20faab0817ea456081376d8da117fabe',voiceId:'CXAc4DNZL6wonQQNlNgZ',gender:'male',  appearance:'dark',           style:'warm',        name:'Alternate Male Bald'},
+  {id:33,avatarId:'d9dcd4e82f324551b5facf1053f66dc9',voiceId:'TJz0pp7opUc4JvMXMXob',gender:'female',appearance:'dark',           style:'warm',        name:'Alternate Female'},
+  {id:34,avatarId:'c1d8e2eeb3dd4d8cb37cb4a2be7a89f1',voiceId:'AsHHje51j2aYdrvLDHfG',gender:'male',  appearance:'tan',            style:'warm',        name:'Alternate Male Hispanic'},
+  {id:35,avatarId:'77d77b293e7047a3994b52eaa729c189',voiceId:'FGLJyeekUzxl8M3CTG9M',gender:'female',appearance:'tan',            style:'warm',        name:'Alternate Female Hispanic'},
 ];
 
-// ── NAVIGATION ──
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-// ── SELECTION HELPERS ──
 function clearGrid(el){
   el.parentElement.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
 }
 
 function selTradition(btn,val){
-  clearGrid(btn);
-  btn.classList.add('sel');
-  S.tradition=val;
+  clearGrid(btn);btn.classList.add('sel');S.tradition=val;
   document.getElementById('btn-trad').disabled=false;
 }
 
 function selName(btn,key,val){
-  clearGrid(btn);
-  btn.classList.add('sel');
-  S[key]=val;
+  clearGrid(btn);btn.classList.add('sel');S[key]=val;
   document.getElementById('btn-names').disabled=!(S.god&&S.jesus);
 }
 
 function selField(btn,key,val){
-  clearGrid(btn);
-  btn.classList.add('sel');
-  S[key]=val;
+  clearGrid(btn);btn.classList.add('sel');S[key]=val;
   document.getElementById('btn-min').disabled=!(S.title&&S.gender&&S.voice&&S.appearance);
 }
 
 function selTopic(btn,val){
-  clearGrid(btn);
-  btn.classList.add('sel');
-  S.topic=val;
-  checkReq();
+  clearGrid(btn);btn.classList.add('sel');S.topic=val;checkReq();
 }
 
 function checkReq(){
   const v=document.getElementById('prayer-req').value.trim();
   document.getElementById('btn-req').disabled=v.length<5&&!S.topic;
-  const w=v.trim().split(/\s+/).filter(Boolean).length;
+  const w=v.split(/\s+/).filter(Boolean).length;
   const hint=document.getElementById('len-hint');
   if(w===0&&S.topic) hint.textContent='✦ Your minister will offer a brief blessing — 15 to 30 seconds';
   else if(w<20) hint.textContent='✦ Your minister will offer a personal prayer — about 1 minute';
@@ -360,48 +342,34 @@ function checkReq(){
 }
 
 function nextTradition(){
-  const needsNames=['catholic','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
-  if(needsNames){
-    if(S.tradition==='messianic-jewish'){S.god='Adonai';S.jesus='Yeshua';}
-    go('s-names');
-  } else {
-    go('s-minister');
-  }
+  const needs=['catholic','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
+  if(needs){if(S.tradition==='messianic-jewish'){S.god='Adonai';S.jesus='Yeshua';}go('s-names');}
+  else go('s-minister');
 }
 
 function backMin(){
-  const needsNames=['catholic','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
-  go(needsNames?'s-names':'s-tradition');
+  const needs=['catholic','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
+  go(needs?'s-names':'s-tradition');
 }
 
-// ── BEST MINISTER MATCH ──
 function getBest(){
   let pool=[...MINISTERS];
-  if(S.gender) pool=pool.filter(m=>m.gender===S.gender);
-  if(pool.length===0) pool=[...MINISTERS];
-  if(S.appearance) pool=pool.filter(m=>m.appearance===S.appearance)||pool;
-  if(pool.length===0) pool=[...MINISTERS];
-  if(S.voice){
-    const v=pool.filter(m=>m.style===S.voice||m.style.includes(S.voice));
-    if(v.length>0) pool=v;
-  }
+  if(S.gender){const f=pool.filter(m=>m.gender===S.gender);if(f.length)pool=f;}
+  if(S.appearance){const f=pool.filter(m=>m.appearance===S.appearance);if(f.length)pool=f;}
+  if(S.voice){const f=pool.filter(m=>m.style===S.voice||m.style.includes(S.voice));if(f.length)pool=f;}
   return pool[0]||MINISTERS[0];
 }
 
-// ── PRAYER LENGTH ──
 function getLen(){
-  const v=document.getElementById('prayer-req').value.trim();
-  const w=v.split(/\s+/).filter(Boolean).length;
-  if(w===0&&S.topic) return 'short';
-  if(w<20) return 'personal';
+  const w=document.getElementById('prayer-req').value.trim().split(/\s+/).filter(Boolean).length;
+  if(w===0&&S.topic)return 'short';
+  if(w<20)return 'personal';
   return 'extended';
 }
 
-// ── DELIVER PRAYER ──
 async function deliver(){
   const req=document.getElementById('prayer-req').value.trim()||S.topic;
-  const len=getLen();
-  const minister=getBest();
+  const len=getLen();const minister=getBest();
   go('s-prayer');
   document.getElementById('loading-area').style.display='block';
   document.getElementById('prayer-area').style.display='none';
@@ -422,9 +390,8 @@ async function deliverExtended(){
 async function runPrayer(req,len,minister){
   const msgs={short:'Your minister is preparing your blessing',personal:'Your minister is praying over your request',extended:'Your minister is preparing your extended prayer'};
   setLoad(msgs[len]);
-
   try{
-    const res=await fetch(CFG.ANTHROPIC+'/api/anthropic/v1/messages',{
+    const res=await fetch(PROXY+'/api/anthropic/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -439,57 +406,40 @@ async function runPrayer(req,len,minister){
     let p;
     try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}
     catch{p={verse:'Philippians 4:6-7',verseText:'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.',prayer:raw,closing:'Amen.'};}
-
     const script=`${p.verseText}\n\n${p.prayer}\n\n${p.closing}`;
-    const hasKeys=CFG.HEYGEN!=='https://fd6475ee-da3b-45ab-a302-11f1dd27026d-00-3cjvbau4zdiw7.worf.replit.dev'&&CFG.ELEVEN!=='https://fd6475ee-da3b-45ab-a302-11f1dd27026d-00-3cjvbau4zdiw7.worf.replit.dev';
     let videoUrl=null;
-
-    if(hasKeys){
-      try{
-        setLoad('Your minister is finding their voice…');
-        await genAudio(minister.voiceId,script);
-        setLoad('Your minister is appearing for you…');
-        const vid=await genVideo(minister.avatarId,minister.voiceId,script);
-        setLoad('Almost ready…');
-        videoUrl=await pollVideo(vid);
-      }catch(e){console.warn('Video error:',e);}
-    }
-
+    try{
+      setLoad('Your minister is finding their voice…');
+      await genAudio(minister.voiceId,script);
+      setLoad('Your minister is appearing for you…');
+      const vid=await genVideo(minister.avatarId,minister.voiceId,script);
+      setLoad('Almost ready…');
+      videoUrl=await pollVideo(vid);
+    }catch(e){console.warn('Video error:',e);}
     showPrayer(p,minister,videoUrl,len);
-    S.lastPrayer={p,minister,len};
-
   }catch(e){
     console.error(e);
-    const fb=getFallback(req,len);
-    showPrayer(fb,minister,null,len);
+    showPrayer(getFallback(req,len),minister,null,len);
   }
 }
 
-function setLoad(msg){
-  document.getElementById('loading-text').innerHTML=msg+'<span class="loading-dots"></span>';
-}
+function setLoad(msg){document.getElementById('loading-text').innerHTML=msg+'<span class="loading-dots"></span>';}
 
-// ── SYSTEM PROMPT ──
 function buildSys(len,minister){
   const t=S.tradition;
-  const isM=t==='messianic-jewish';
-  const isJ=t.includes('jewish')&&!isM;
-  const god=S.god||'God';
-  const jesus=S.jesus||'Jesus';
+  const isM=t==='messianic-jewish';const isJ=t.includes('jewish')&&!isM;
+  const god=S.god||'God';const jesus=S.jesus||'Jesus';
   const words={short:70,personal:140,extended:280}[len];
   const time={short:'15-30 seconds',personal:'45-60 seconds',extended:'90-120 seconds'}[len];
-
   let sc='';
-  if(isJ) sc=`Draw ONLY from the Hebrew Bible (Tanakh). Refer to God as HaShem or Adonai. NEVER reference Jesus or New Testament. Paraphrase scripture.`;
-  else if(isM) sc=`Draw from Tanakh and New Testament. Refer to God as "${god}" and Jesus as "${jesus}". Paraphrase scripture.`;
+  if(isJ)sc=`Draw ONLY from the Hebrew Bible (Tanakh). Refer to God as HaShem or Adonai. NEVER reference Jesus or New Testament. Paraphrase scripture.`;
+  else if(isM)sc=`Draw from Tanakh and New Testament. Refer to God as "${god}" and Jesus as "${jesus}". Paraphrase scripture.`;
   else sc=`Draw from Old and New Testament. Refer to God as "${god}" and Jesus as "${jesus}". Paraphrase scripture.`;
-
   const depth={
     short:`Write approximately ${words} words. Brief blessing: address God, scripture reference, direct blessing, close.`,
     personal:`Write approximately ${words} words. Personal prayer: address God, acknowledge their need, weave scripture, speak blessing, close. 2-3 paragraphs.`,
     extended:`Write approximately ${words} words. Full extended prayer: reverent opening, deep engagement with their need, scripture throughout, building intensity, specific blessings, full benediction. 4-5 paragraphs.`
   }[len];
-
   return `You are the most beloved Spirit-filled minister anyone has encountered. Pray with deep sincerity, warmth, and authority. Tradition: ${t}. Voice: ${minister.style}.\n\n${sc}\n\n${depth}\n\nSpoken aloud this runs approximately ${time}.\n\nRespond ONLY with valid JSON:\n{"verse":"Reference","verseText":"Brief paraphrase","prayer":"Full prayer","closing":"Closing"}`;
 }
 
@@ -498,71 +448,59 @@ function buildPrompt(req,len){
   return `${d[len]} Their need: ${req}. Speak directly to them. Paraphrase scripture. Pray in English.`;
 }
 
-// ── SHOW PRAYER ──
 function showPrayer(p,minister,videoUrl,len){
   document.getElementById('m-avatar').textContent=minister.gender==='female'?'👩':'👨';
   document.getElementById('deeper-face').textContent=minister.gender==='female'?'👩':'👨';
-  document.getElementById('m-name').textContent=`${S.title||minister.name}`;
-  document.getElementById('m-desc').textContent=`Baruch Kairos Group · Pray With Me™`;
+  document.getElementById('m-name').textContent=S.title||minister.name;
+  document.getElementById('m-desc').textContent='Baruch Kairos Group · Pray With Me™';
   document.getElementById('v-badge').textContent=p.verse||'SCRIPTURE';
-
   const vw=document.getElementById('video-wrap');
   if(videoUrl){
     vw.style.display='block';
     vw.innerHTML=`<video width="100%" autoplay controls style="border-radius:12px;width:100%;display:block;"><source src="${videoUrl}" type="video/mp4"></video>`;
-  } else {
-    vw.style.display='none';
-  }
-
+  }else{vw.style.display='none';}
   const lines=(p.prayer||'').split('\n').filter(x=>x.trim());
   document.getElementById('prayer-text').innerHTML=
     `<p class="vblock">"${p.verseText}"<br><span style="font-size:.82rem;opacity:.7;">— ${p.verse}</span></p>`+
     lines.map(l=>`<p style="margin-bottom:13px;">${l}</p>`).join('');
   document.getElementById('prayer-close').textContent=p.closing||'— Amen';
-
   document.getElementById('loading-area').style.display='none';
   document.getElementById('prayer-area').style.display='block';
-
-  if(len!=='extended'){
-    setTimeout(()=>{document.getElementById('deeper-nudge').style.display='block';},3500);
-  }
+  if(len!=='extended'){setTimeout(()=>{document.getElementById('deeper-nudge').style.display='block';},3500);}
 }
 
-// ── HEYGEN ──
 async function genVideo(avatarId,voiceId,script){
-  const r=await fetch(CFG.HEYGEN+'/api/heygen/v2/video/generate',{
+  const r=await fetch(PROXY+'/api/heygen/v2/video/generate',{
     method:'POST',
-    headers:{'Content-Type':'application/json','X-Api-Key':CFG.HEYGEN},
+    headers:{'Content-Type':'application/json'},
     body:JSON.stringify({video_inputs:[{character:{type:'avatar',avatar_id:avatarId,avatar_style:'normal'},voice:{type:'elevenlabs',voice_id:voiceId,input_text:script},background:{type:'color',value:'#1A1008'}}],dimension:{width:1280,height:720}})
   });
   const d=await r.json();
-  if(d.error) throw new Error(d.error.message);
+  if(d.error)throw new Error(d.error.message);
   return d.data?.video_id;
 }
 
 async function pollVideo(videoId){
   for(let i=0;i<30;i++){
     await new Promise(r=>setTimeout(r,3000));
-    const r=await fetch(CFG.HEYGEN+`/api/heygen/v1/video_status.get?video_id=${videoId}`,{headers:{'X-Api-Key':CFG.HEYGEN}});
+    const r=await fetch(PROXY+`/api/heygen/v1/video_status.get?video_id=${videoId}`);
     const d=await r.json();
-    if(d.data?.status==='completed') return d.data.video_url;
-    if(d.data?.status==='failed') throw new Error('Video failed');
+    if(d.data?.status==='completed')return d.data.video_url;
+    if(d.data?.status==='failed')throw new Error('Video failed');
   }
   throw new Error('Timeout');
 }
 
-// ── ELEVENLABS ──
 async function genAudio(voiceId,text){
-  const r=await fetch(CFG.ELEVEN+`/api/elevenlabs/v1/text-to-speech/${voiceId}`,{
+  const r=await fetch(PROXY+`/api/elevenlabs/v1/text-to-speech/${voiceId}`,{
     method:'POST',
-    headers:{'Content-Type':'application/json','xi-api-key':CFG.ELEVEN},
+    headers:{'Content-Type':'application/json'},
     body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.75,similarity_boost:.85,style:.5,use_speaker_boost:true}})
   });
-  if(!r.ok) throw new Error('ElevenLabs failed');
+  if(!r.ok)throw new Error('ElevenLabs failed');
   return URL.createObjectURL(await r.blob());
 }
 
-// ── FALLBACK ──
 function getFallback(req,len){
   const god=S.god||'Lord';const jesus=S.jesus||'Jesus';
   const prayers={
@@ -573,7 +511,6 @@ function getFallback(req,len){
   return {verse:'Philippians 4:6-7',verseText:'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.',prayer:prayers[len],closing:`In the precious name of ${jesus} — Amen.`};
 }
 
-// ── ACTIONS ──
 function copyPrayer(){navigator.clipboard.writeText(document.getElementById('prayer-text').innerText).then(()=>alert('Prayer copied 🙏'));}
 function sharePrayer(){const t=document.getElementById('prayer-text').innerText;if(navigator.share)navigator.share({title:'Pray With Me',text:t,url:window.location.href});else copyPrayer();}
 function toggleSub(){const b=document.getElementById('sub-box');b.style.display=b.style.display==='none'?'block':'none';}
