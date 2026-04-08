@@ -473,7 +473,7 @@ async function genVideo(avatarId,voiceId,script){
   const r=await fetch(PROXY+'/api/heygen/v2/video/generate',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({video_inputs:[{character:{type:'avatar',avatar_id:avatarId,avatar_style:'normal'},voice:{type:'elevenlabs',voice_id:voiceId,input_text:script},background:{type:'color',value:'#1A1008'}}],dimension:{width:1280,height:720}})
+    body:JSON.stringify({video_inputs:[{character:{type:'avatar',avatar_id:avatarId,avatar_style:'normal'},voice:{type:'text',input_text:script,voice_id:voiceId},background:{type:'color',value:'#1A1008'}}],dimension:{width:1280,height:720}})
   });
   const d=await r.json();
   if(d.error)throw new Error(d.error.message);
