@@ -446,9 +446,19 @@ async function runPrayer(req,len,minister){
     try{
       setLoad('Your minister is appearing for you…');
       const vid=await genVideo(minister.avatarId,minister.voiceId,script);
-      setLoad('Your minister is being prepared — this takes 2 to 3 minutes. Please wait…');
-      videoUrl=await pollVideo(vid);
-    }catch(e){console.warn('Video error:',e);}
+      // Show prayer text immediately while video generates in background
+      showPrayer(p,minister,null,len);
+      // Poll for video in background and inject when ready
+      pollVideo(vid).then(url=>{
+        if(url){
+          const vw=document.getElementById('video-wrap');
+          vw.style.display='block';
+          vw.innerHTML=`<video width="100%" autoplay controls style="border-radius:12px;width:100%;display:block;"><source src="${url}" type="video/mp4"></video>`;
+          vw.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+      }).catch(e=>console.warn('Background video error:',e));
+      return;
+    }catch(e){console.warn('Video generation error:',e);}
     showPrayer(p,minister,videoUrl,len);
   }catch(e){
     console.error(e);
