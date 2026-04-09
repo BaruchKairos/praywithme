@@ -265,41 +265,76 @@ const PROXY='https://fd6475ee-da3b-45ab-a302-11f1dd27026d-00-3cjvbau4zdiw7.worf.
 const S={tradition:'',god:'God',jesus:'Jesus',title:'',gender:'',voice:'',appearance:'',topic:'',lastPrayer:null};
 
 const MINISTERS=[
-  {id:1, avatarId:'60b80b8ca51b4c8f8fc0521c0704f560',voiceId:'6Qxy5k2hvoNF2omYzGNz',gender:'male',  appearance:'light',          style:'powerful',    name:'Bold Male Charismatic'},
-  {id:2, avatarId:'f9cc36641d5d4debb75a21a2d65c624a',voiceId:'gcdNeREzHPJpCf9wnB0l',gender:'male',  appearance:'light',          style:'traditional', name:'Senior Male Catholic'},
-  {id:3, avatarId:'3deac6acca9d4357a2bc97a971fe2b79',voiceId:'hHJeN9sMjsoS5lyD1gZP',gender:'male',  appearance:'medium',         style:'warm',        name:'Male Evangelical'},
-  {id:4, avatarId:'b598091703ae434082748d29439352d4',voiceId:'10NkTYmU7tSz3Kkl3Lex',gender:'male',  appearance:'medium',         style:'contemporary',name:'Young American Male'},
-  {id:5, avatarId:'cadb2f5a25954b3da93e08024f0cbf6b',voiceId:'hILdTfuUq4LRBMrxHERr',gender:'male',  appearance:'dark',           style:'powerful',    name:'Baptist Minister Male'},
-  {id:6, avatarId:'bbcac9d6807f43a0ab5236ea7e6efa0d',voiceId:'Pc6mkcSQXB2l3WmfeKVS',gender:'male',  appearance:'dark',           style:'warm',        name:'Male Non Denominational'},
-  {id:7, avatarId:'8c52bb7102784c8d9abb96c87249829b',voiceId:'86ZLAUcyPNBrbdJKn3u6',gender:'male',  appearance:'tan',            style:'warm',        name:'Male Tan Catholic Hispanic'},
-  {id:8, avatarId:'c807ecb51b2448ebabcac939f710e79f',voiceId:'2h7ex7B1yGrkcLFI8zUO',gender:'male',  appearance:'tan',            style:'traditional', name:'Male Tan Orthodox Christian'},
-  {id:9, avatarId:'b0e8eb5d14904ae885c2af2775866c41',voiceId:'lVOAYogEKnZjOSNDGKcv',gender:'female',appearance:'light',          style:'warm',        name:'Female Light Non-Denominational'},
-  {id:10,avatarId:'4577018d458d46418f9d0a2805bf9089',voiceId:'RILOU7YmBhvwJGDGjNmP',gender:'female',appearance:'light',          style:'traditional', name:'Female Light Catholic'},
-  {id:11,avatarId:'61e1ad250b12480fb2c21f28eda45d1c',voiceId:'75MqelvgFq5upx0r44WK',gender:'female',appearance:'medium',         style:'contemporary',name:'Female Medium Evangelical'},
-  {id:12,avatarId:'2cf69599ad8440f18a86c2cd3d809237',voiceId:'1wGbFxmAM3Fgw63G1zZJ',gender:'female',appearance:'medium',         style:'warm',        name:'Female Medium Protestant'},
-  {id:13,avatarId:'861136f1f71645ed9c3b15fd8e867ce0',voiceId:'NQMJRVvPew6HsaebYnZj',gender:'female',appearance:'dark',           style:'powerful',    name:'Female Dark Non Denominational'},
-  {id:14,avatarId:'629ff000d2894223be515c91c9674a75',voiceId:'M6ic45wruJGWAxLFEMNK',gender:'female',appearance:'dark',           style:'warm',        name:'Female Dark Baptist'},
-  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'W1EJxHy9vl73xgPIKgpn',gender:'male',  appearance:'light',          style:'traditional', name:'Male Orthodox Messianic'},
-  {id:16,avatarId:'a34fab9e9e814cd781b3fd7e766fdd5d',voiceId:'8WaMCGQzWsKvf7sGPqjE',gender:'female',appearance:'tan',            style:'contemporary',name:'Female Tan Non Denominational'},
-  {id:17,avatarId:'ae263dd8f441408e89c08d061c122973',voiceId:'sla02gCKN0hNfNn9ORJN',gender:'male',  appearance:'east-asian',     style:'warm',        name:'Male East Asian Non Denom'},
-  {id:18,avatarId:'b41bdaa4d2024392bd68c1300a0beb85',voiceId:'WIX8boagHAO6uMUqxXLz',gender:'female',appearance:'east-asian',     style:'contemporary',name:'Female East Asian Evangelical'},
-  {id:19,avatarId:'8435c4bc32b246b5973398aafec8ebb1',voiceId:'LrnwgcdTLxc99sutUxGU',gender:'male',  appearance:'south-asian',    style:'powerful',    name:'Male South Asian Protestant'},
-  {id:20,avatarId:'5fe8e4b41ec8433e927384d01fe1bfec',voiceId:'ykMqqjWs4pQdCIvGPn0z',gender:'female',appearance:'southeast-asian',style:'warm',        name:'Female Southeast Asian Catholic'},
-  {id:21,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'7DHxEfwQzXWuiEldRcxx',gender:'male',  appearance:'southeast-asian',style:'traditional', name:'Male Southeast Asian Non Denom'},
-  {id:22,avatarId:'2381a1ba36f2484d9ecdbc0d6633fcd7',voiceId:'vYENaCJHl4vFKNDYPr8y',gender:'female',appearance:'south-asian',    style:'warm',        name:'Female South Asian Non Denom'},
-  {id:23,avatarId:'19cec4989fe64b69bdd274f91fd8628c',voiceId:'SHr8L8YJLn64BwfXPWk2',gender:'male',  appearance:'african',        style:'warm',        name:'African Male Non Denom'},
-  {id:24,avatarId:'d0528d7ff1ab4dda9850c5e9c0f39227',voiceId:'D9xwB6HNBJ9h4YvQFWuE',gender:'female',appearance:'african',        style:'warm',        name:'Female African Non Denom'},
-  {id:25,avatarId:'b598091703ae434082748d29439352d4',voiceId:'USAEIpDoTqdUaYNLaLAV',gender:'male',  appearance:'light',          style:'contemporary',name:'Male Youth White American'},
-  {id:26,avatarId:'16c7741063dd42ceaf2bb26a478878d4',voiceId:'bQxW1c7YCr6VQgQhw8KX',gender:'male',  appearance:'dark',           style:'contemporary',name:'Male Youth African American'},
-  {id:27,avatarId:'4e977090e89944019926fb671c058dce',voiceId:'DkVHY251JcjFstLRlihO',gender:'male',  appearance:'east-asian',     style:'contemporary',name:'Youth Asian American Male'},
-  {id:28,avatarId:'86a4cede82c249f3a0c09a810be5b675',voiceId:'EkK5I93UQWFDigLMpZcX',gender:'male',  appearance:'light',          style:'charismatic', name:'Bold Male Charismatic Alt'},
-  {id:29,avatarId:'f2840943593b4076981c64a81ff67dc1',voiceId:'75DchiXtNUXnu3lra8pV',gender:'male',  appearance:'light',          style:'warm',        name:'Male Southern Christian'},
-  {id:30,avatarId:'2e50a5e538d749ce99fb6551c7614576',voiceId:'4NejU5DwQjevnR6mh3mb',gender:'female',appearance:'light',          style:'charismatic', name:'Female Bold Charismatic'},
-  {id:31,avatarId:'f9c3e3777d2d43ccaf08acb9cc2a2615',voiceId:'c4TutCiAuWP4vwb1xebb',gender:'female',appearance:'light',          style:'warm',        name:'Female Southern Christian'},
-  {id:32,avatarId:'20faab0817ea456081376d8da117fabe',voiceId:'CXAc4DNZL6wonQQNlNgZ',gender:'male',  appearance:'dark',           style:'warm',        name:'Alternate Male Bald'},
-  {id:33,avatarId:'d9dcd4e82f324551b5facf1053f66dc9',voiceId:'TJz0pp7opUc4JvMXMXob',gender:'female',appearance:'dark',           style:'warm',        name:'Alternate Female'},
-  {id:34,avatarId:'c1d8e2eeb3dd4d8cb37cb4a2be7a89f1',voiceId:'AsHHje51j2aYdrvLDHfG',gender:'male',  appearance:'tan',            style:'warm',        name:'Alternate Male Hispanic'},
-  {id:35,avatarId:'77d77b293e7047a3994b52eaa729c189',voiceId:'FGLJyeekUzxl8M3CTG9M',gender:'female',appearance:'tan',            style:'warm',        name:'Alternate Female Hispanic'},
+  // Powerful & Bold — male deep authoritative voices
+  {id:1, avatarId:'60b80b8ca51b4c8f8fc0521c0704f560',voiceId:'88bb9ee1c81b466eb2a08fdde86d3619',gender:'male',  appearance:'light',          style:'powerful',    name:'Bold Male Charismatic'},
+  // Traditional & Reverent — measured dignified male
+  {id:2, avatarId:'f9cc36641d5d4debb75a21a2d65c624a',voiceId:'828b59f834fd4c7188da322b6d9b6c75',gender:'male',  appearance:'light',          style:'traditional', name:'Senior Male Catholic'},
+  // Warm & Gentle — warm approachable male
+  {id:3, avatarId:'3deac6acca9d4357a2bc97a971fe2b79',voiceId:'beac6061ade8472e83bb8edf1f8f943d',gender:'male',  appearance:'medium',         style:'warm',        name:'Male Evangelical'},
+  // Contemporary — natural conversational male
+  {id:4, avatarId:'b598091703ae434082748d29439352d4',voiceId:'66da5fabd6b944b3a42f35aed9631ad2',gender:'male',  appearance:'medium',         style:'contemporary',name:'Young American Male'},
+  // Powerful & Bold — deep Baptist rhythm
+  {id:5, avatarId:'cadb2f5a25954b3da93e08024f0cbf6b',voiceId:'88bb9ee1c81b466eb2a08fdde86d3619',gender:'male',  appearance:'dark',           style:'powerful',    name:'Baptist Minister Male'},
+  // Warm & Gentle — dark male warm
+  {id:6, avatarId:'bbcac9d6807f43a0ab5236ea7e6efa0d',voiceId:'b8a9be5dbbb54be5a5d98069904d3668',gender:'male',  appearance:'dark',           style:'warm',        name:'Male Non Denominational'},
+  // Warm & Gentle — Hispanic warm male
+  {id:7, avatarId:'8c52bb7102784c8d9abb96c87249829b',voiceId:'beac6061ade8472e83bb8edf1f8f943d',gender:'male',  appearance:'tan',            style:'warm',        name:'Male Tan Catholic Hispanic'},
+  // Traditional & Reverent — Orthodox dignified
+  {id:8, avatarId:'c807ecb51b2448ebabcac939f710e79f',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'tan',            style:'traditional', name:'Male Tan Orthodox Christian'},
+  // Warm & Gentle — female soothing
+  {id:9, avatarId:'b0e8eb5d14904ae885c2af2775866c41',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'light',          style:'warm',        name:'Female Light Non-Denominational'},
+  // Traditional & Reverent — female Catholic
+  {id:10,avatarId:'4577018d458d46418f9d0a2805bf9089',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'light',          style:'traditional', name:'Female Light Catholic'},
+  // Contemporary — female bright
+  {id:11,avatarId:'61e1ad250b12480fb2c21f28eda45d1c',voiceId:'662f98eef6fd4ff89faf9bc2485659eb',gender:'female',appearance:'medium',         style:'contemporary',name:'Female Medium Evangelical'},
+  // Warm & Gentle — female warm medium
+  {id:12,avatarId:'2cf69599ad8440f18a86c2cd3d809237',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'medium',         style:'warm',        name:'Female Medium Protestant'},
+  // Powerful & Bold — female authoritative
+  {id:13,avatarId:'861136f1f71645ed9c3b15fd8e867ce0',voiceId:'b6313bbadeff44cda4bcc995015a0045',gender:'female',appearance:'dark',           style:'powerful',    name:'Female Dark Non Denominational'},
+  // Warm & Gentle — female dark warm
+  {id:14,avatarId:'629ff000d2894223be515c91c9674a75',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'dark',           style:'warm',        name:'Female Dark Baptist'},
+  // Traditional & Reverent — Messianic scholarly
+  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'light',          style:'traditional', name:'Male Orthodox Messianic'},
+  // Contemporary — female tan bridge builder
+  {id:16,avatarId:'a34fab9e9e814cd781b3fd7e766fdd5d',voiceId:'662f98eef6fd4ff89faf9bc2485659eb',gender:'female',appearance:'tan',            style:'contemporary',name:'Female Tan Non Denominational'},
+  // Warm & Gentle — East Asian male
+  {id:17,avatarId:'ae263dd8f441408e89c08d061c122973',voiceId:'beac6061ade8472e83bb8edf1f8f943d',gender:'male',  appearance:'east-asian',     style:'warm',        name:'Male East Asian Non Denom'},
+  // Contemporary — East Asian female
+  {id:18,avatarId:'b41bdaa4d2024392bd68c1300a0beb85',voiceId:'662f98eef6fd4ff89faf9bc2485659eb',gender:'female',appearance:'east-asian',     style:'contemporary',name:'Female East Asian Evangelical'},
+  // Powerful & Bold — South Asian male
+  {id:19,avatarId:'8435c4bc32b246b5973398aafec8ebb1',voiceId:'88bb9ee1c81b466eb2a08fdde86d3619',gender:'male',  appearance:'south-asian',    style:'powerful',    name:'Male South Asian Protestant'},
+  // Warm & Gentle — Southeast Asian female Catholic
+  {id:20,avatarId:'5fe8e4b41ec8433e927384d01fe1bfec',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'southeast-asian',style:'warm',        name:'Female Southeast Asian Catholic'},
+  // Traditional & Reverent — Southeast Asian male
+  {id:21,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'southeast-asian',style:'traditional', name:'Male Southeast Asian Non Denom'},
+  // Warm & Gentle — South Asian female
+  {id:22,avatarId:'2381a1ba36f2484d9ecdbc0d6633fcd7',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'south-asian',    style:'warm',        name:'Female South Asian Non Denom'},
+  // Warm & Gentle — African male
+  {id:23,avatarId:'19cec4989fe64b69bdd274f91fd8628c',voiceId:'b8a9be5dbbb54be5a5d98069904d3668',gender:'male',  appearance:'african',        style:'warm',        name:'African Male Non Denom'},
+  // Warm & Gentle — African female
+  {id:24,avatarId:'d0528d7ff1ab4dda9850c5e9c0f39227',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'african',        style:'warm',        name:'Female African Non Denom'},
+  // Contemporary — Youth White American
+  {id:25,avatarId:'b598091703ae434082748d29439352d4',voiceId:'66da5fabd6b944b3a42f35aed9631ad2',gender:'male',  appearance:'light',          style:'contemporary',name:'Male Youth White American'},
+  // Contemporary — Youth African American
+  {id:26,avatarId:'16c7741063dd42ceaf2bb26a478878d4',voiceId:'66da5fabd6b944b3a42f35aed9631ad2',gender:'male',  appearance:'dark',           style:'contemporary',name:'Male Youth African American'},
+  // Contemporary — Youth Asian American
+  {id:27,avatarId:'4e977090e89944019926fb671c058dce',voiceId:'66da5fabd6b944b3a42f35aed9631ad2',gender:'male',  appearance:'east-asian',     style:'contemporary',name:'Youth Asian American Male'},
+  // Charismatic — Bold Alt
+  {id:28,avatarId:'86a4cede82c249f3a0c09a810be5b675',voiceId:'6981538b2a85415bbcd878978190314e',gender:'male',  appearance:'light',          style:'charismatic', name:'Bold Male Charismatic Alt'},
+  // Warm — Southern Christian Male
+  {id:29,avatarId:'f2840943593b4076981c64a81ff67dc1',voiceId:'beac6061ade8472e83bb8edf1f8f943d',gender:'male',  appearance:'light',          style:'warm',        name:'Male Southern Christian'},
+  // Charismatic — Female Bold
+  {id:30,avatarId:'2e50a5e538d749ce99fb6551c7614576',voiceId:'b6313bbadeff44cda4bcc995015a0045',gender:'female',appearance:'light',          style:'charismatic', name:'Female Bold Charismatic'},
+  // Warm — Southern Female
+  {id:31,avatarId:'f9c3e3777d2d43ccaf08acb9cc2a2615',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'light',          style:'warm',        name:'Female Southern Christian'},
+  // Warm — Alternate Black Male
+  {id:32,avatarId:'20faab0817ea456081376d8da117fabe',voiceId:'b8a9be5dbbb54be5a5d98069904d3668',gender:'male',  appearance:'dark',           style:'warm',        name:'Alternate Male Bald'},
+  // Warm — Alternate Black Female
+  {id:33,avatarId:'d9dcd4e82f324551b5facf1053f66dc9',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'dark',           style:'warm',        name:'Alternate Female'},
+  // Warm — Alternate Hispanic Male
+  {id:34,avatarId:'c1d8e2eeb3dd4d8cb37cb4a2be7a89f1',voiceId:'beac6061ade8472e83bb8edf1f8f943d',gender:'male',  appearance:'tan',            style:'warm',        name:'Alternate Male Hispanic'},
+  // Warm — Alternate Hispanic Female
+  {id:35,avatarId:'77d77b293e7047a3994b52eaa729c189',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'tan',            style:'warm',        name:'Alternate Female Hispanic'},
 ];
 
 function go(id){
