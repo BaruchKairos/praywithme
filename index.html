@@ -444,8 +444,6 @@ async function runPrayer(req,len,minister){
     const script=`${p.verseText}\n\n${p.prayer}\n\n${p.closing}`;
     let videoUrl=null;
     try{
-      setLoad('Your minister is finding their voice…');
-      await genAudio(minister.voiceId,script);
       setLoad('Your minister is appearing for you…');
       const vid=await genVideo(minister.avatarId,minister.voiceId,script);
       setLoad('Almost ready…');
