@@ -446,7 +446,7 @@ async function runPrayer(req,len,minister){
     try{
       setLoad('Your minister is appearing for you…');
       const vid=await genVideo(minister.avatarId,minister.voiceId,script);
-      setLoad('Almost ready…');
+      setLoad('Your minister is being prepared — this takes 2 to 3 minutes. Please wait…');
       videoUrl=await pollVideo(vid);
     }catch(e){console.warn('Video error:',e);}
     showPrayer(p,minister,videoUrl,len);
@@ -514,12 +514,12 @@ async function genVideo(avatarId,voiceId,script){
 }
 
 async function pollVideo(videoId){
-  for(let i=0;i<30;i++){
-    await new Promise(r=>setTimeout(r,3000));
+  for(let i=0;i<60;i++){
+    await new Promise(r=>setTimeout(r,5000));
     const r=await fetch(PROXY+`/api/heygen/v1/video_status.get?video_id=${videoId}`);
     const d=await r.json();
     if(d.data?.status==='completed')return d.data.video_url;
-    if(d.data?.status==='failed')throw new Error('Video failed');
+    if(d.data?.status==='failed')throw new Error('Video failed: '+(d.data?.error?.message||'unknown'));
   }
   throw new Error('Timeout');
 }
