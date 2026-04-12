@@ -472,8 +472,8 @@ function buildSys(len,minister){
   const t=S.tradition;
   const isM=t==='messianic-jewish';const isJ=t.includes('jewish')&&!isM;
   const god=S.god||'God';const jesus=S.jesus||'Jesus';
-  const words={short:70,personal:140,extended:280}[len];
-  const time={short:'15-30 seconds',personal:'45-60 seconds',extended:'90-120 seconds'}[len];
+  const words={short:50,personal:80,extended:150}[len];
+  const time={short:'15-20 seconds',personal:'30-40 seconds',extended:'60-75 seconds'}[len];
   let sc='';
   if(isJ)sc=`Draw ONLY from the Hebrew Bible (Tanakh). Refer to God as HaShem or Adonai. NEVER reference Jesus or New Testament. Paraphrase scripture.`;
   else if(isM)sc=`Draw from Tanakh and New Testament. Refer to God as "${god}" and Jesus as "${jesus}". Paraphrase scripture.`;
