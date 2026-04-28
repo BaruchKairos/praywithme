@@ -558,7 +558,7 @@ const MINISTERS=[
   // Warm & Gentle — Hispanic warm male
   {id:7, avatarId:'8c52bb7102784c8d9abb96c87249829b',voiceId:'beac6061ade8472e83bb8edf1f8f943d',gender:'male',  appearance:'tan',            style:'warm',        name:'Male Tan Catholic Hispanic'},
   // Traditional & Reverent — Orthodox dignified
-  {id:8, avatarId:'c807ecb51b2448ebabcac939f710e79f',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'tan',            style:'traditional', name:'Rabbi Mordechai — Orthodox & traditional',rabbi:true,rabbiShort:'Rabbi Mordechai',rabbiSub:'Traditional voice'},
+  {id:8, avatarId:'c807ecb51b2448ebabcac939f710e79f',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'tan',            style:'traditional', name:'Rabbi Mordechi — Orthodox & traditional',rabbi:true,rabbiShort:'Rabbi Mordechi',rabbiSub:'Traditional voice'},
   // Warm & Gentle — female soothing
   {id:9, avatarId:'b0e8eb5d14904ae885c2af2775866c41',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'light',          style:'warm',        name:'Female Light Non-Denominational'},
   // Traditional & Reverent — female Catholic
@@ -572,7 +572,7 @@ const MINISTERS=[
   // Warm & Gentle — female dark warm
   {id:14,avatarId:'629ff000d2894223be515c91c9674a75',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'dark',           style:'warm',        name:'Female Dark Baptist'},
   // Traditional & Reverent — Messianic scholarly
-  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'light',          style:'traditional', name:'Rabbi Benayah — Messianic Jewish',rabbi:true,rabbiShort:'Rabbi Benayah',rabbiSub:'Messianic / Yeshua tradition'},
+  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'light',          style:'traditional', name:'Rabbi Joshua — Messianic Jewish',rabbi:true,rabbiShort:'Rabbi Joshua',rabbiSub:'Messianic / Yeshua tradition'},
   // Contemporary — female tan bridge builder
   {id:16,avatarId:'a34fab9e9e814cd781b3fd7e766fdd5d',voiceId:'662f98eef6fd4ff89faf9bc2485659eb',gender:'female',appearance:'tan',            style:'contemporary',name:'Female Tan Non Denominational'},
   // Warm & Gentle — East Asian male
@@ -584,7 +584,7 @@ const MINISTERS=[
   // Warm & Gentle — Southeast Asian female Catholic
   {id:20,avatarId:'5fe8e4b41ec8433e927384d01fe1bfec',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'southeast-asian',style:'warm',        name:'Female Southeast Asian Catholic'},
   // Traditional & Reverent — Southeast Asian male
-  {id:21,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'southeast-asian',style:'traditional', name:'Rabbi Eliav — Conservative & Reform',rabbi:true,rabbiShort:'Rabbi Eliav',rabbiSub:'Community & pastoral tone'},
+  {id:21,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'southeast-asian',style:'traditional', name:'Rabbi Saul — Conservative & Reform',rabbi:true,rabbiShort:'Rabbi Saul',rabbiSub:'Community & pastoral tone'},
   // Warm & Gentle — South Asian female
   {id:22,avatarId:'2381a1ba36f2484d9ecdbc0d6633fcd7',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'south-asian',    style:'warm',        name:'Female South Asian Non Denom'},
   // Warm & Gentle — African male
@@ -1183,7 +1183,7 @@ function buildPrompt(req,len){
 function showPrayer(p,minister,videoUrl,len){
   document.getElementById('m-avatar').textContent=minister.gender==='female'?'👩':'👨';
   document.getElementById('deeper-face').textContent=minister.gender==='female'?'👩':'👨';
-  document.getElementById('m-name').textContent=S.title||minister.name;
+  document.getElementById('m-name').textContent=minister.rabbi?(minister.rabbiShort||minister.name):(S.title||minister.name);
   document.getElementById('m-desc').textContent='Baruch Kairos Group · Pray With Me™';
   document.getElementById('v-badge').textContent=p.verse||'SCRIPTURE';
   const vw=document.getElementById('video-wrap');
