@@ -1100,7 +1100,8 @@ async function deliverExtended(){
 }
 
 async function runPrayer(req,len,minister){
-  const msgs={short:'Your minister is preparing your blessing',personal:'Your minister is praying over your request',extended:'Your minister is preparing your extended prayer'};
+  const role=clergyRoleLabel();
+  const msgs={short:`Your ${role} is preparing your blessing`,personal:`Your ${role} is praying over your request`,extended:`Your ${role} is preparing your extended prayer`};
   setLoad(msgs[len]);
   try{
     const res=await fetch(PROXY+'/api/anthropic/v1/messages',{
@@ -1121,7 +1122,7 @@ async function runPrayer(req,len,minister){
     const script=`${p.verseText}\n\n${p.prayer}\n\n${p.closing}`;
     let videoUrl=null;
     try{
-      setLoad('Your minister is appearing for you…');
+      setLoad(`Your ${role} is appearing for you…`);
       const vid=await genVideo(minister.avatarId,minister.voiceId,script);
       // Show prayer text immediately while video generates in background
       showPrayer(p,minister,null,len);
@@ -1147,6 +1148,13 @@ async function runPrayer(req,len,minister){
 }
 
 function setLoad(msg){document.getElementById('loading-text').innerHTML=msg+'<span class="loading-dots"></span>';}
+
+function clergyRoleLabel(){
+  const title=String(S.title||'').trim().toLowerCase();
+  if(!title)return 'minister';
+  if(title==='father' || title==='priest')return 'priest';
+  return title;
+}
 
 function buildSys(len,minister){
   const t=S.tradition;
