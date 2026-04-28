@@ -4,19 +4,92 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pray With Me</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400&family=EB+Garamond:wght@500;600&family=Merriweather:wght@700&family=Vollkorn:wght@500;600&family=Oswald:wght@500;600&family=Playfair+Display:wght@500;600&family=Frank+Ruhl+Libre:wght@500;600&family=Inter:wght@300;400&family=Lora:ital,wght@1,500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#8B6914;--cream:#FAF6EF;--deep:#1A1008;--stone:#6B5E4E}
+:root{--gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#8B6914;--cream:#FAF0E0;--deep:#0A1628;--stone:#6B5E4E}
 html,body{height:100%;background:var(--deep);color:var(--cream);font-family:'Lato',sans-serif;font-weight:300;overflow-x:hidden}
-.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 20% 20%,#2a1a05 0%,#0e0804 50%,#000 100%)}
+.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 24% 10%,#20355b 0%,#111f38 32%,#0A1628 64%,#07101D 100%)}
 .app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center}
-header{width:100%;text-align:center;padding:40px 24px 20px}
-.cross{font-size:26px;color:var(--gold);display:block;margin-bottom:12px;animation:glow 4s ease-in-out infinite}
-@keyframes glow{0%,100%{text-shadow:0 0 10px rgba(201,168,76,.3)}50%{text-shadow:0 0 30px rgba(201,168,76,.8)}}
-.title{font-family:'Cinzel',serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:600;letter-spacing:.15em;background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:var(--gold-light);opacity:.8;margin-top:8px}
-.divider{width:160px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto;opacity:.6}
+header{width:100%;text-align:center;padding:0 0 14px;position:relative}
+.hero{
+  position:relative;
+  width:100%;
+  min-height:280px;
+  overflow:hidden;
+  background:linear-gradient(180deg,#070E1E 0%,#132B4D 36%,#6F5A35 64%,#F0D890 100%);
+}
+.hero-glow{
+  position:absolute;
+  left:50%;
+  bottom:72px;
+  width:420px;
+  height:260px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(255,240,192,.95) 0%,rgba(245,200,96,.65) 42%,rgba(245,200,96,.2) 70%,rgba(245,200,96,0) 100%);
+  filter:blur(2px);
+}
+.glory-rays{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.ray{fill:url(#rayGrad);transform-origin:50% 80%;animation:rayPulse 4s ease-in-out infinite}
+.ray.soft{opacity:.18}
+.ray.mid{opacity:.26}
+.ray.bright{fill:url(#rayBrightGrad);opacity:.36}
+.ray.d1{animation-delay:.25s}
+.ray.d2{animation-delay:.75s}
+.ray.d3{animation-delay:1.3s}
+.ray.d4{animation-delay:1.9s}
+.ray.d5{animation-delay:2.4s}
+@keyframes rayPulse{0%,100%{opacity:.15}50%{opacity:.42}}
+.hero-title-wrap{
+  position:absolute;
+  top:26px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(92%,720px);
+  z-index:4;
+}
+.title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2rem,6vw,2.9rem);
+  font-weight:300;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:#FFF5D8;
+  text-shadow:0 0 20px rgba(248,215,134,.35),0 0 38px rgba(248,215,134,.15);
+  animation:titlePulse 6s ease-in-out infinite;
+}
+.tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:#E8D0A0;opacity:.65;margin-top:6px}
+@keyframes titlePulse{0%,100%{opacity:.9}50%{opacity:1}}
+.mountain-back,.mountain-front{position:absolute;left:0;right:0;width:100%}
+.mountain-back{bottom:42px;height:118px;fill:#122741;opacity:.96}
+.mountain-front{bottom:0;height:98px;fill:#0A1628}
+.ridge-symbols{
+  position:absolute;
+  bottom:68px;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(92%,820px);
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  z-index:5;
+}
+.ridge-symbols svg{width:38px;height:38px;stroke:#C9A84C;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ridge-symbols .seal{width:56px;height:56px}
+.divider{width:180px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:14px auto 4px;opacity:.6}
+.bless-nav-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:8px 0 0;padding:0 16px}
+.btn-bless-nav{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.45);border-radius:8px;padding:10px 18px;color:var(--gold-light);font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.14em;cursor:pointer;transition:all .25s}
+.btn-bless-nav:hover{border-color:var(--gold);color:var(--cream)}
+.bless-mode-banner{display:none;margin:0 24px 14px;padding:12px 14px;border-radius:8px;border:1px solid rgba(201,168,76,.35);background:rgba(201,168,76,.08);font-size:.78rem;color:var(--gold-light);text-align:center;line-height:1.45}
+.bless-mode-banner strong{font-family:'Cinzel',serif;letter-spacing:.12em;color:var(--gold);font-weight:600}
+.bless-gift-panel{display:none;margin-bottom:16px;padding:16px;border-radius:10px;border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.06)}
+.bless-gift-panel .bless-k{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.16em;color:var(--gold);margin-bottom:8px}
+.bless-gift-panel label{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:.84rem;line-height:1.45;color:var(--cream);margin-top:10px}
+.bless-gift-panel input[type=checkbox]{margin-top:3px;accent-color:var(--gold)}
+@media (prefers-reduced-motion:reduce){
+  .ray,.title{animation:none}
+}
 .screen{display:none;width:100%;max-width:680px;padding:0 24px 60px;animation:up .5s ease both}
 .screen.active{display:block}
 @keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -31,6 +104,24 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
 .btn-choice .icon{font-size:1.4rem}
 .btn-choice .lbl{font-weight:400}
 .btn-choice .sub{font-size:.68rem;opacity:.55}
+.trad-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.trad-btn{background:linear-gradient(180deg,rgba(241,212,146,.38) 0%,rgba(201,168,76,.3) 45%,rgba(139,105,20,.34) 100%);border:1px solid rgba(232,213,163,.75);border-bottom:4px solid rgba(96,69,10,.95);border-radius:10px;padding:14px 12px 12px;color:#FFF7E4;cursor:pointer;font-size:.9rem;text-align:center;transition:transform .15s ease,box-shadow .2s ease,filter .2s ease;display:flex;flex-direction:column;align-items:center;gap:5px;box-shadow:0 8px 18px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,236,188,.5),inset 0 -6px 12px rgba(90,58,8,.28)}
+.trad-btn:hover{filter:brightness(1.07);transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.5),0 0 16px rgba(201,168,76,.24),inset 0 1px 0 rgba(255,236,188,.58),inset 0 -6px 12px rgba(90,58,8,.24)}
+.trad-btn:active{transform:translateY(2px);border-bottom-width:2px}
+.trad-btn.sel{background:linear-gradient(180deg,rgba(255,231,178,.55) 0%,rgba(232,200,112,.55) 42%,rgba(166,121,24,.58) 100%);border-color:#F2D590;box-shadow:0 0 0 1px rgba(250,229,169,.48),0 10px 26px rgba(0,0,0,.55),0 0 20px rgba(201,168,76,.33),inset 0 1px 0 rgba(255,243,205,.68),inset 0 -6px 12px rgba(90,58,8,.22);color:#FFFCEB}
+.trad-btn .icon{font-size:1.32rem}
+.trad-btn .lbl{font-weight:500;line-height:1.2;text-wrap:balance}
+.trad-btn .sub{font-size:.67rem;opacity:.84;line-height:1.25;text-wrap:balance}
+.trad-btn.full{grid-column:1 / -1}
+.trad-catholic{font-family:'EB Garamond','Cormorant Garamond',serif}
+.trad-baptist{font-family:'Merriweather','Cinzel',serif;font-weight:700}
+.trad-methodist{font-family:'Vollkorn','Cormorant Garamond',serif}
+.trad-protestant{font-family:'Vollkorn','Cormorant Garamond',serif}
+.trad-evangelical{font-family:'Oswald','Cinzel',sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.trad-orthodox-christian{font-family:'Playfair Display','Cormorant Garamond',serif}
+.trad-jewish{font-family:'Frank Ruhl Libre','Cormorant Garamond',serif}
+.trad-nondenominational{font-family:'Inter','Lato',sans-serif;letter-spacing:.04em;font-weight:300}
+.trad-other{font-family:'Lora','Cormorant Garamond',serif;font-style:italic}
 .btn-primary{width:100%;padding:17px;background:linear-gradient(135deg,var(--gold-dark),var(--gold),var(--gold-dark));background-size:200%;border:none;border-radius:8px;color:var(--deep);font-family:'Cinzel',serif;font-size:.9rem;font-weight:600;letter-spacing:.2em;cursor:pointer;transition:all .4s;margin-top:8px}
 .btn-primary:hover{background-position:100%;box-shadow:0 8px 30px rgba(201,168,76,.3);transform:translateY(-1px)}
 .btn-primary:disabled{opacity:.45;cursor:not-allowed;transform:none}
@@ -39,6 +130,12 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
 .textarea{width:100%;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.25);border-radius:10px;padding:18px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:1.1rem;line-height:1.7;resize:vertical;min-height:130px;outline:none;margin-bottom:10px}
 .textarea::placeholder{color:rgba(201,168,76,.35);font-style:italic}
 .textarea:focus{border-color:rgba(201,168,76,.6)}
+.crisis-box{display:none;margin:12px 0 14px;padding:14px;border-radius:10px;border:1px solid rgba(232,170,170,.5);background:linear-gradient(180deg,rgba(90,26,30,.6),rgba(54,13,18,.7));color:#FFEFEF}
+.crisis-title{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.14em;color:#FFD8D8;margin-bottom:8px}
+.crisis-copy{font-size:.84rem;line-height:1.5;opacity:.94}
+.crisis-links{display:grid;gap:6px;margin-top:10px}
+.crisis-links a{color:#FFDFA3;text-decoration:none;border-bottom:1px dotted rgba(255,223,163,.5);width:fit-content}
+.crisis-links a:hover{color:#FFF1C8}
 .len-hint{font-size:.73rem;color:rgba(201,168,76,.4);text-align:right;margin-bottom:14px}
 .loading{text-align:center;padding:60px 20px}
 .loading-cross{font-size:3rem;color:var(--gold);animation:glow 1.5s ease-in-out infinite;display:block;margin-bottom:18px}
@@ -61,6 +158,24 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
 .free-banner{background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.18);border-radius:8px;padding:10px 14px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;font-size:.77rem}
 .free-banner .lbl{color:var(--stone)}
 .free-banner .cnt{color:var(--gold);font-family:'Cinzel',serif}
+.paywall-root{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(5,10,20,.88);backdrop-filter:blur(6px)}
+.paywall-root.open{display:flex}
+.paywall-card{width:100%;max-width:420px;border-radius:14px;padding:26px 22px;border:1px solid rgba(201,168,76,.45);background:linear-gradient(165deg,rgba(22,36,58,.98),rgba(10,22,40,.98));box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(255,236,188,.08) inset}
+.paywall-kicker{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.22em;color:var(--gold);margin-bottom:10px;text-align:center}
+.paywall-title{font-family:'Cormorant Garamond',serif;font-size:1.35rem;color:var(--cream);text-align:center;line-height:1.35;margin-bottom:8px}
+.paywall-lead{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:rgba(232,213,163,.75);text-align:center;margin-bottom:18px;line-height:1.45}
+.paywall-tiers{display:grid;gap:10px;margin-bottom:14px}
+.paywall-tier{text-align:left;padding:14px;border-radius:10px;border:1px solid rgba(201,168,76,.28);background:rgba(201,168,76,.06);cursor:pointer;transition:border-color .2s,background .2s}
+.paywall-tier:hover{border-color:rgba(232,213,163,.55);background:rgba(201,168,76,.1)}
+.paywall-tier-name{font-family:'Cinzel',serif;font-size:.78rem;letter-spacing:.12em;color:var(--gold-light)}
+.paywall-tier-price{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--cream);margin-top:4px}
+.paywall-tier-note{font-size:.72rem;color:rgba(232,213,163,.55);margin-top:4px;line-height:1.35}
+.paywall-foot{font-size:.72rem;color:rgba(201,168,76,.45);text-align:center;line-height:1.45;margin-top:12px}
+.paywall-close{margin-top:14px;width:100%;background:none;border:none;color:rgba(201,168,76,.45);font-family:'Lato',sans-serif;font-size:.8rem;cursor:pointer;padding:8px}
+.paywall-close:hover{color:var(--gold-light)}
+.paywall-notice{display:none;margin-top:12px;padding:10px;border-radius:8px;border:1px solid rgba(201,168,76,.25);background:rgba(201,168,76,.08);font-size:.78rem;color:var(--gold-light);line-height:1.45;text-align:center}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);z-index:10000;padding:12px 20px;border-radius:8px;background:rgba(10,22,40,.95);border:1px solid rgba(201,168,76,.35);color:var(--cream);font-size:.82rem;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;max-width:90%}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .sub-box-inner{background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.3);border-radius:12px;padding:22px;text-align:center;margin-top:20px}
 .sub-grid{display:grid;gap:10px;grid-template-columns:1fr 1fr;margin:16px 0}
 .sub-card{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:14px;position:relative}
@@ -78,34 +193,120 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
 .btn-deeper{width:100%;padding:18px;background:linear-gradient(135deg,#7a5010,var(--gold),#e8c86a,var(--gold),#7a5010);background-size:200%;border:none;border-radius:8px;color:var(--deep);font-family:'Cinzel',serif;font-size:.95rem;font-weight:600;letter-spacing:.18em;cursor:pointer;transition:all .5s;margin-bottom:12px}
 .btn-deeper:hover{background-position:100%;box-shadow:0 8px 40px rgba(201,168,76,.4);transform:translateY(-2px)}
 .btn-no-thanks{background:none;border:none;color:rgba(201,168,76,.35);font-family:'Lato',sans-serif;font-size:.78rem;cursor:pointer;width:100%;text-align:center;padding:10px}
-@media(max-width:480px){.g3{grid-template-columns:1fr 1fr}.g4{grid-template-columns:1fr 1fr}.action-row{grid-template-columns:1fr}}
+@media(max-width:480px){.g3{grid-template-columns:1fr 1fr}.g4{grid-template-columns:1fr 1fr}.action-row{grid-template-columns:1fr}.trad-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="bg"></div>
 <div class="app">
 <header>
-  <span class="cross">✦ ✝ ✦</span>
-  <h1 class="title">Pray With Me</h1>
-  <p class="tagline">A sacred space, personalized for you</p>
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <svg class="glory-rays" viewBox="0 0 1200 360" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="rayGrad" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="rgba(245,200,80,0)"/>
+          <stop offset="45%" stop-color="rgba(245,200,80,.38)"/>
+          <stop offset="100%" stop-color="rgba(245,200,80,.04)"/>
+        </linearGradient>
+        <linearGradient id="rayBrightGrad" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="rgba(255,232,128,0)"/>
+          <stop offset="42%" stop-color="rgba(255,232,128,.62)"/>
+          <stop offset="100%" stop-color="rgba(255,232,128,.08)"/>
+        </linearGradient>
+      </defs>
+      <polygon class="ray soft d1" points="600,280 520,0 565,0"/>
+      <polygon class="ray mid d2" points="600,280 555,0 600,0"/>
+      <polygon class="ray bright d3" points="600,280 590,0 630,0"/>
+      <polygon class="ray mid d4" points="600,280 630,0 670,0"/>
+      <polygon class="ray soft d5" points="600,280 660,0 720,0"/>
+      <polygon class="ray soft d3" points="600,280 465,0 525,0"/>
+      <polygon class="ray mid d1" points="600,280 705,0 755,0"/>
+    </svg>
+    <div class="hero-title-wrap">
+      <h1 class="title">Pray With Me</h1>
+      <p class="tagline">a sacred space, personalized for you</p>
+    </div>
+    <svg class="mountain-back" viewBox="0 0 1200 220" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 220 L0 156 L78 92 L144 138 L226 54 L308 140 L388 72 L472 152 L550 42 L624 142 L710 84 L792 162 L876 68 L962 154 L1050 78 L1142 166 L1200 126 L1200 220 Z"/>
+    </svg>
+    <div class="ridge-symbols" aria-hidden="true">
+      <svg viewBox="0 0 40 40"><path stroke-width="2.1" d="M20 6v28M11 16h18"/></svg>
+      <svg viewBox="0 0 40 40"><path stroke-width="2" d="M20 5v30M9 16h22M13 9h14M11 26l18-4"/></svg>
+      <svg viewBox="0 0 40 40"><path stroke-width="1.8" d="M20 5l13 22H7L20 5zm0 30L7 13h26L20 35z"/></svg>
+      <svg class="seal" viewBox="0 0 56 56">
+        <g stroke-width="1.8">
+          <path d="M10 15h36"/>
+          <path d="M14 15c0-5 4-8 7-8M20 15c0-6 4-10 8-10M28 15V5M36 15c0-6-4-10-8-10M42 15c0-5-4-8-7-8"/>
+          <path d="M28 18l9 15H19l9-15zm0 22L19 25h18L28 40z"/>
+          <path d="M20 45c4-5 12-5 16 0M20 45l8 6M36 45l-8 6"/>
+        </g>
+      </svg>
+      <svg viewBox="0 0 40 40"><path stroke-width="2" d="M10 31l20-22M10 9l20 22M20 9v22M20 9c5 0 8 3 8 7"/></svg>
+      <svg viewBox="0 0 40 40"><path stroke-width="2" d="M7 16c6-6 20-6 26 0M7 24c6 6 20 6 26 0M27 20h7"/></svg>
+      <svg viewBox="0 0 40 40"><path stroke-width="2.1" d="M20 6v28M11 16h18"/></svg>
+    </div>
+    <svg class="mountain-front" viewBox="0 0 1200 180" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 180 C90 150 170 160 250 150 C320 142 390 148 470 140 C560 132 640 138 720 128 C810 116 905 130 990 122 C1075 114 1145 120 1200 110 L1200 180 Z"/>
+    </svg>
+  </div>
   <div class="divider"></div>
+  <div class="bless-nav-row">
+    <button type="button" class="btn-bless-nav" onclick="goBlessIntro()">✦ BLESS SOMEONE™ — SEND A PRAYER</button>
+  </div>
 </header>
+
+<!-- BLESS SOMEONE — INTRO -->
+<div class="screen" id="s-bless-intro">
+  <div class="sec-title">Bless Someone™</div>
+  <div class="sec-sub">Send a personalized prayer as a gift. They open your link, receive the blessing you crafted, and may unlock an extended prayer for <strong style="color:var(--gold);font-weight:600;">$1.11</strong> — credited toward a subscription within 30 days, just like Go Deeper.</div>
+  <div style="font-family:'Cormorant Garamond',serif;font-size:1rem;line-height:1.75;color:var(--cream);opacity:.92;margin-bottom:20px;padding:0 4px;">
+    <p style="margin-bottom:14px;"><strong style="color:var(--gold-light);">Receiver pays $1.11:</strong> They choose extended after opening your gift; the fee applies to subscription if they join within 30 days.</p>
+    <p><strong style="color:var(--gold-light);">You pay $1.11 upfront:</strong> Add extended as part of your gift. The receiver still receives the <strong>$1.11 credit</strong> toward subscription — a gift from you, applied in their name when they subscribe.</p>
+  </div>
+  <button class="btn-primary" onclick="go('s-bless-sender')">CREATE A BLESSING GIFT</button>
+  <button class="btn-back" onclick="exitBlessFlow()">← Back to Pray for Myself</button>
+</div>
+
+<!-- BLESS SOMEONE — SENDER DETAILS -->
+<div class="screen" id="s-bless-sender">
+  <div class="sec-title">Bless Someone™</div>
+  <div class="sec-sub">Who is this blessing for?</div>
+  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">RECIPIENT FIRST NAME OR NICKNAME</div>
+  <input type="text" id="bless-recipient-name" class="textarea" style="min-height:52px;padding:14px 16px;margin-bottom:14px;" placeholder="e.g. Mom, David, Sarah…" maxlength="80">
+  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">SHORT NOTE (OPTIONAL)</div>
+  <textarea id="bless-sender-note" class="textarea" style="min-height:88px;" placeholder="A few words of love…" maxlength="280"></textarea>
+  <button class="btn-primary" onclick="blessSenderContinue()">CONTINUE — CHOOSE TRADITION &amp; MINISTER</button>
+  <button class="btn-back" onclick="go('s-bless-intro')">← Back</button>
+</div>
+
+<!-- BLESS SOMEONE — RECEIVER OPENS LINK -->
+<div class="screen" id="s-bless-receive">
+  <div class="sec-title">You've Received a Blessing</div>
+  <div class="sec-sub" id="bless-rcv-lead">Someone sent you prayer through Bless Someone™.</div>
+  <div id="bless-rcv-meta" style="font-size:.84rem;color:rgba(232,213,163,.75);margin-bottom:18px;line-height:1.5;"></div>
+  <button class="btn-primary" id="bless-rcv-open" onclick="openReceivedBlessing()">OPEN THIS BLESSING</button>
+  <button class="btn-back" onclick="clearBlessQueryAndHome()">← Start my own prayer</button>
+</div>
 
 <!-- TRADITION -->
 <div class="screen active" id="s-tradition">
-  <div class="free-banner"><span class="lbl">✦ 1 FREE PRAYER THIS MONTH</span><span class="cnt">1 remaining</span></div>
+  <div id="bless-mode-banner" class="bless-mode-banner"><strong>BLESS SOMEONE™</strong> — You're creating a gift. Complete the steps, then copy the link to send.</div>
+  <div class="free-banner"><span class="lbl">✦ 1 FREE PRAYER THIS MONTH</span><span class="cnt" id="free-count">1 remaining</span></div>
   <div class="sec-title">Your Faith Tradition</div>
   <div class="sec-sub">What is your faith tradition?</div>
-  <div class="g2">
-    <button class="btn-choice" onclick="selTradition(this,'catholic')"><span class="icon">⛪</span><span class="lbl">Catholic</span></button>
-    <button class="btn-choice" onclick="selTradition(this,'protestant')"><span class="icon">✝️</span><span class="lbl">Protestant</span><span class="sub">Baptist, Methodist, etc.</span></button>
-    <button class="btn-choice" onclick="selTradition(this,'evangelical')"><span class="icon">📖</span><span class="lbl">Evangelical</span><span class="sub">Pentecostal, Charismatic</span></button>
-    <button class="btn-choice" onclick="selTradition(this,'orthodox-christian')"><span class="icon">☦️</span><span class="lbl">Orthodox Christian</span></button>
-    <button class="btn-choice" onclick="selTradition(this,'messianic-jewish')"><span class="icon">✡️</span><span class="lbl">Messianic Jewish</span><span class="sub">Believers in Yeshua</span></button>
-    <button class="btn-choice" onclick="selTradition(this,'orthodox-jewish')"><span class="icon">🕍</span><span class="lbl">Orthodox Jewish</span></button>
-    <button class="btn-choice" onclick="selTradition(this,'conservative-jewish')"><span class="icon">🔯</span><span class="lbl">Conservative / Reform Jewish</span></button>
-    <button class="btn-choice" onclick="selTradition(this,'nondenominational')"><span class="icon">🕊️</span><span class="lbl">Non-Denominational</span></button>
-    <button class="btn-choice" onclick="selTradition(this,'other')"><span class="icon">🙏</span><span class="lbl">Other / Interfaith</span></button>
+  <div class="trad-grid">
+    <button class="btn-choice trad-btn trad-catholic" onclick="selTradition(this,'catholic')"><span class="icon">⛪</span><span class="lbl">Roman Catholic</span></button>
+    <button class="btn-choice trad-btn trad-baptist" onclick="selTradition(this,'baptist')"><span class="icon">✝️</span><span class="lbl">Baptist</span></button>
+    <button class="btn-choice trad-btn trad-methodist" onclick="selTradition(this,'methodist')"><span class="icon">✝️</span><span class="lbl">Methodist</span></button>
+    <button class="btn-choice trad-btn trad-protestant" onclick="selTradition(this,'protestant')"><span class="icon">✝️</span><span class="lbl">Protestant</span><span class="sub">Lutheran, Presbyterian, etc.</span></button>
+    <button class="btn-choice trad-btn trad-evangelical" onclick="selTradition(this,'evangelical')"><span class="icon">📖</span><span class="lbl">Evangelical</span><span class="sub">Pentecostal, Charismatic</span></button>
+    <button class="btn-choice trad-btn trad-orthodox-christian" onclick="selTradition(this,'orthodox-christian')"><span class="icon">☦️</span><span class="lbl">Orthodox Christian</span></button>
+    <button class="btn-choice trad-btn trad-jewish" onclick="selTradition(this,'messianic-jewish')"><span class="icon">✡️</span><span class="lbl">Messianic Jewish</span><span class="sub">Believers in Yeshua</span></button>
+    <button class="btn-choice trad-btn trad-jewish" onclick="selTradition(this,'orthodox-jewish')"><span class="icon">🕍</span><span class="lbl">Orthodox Jewish</span></button>
+    <button class="btn-choice trad-btn trad-jewish" onclick="selTradition(this,'conservative-jewish')"><span class="icon">🔯</span><span class="lbl">Conservative / Reform</span><span class="sub">Jewish</span></button>
+    <button class="btn-choice trad-btn trad-nondenominational" onclick="selTradition(this,'nondenominational')"><span class="icon">🕊️</span><span class="lbl">Non-Denominational</span></button>
+    <button class="btn-choice trad-btn trad-other full" onclick="selTradition(this,'other')"><span class="icon">🙏</span><span class="lbl">Other / Interfaith</span></button>
   </div>
   <button class="btn-primary" id="btn-trad" disabled onclick="nextTradition()">CONTINUE</button>
 </div>
@@ -148,6 +349,12 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
     <button class="btn-choice" onclick="selField(this,'title','Minister')"><span class="lbl">Minister</span></button>
     <button class="btn-choice" onclick="selField(this,'title','Elder')"><span class="lbl">Elder</span></button>
     <button class="btn-choice" onclick="selField(this,'title','Chaplain')"><span class="lbl">Chaplain</span></button>
+    <button type="button" class="btn-choice" id="btn-title-rabbi" onclick="selField(this,'title','Rabbi')"><span class="lbl">Rabbi</span></button>
+  </div>
+  <div id="rabbi-minister-panel" style="display:none;margin-bottom:18px;">
+    <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">CHOOSE YOUR RABBI</div>
+    <div class="sec-sub" style="margin-top:-6px;margin-bottom:12px;max-width:520px;margin-left:auto;margin-right:auto;">Select the rabbi avatar who will lead your prayer (HeyGen rabbi-designated roster).</div>
+    <div class="g3" id="rabbi-minister-grid"></div>
   </div>
   <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;">GENDER</div>
   <div class="g2">
@@ -192,6 +399,20 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
     <button class="btn-choice" onclick="selTopic(this,'Spiritual Growth')"><span class="icon">📖</span><span class="lbl">Spiritual Growth</span></button>
   </div>
   <textarea class="textarea" id="prayer-req" placeholder="Tell your minister what's on your heart…" oninput="checkReq()"></textarea>
+  <div class="crisis-box" id="crisis-box">
+    <div class="crisis-title">IMMEDIATE SUPPORT</div>
+    <div class="crisis-copy">If you may harm yourself or feel you cannot stay safe, please contact support now. You matter and help is available 24/7.</div>
+    <div class="crisis-links">
+      <a href="tel:988">Call or text 988 (Suicide & Crisis Lifeline)</a>
+      <a href="sms:741741">Text HOME to 741741 (Crisis Text Line)</a>
+      <a href="tel:18006624357">Call 1-800-662-4357 (SAMHSA)</a>
+    </div>
+  </div>
+  <div id="bless-gift-panel" class="bless-gift-panel">
+    <div class="bless-k">GIFT OPTIONS — BLESS SOMEONE™</div>
+    <div style="font-size:.8rem;color:rgba(232,213,163,.8);line-height:1.45;">Extended unlock is <strong style="color:var(--gold);">$1.11</strong>. The recipient may purchase it when they open your link — or you can prepay below so we still credit <strong style="color:var(--gold);">$1.11</strong> to them toward a subscription (gift from you).</div>
+    <label><input type="checkbox" id="bless-prepay-extended"> <span>I'm paying <strong>$1.11</strong> now so my recipient receives the extended unlock + subscription credit as my gift. <em style="opacity:.85;">(Stripe: connect checkout URL <code style="font-size:.7rem;">bless_sender_prepay</code> in app script.)</em></span></label>
+  </div>
   <div class="len-hint" id="len-hint">✦ Your minister will offer a brief blessing — 15 to 30 seconds</div>
   <button class="btn-primary" id="btn-req" disabled onclick="deliver()">RECEIVE YOUR PRAYER</button>
   <button class="btn-back" onclick="go('s-minister')">← Back</button>
@@ -217,8 +438,19 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
     <div class="action-row">
       <button class="btn-sec" onclick="copyPrayer()">📋 Copy</button>
       <button class="btn-sec" onclick="sharePrayer()">🔗 Share</button>
+      <button class="btn-sec" id="btn-copy-bless-link" style="display:none;" onclick="copyBlessSomeoneLink()" title="After your minister’s video appears, the gift link can include that video for the recipient.">🎁 Copy Bless Someone™ Link</button>
       <button class="btn-sec" onclick="startOver()">🙏 Pray Again</button>
       <button class="btn-sec" onclick="toggleSub()">⭐ Subscribe</button>
+    </div>
+    <div id="bless-receiver-tools" style="display:none;margin-top:12px;">
+      <div style="text-align:center;font-size:.65rem;color:var(--stone);line-height:1.5;padding:0 8px 10px;opacity:.92;">Optional keepsakes only. Your gift is the minister-led prayer experience above (video when your sender included one). A transcript is for your convenience—not a replacement for that experience.</div>
+      <div class="action-row">
+        <button type="button" class="btn-sec" id="btn-bless-recv-video" style="display:none;" onclick="downloadBlessGiftVideo()">⬇ Save minister video</button>
+        <button type="button" class="btn-sec" onclick="downloadBlessGiftAsText()">Save prayer transcript (.txt)</button>
+      </div>
+      <div style="text-align:center;margin-top:10px;">
+        <button type="button" class="btn-sec" onclick="deleteBlessGiftFromServer()">Delete gift link</button>
+      </div>
     </div>
     <div id="sub-box" style="display:none;">
       <div class="sub-box-inner">
@@ -227,14 +459,14 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
           <div class="sub-card"><div class="sub-price">$4.99</div><div class="sub-period">PER MONTH</div></div>
           <div class="sub-card feat"><div class="sub-badge">MOST FAITHFUL</div><div class="sub-price">$111</div><div class="sub-period">PER YEAR</div></div>
         </div>
-        <button class="btn-primary" style="margin-top:0;" onclick="alert('Subscription coming soon! 🙏')">BEGIN YOUR JOURNEY</button>
+        <button class="btn-primary" style="margin-top:0;" onclick="openPaywall('subscribe')">BEGIN YOUR JOURNEY</button>
         <div style="font-size:.66rem;color:var(--stone);margin-top:8px;">Cancel anytime · Churches contact Baruch Kairos Group for licensing</div>
       </div>
     </div>
     <div id="deeper-nudge" style="display:none;margin-top:18px;">
       <div style="text-align:center;padding:18px;background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.2);border-radius:12px;">
         <div style="font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.2em;color:var(--gold);margin-bottom:6px;">YOUR MINISTER HAS MORE</div>
-        <div style="font-family:'Cormorant Garamath',serif;font-style:italic;font-size:.95rem;color:var(--gold-light);opacity:.8;margin-bottom:14px;line-height:1.5;">An extended prayer has been prepared personally for you</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--gold-light);opacity:.8;margin-bottom:14px;line-height:1.5;">An extended prayer has been prepared personally for you</div>
         <button class="btn-deeper" onclick="go('s-deeper')">✦ &nbsp; GO DEEPER — $1.11 &nbsp; ✦</button>
         <div style="font-size:.68rem;color:rgba(201,168,76,.4);">Credited toward any subscription within 30 days</div>
       </div>
@@ -259,10 +491,56 @@ header{width:100%;text-align:center;padding:40px 24px 20px}
 
 </div>
 
+<div id="paywall-root" class="paywall-root" role="dialog" aria-modal="true" aria-labelledby="paywall-title" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-card" onclick="event.stopPropagation()">
+    <div class="paywall-kicker">CONTINUE YOUR JOURNEY</div>
+    <div class="paywall-title" id="paywall-title">You have used your free prayer this month</div>
+    <div class="paywall-lead" id="paywall-lead">Subscribe for unlimited prayers, or complete Go Deeper for extended blessings when checkout is connected.</div>
+    <div class="paywall-tiers">
+      <div class="paywall-tier" onclick="beginCheckout('personal')">
+        <div class="paywall-tier-name">PERSONAL</div>
+        <div class="paywall-tier-price">$4.99 / month</div>
+        <div class="paywall-tier-note">10 prayers per month · cancel anytime</div>
+      </div>
+      <div class="paywall-tier" onclick="beginCheckout('unlimited')">
+        <div class="paywall-tier-name">UNLIMITED</div>
+        <div class="paywall-tier-price">$9.99 / month</div>
+        <div class="paywall-tier-note">Unlimited prayers · best value for daily use</div>
+      </div>
+      <div class="paywall-tier" onclick="beginCheckout('annual')">
+        <div class="paywall-tier-name">ANNUAL FAITHFUL</div>
+        <div class="paywall-tier-price">$111 / year</div>
+        <div class="paywall-tier-note">One year of unlimited prayer</div>
+      </div>
+    </div>
+    <div class="paywall-notice" id="paywall-notice"></div>
+    <div class="paywall-foot">Secure checkout via Stripe will open here once linked. Churches: contact Baruch Kairos Group for ministry licensing.</div>
+    <button type="button" class="paywall-close" onclick="closePaywall()">Close</button>
+  </div>
+</div>
+<div id="toast" class="toast" role="status"></div>
+
 <script>
 const PROXY='https://github-login.replit.app';
+const FREE_PRAYER_LIMIT=1;
+const USAGE_KEY='pwm.freePrayerUsage.v1';
+const SUBSCRIPTION_KEY='pwm.subscriptionActive.v1';
+const DEEPER_PURCHASE_KEY='pwm.goDeeperPurchased.v1';
+const STRIPE_CHECKOUT_URLS={personal:'',unlimited:'',annual:'',bless_sender_prepay:'',bless_receiver_extended:''};
+const RECEIVER_CREDIT_KEY='pwm.receiverBlessCredit111';
+const BLESS={mode:'self',recipientFirst:'',senderNote:'',senderPrepayExtended:false};
+let pendingBlessGift=null;
+let blessReceiveGiftId=null;
+const CRISIS_PATTERNS=[
+  /\bi\s*(?:do\s*not|don't)\s*want\s*to\s*live\b/i,
+  /\bend\s*it\b/i,
+  /\bsuicide\b/i,
+  /\bhopeless\b/i,
+  /\bcan'?t\s*go\s*on\b/i,
+  /\bkill\s*myself\b/i
+];
 
-const S={tradition:'',god:'God',jesus:'Jesus',title:'',gender:'',voice:'',appearance:'',topic:'',lastPrayer:null};
+const S={tradition:'',god:'God',jesus:'Jesus',title:'',gender:'',voice:'',appearance:'',topic:'',lastPrayer:null,chosenRabbiId:null};
 
 const MINISTERS=[
   // Powerful & Bold — male deep authoritative voices
@@ -280,7 +558,7 @@ const MINISTERS=[
   // Warm & Gentle — Hispanic warm male
   {id:7, avatarId:'8c52bb7102784c8d9abb96c87249829b',voiceId:'beac6061ade8472e83bb8edf1f8f943d',gender:'male',  appearance:'tan',            style:'warm',        name:'Male Tan Catholic Hispanic'},
   // Traditional & Reverent — Orthodox dignified
-  {id:8, avatarId:'c807ecb51b2448ebabcac939f710e79f',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'tan',            style:'traditional', name:'Male Tan Orthodox Christian'},
+  {id:8, avatarId:'c807ecb51b2448ebabcac939f710e79f',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'tan',            style:'traditional', name:'Rabbi Mordechai — Orthodox & traditional',rabbi:true,rabbiShort:'Rabbi Mordechai',rabbiSub:'Traditional voice'},
   // Warm & Gentle — female soothing
   {id:9, avatarId:'b0e8eb5d14904ae885c2af2775866c41',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'light',          style:'warm',        name:'Female Light Non-Denominational'},
   // Traditional & Reverent — female Catholic
@@ -294,7 +572,7 @@ const MINISTERS=[
   // Warm & Gentle — female dark warm
   {id:14,avatarId:'629ff000d2894223be515c91c9674a75',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'dark',           style:'warm',        name:'Female Dark Baptist'},
   // Traditional & Reverent — Messianic scholarly
-  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'light',          style:'traditional', name:'Male Orthodox Messianic'},
+  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'light',          style:'traditional', name:'Rabbi Benayah — Messianic Jewish',rabbi:true,rabbiShort:'Rabbi Benayah',rabbiSub:'Messianic / Yeshua tradition'},
   // Contemporary — female tan bridge builder
   {id:16,avatarId:'a34fab9e9e814cd781b3fd7e766fdd5d',voiceId:'662f98eef6fd4ff89faf9bc2485659eb',gender:'female',appearance:'tan',            style:'contemporary',name:'Female Tan Non Denominational'},
   // Warm & Gentle — East Asian male
@@ -306,7 +584,7 @@ const MINISTERS=[
   // Warm & Gentle — Southeast Asian female Catholic
   {id:20,avatarId:'5fe8e4b41ec8433e927384d01fe1bfec',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'southeast-asian',style:'warm',        name:'Female Southeast Asian Catholic'},
   // Traditional & Reverent — Southeast Asian male
-  {id:21,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'southeast-asian',style:'traditional', name:'Male Southeast Asian Non Denom'},
+  {id:21,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'southeast-asian',style:'traditional', name:'Rabbi Eliav — Conservative & Reform',rabbi:true,rabbiShort:'Rabbi Eliav',rabbiSub:'Community & pastoral tone'},
   // Warm & Gentle — South Asian female
   {id:22,avatarId:'2381a1ba36f2484d9ecdbc0d6633fcd7',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'south-asian',    style:'warm',        name:'Female South Asian Non Denom'},
   // Warm & Gentle — African male
@@ -341,14 +619,358 @@ function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='s-request'){
+    checkReq();
+    const bp=document.getElementById('bless-gift-panel');
+    if(bp)bp.style.display=(BLESS.mode==='send')?'block':'none';
+  }
+  if(id==='s-tradition'){
+    const b=document.getElementById('bless-mode-banner');
+    if(b)b.style.display=(BLESS.mode==='send')?'block':'none';
+  }
+  if(id==='s-minister'){
+    syncJewishTitleToRabbi();
+    updateRabbiPanel();
+    const bm=document.getElementById('btn-min');
+    if(bm)bm.disabled=!ministerFormComplete();
+  }
+}
+
+function escapeHtml(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function goBlessIntro(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-bless-intro').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function exitBlessFlow(){
+  BLESS.mode='self';
+  BLESS.recipientFirst='';
+  BLESS.senderNote='';
+  BLESS.senderPrepayExtended=false;
+  const b=document.getElementById('bless-mode-banner');
+  if(b)b.style.display='none';
+  const bp=document.getElementById('bless-gift-panel');
+  if(bp)bp.style.display='none';
+  const cb=document.getElementById('bless-prepay-extended');
+  if(cb)cb.checked=false;
+  go('s-tradition');
+}
+
+function blessSenderContinue(){
+  const n=(document.getElementById('bless-recipient-name')&&document.getElementById('bless-recipient-name').value.trim())||'';
+  if(n.length<1){showToast('Please add the recipient’s first name or nickname');return;}
+  BLESS.mode='send';
+  BLESS.recipientFirst=n;
+  BLESS.senderNote=(document.getElementById('bless-sender-note')&&document.getElementById('bless-sender-note').value.trim())||'';
+  const b=document.getElementById('bless-mode-banner');
+  if(b)b.style.display='block';
+  go('s-tradition');
+}
+
+function applyBlessReceiveUi(){
+  const meta=document.getElementById('bless-rcv-meta');
+  const btn=document.getElementById('bless-rcv-open');
+  const lead=document.getElementById('bless-rcv-lead');
+  if(pendingBlessGift){
+    if(lead)lead.textContent='Someone sent you prayer through Bless Someone™.';
+    let h='';
+    if(pendingBlessGift.recipientFirst)h+=`<p style="margin-bottom:8px;">Prepared with <strong>${escapeHtml(pendingBlessGift.recipientFirst)}</strong> in mind.</p>`;
+    if(pendingBlessGift.senderNote)h+=`<p style="font-style:italic;opacity:.9;">${escapeHtml(pendingBlessGift.senderNote)}</p>`;
+    if(pendingBlessGift.senderPrepayExtended)h+=`<p style="margin-top:12px;color:var(--gold);">Your sender prepaid <strong>$1.11</strong> for extended prayer. You also hold that amount as <strong>subscription credit</strong> (gift from them) when you subscribe within 30 days.</p>`;
+    if(meta)meta.innerHTML=h||'<p>Open the blessing when you are ready.</p>';
+    if(btn)btn.style.display='block';
+  }else{
+    if(lead)lead.textContent='This Bless Someone™ link could not be loaded.';
+    if(meta)meta.innerHTML='<p>We could not find this gift on the server, and it is not saved in this browser. Ask the sender to create the link again after the Bless Someone API is deployed, or open the link where it was first created.</p>';
+    if(btn)btn.style.display='none';
+  }
+}
+
+function initBlessFromUrl(){
+  const id=new URLSearchParams(location.search).get('bless');
+  if(!id)return;
+  blessReceiveGiftId=String(id).slice(0,48);
+  pendingBlessGift=null;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-bless-receive').classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  const meta=document.getElementById('bless-rcv-meta');
+  const btn=document.getElementById('bless-rcv-open');
+  const lead=document.getElementById('bless-rcv-lead');
+  if(lead)lead.textContent='Someone sent you prayer through Bless Someone™.';
+  if(meta)meta.innerHTML='<p style="opacity:.85;">Loading your blessing…</p>';
+  if(btn)btn.style.display='none';
+
+  (async()=>{
+    let pack=null;
+    try{
+      const r=await fetch(PROXY+'/api/bless/'+encodeURIComponent(id),{method:'GET',headers:{'Accept':'application/json'}});
+      if(r.ok)pack=await r.json();
+    }catch{}
+    if(!pack){
+      try{
+        const raw=localStorage.getItem('pwm.blessGift.'+id);
+        if(raw)pack=JSON.parse(raw);
+      }catch{}
+    }
+    pendingBlessGift=pack;
+    applyBlessReceiveUi();
+  })();
+}
+
+function clearBlessQueryAndHome(){
+  blessReceiveGiftId=null;
+  pendingBlessGift=null;
+  try{
+    const u=new URL(window.location.href);
+    u.searchParams.delete('bless');
+    history.replaceState({},'',u.pathname+(u.search?u.search:''));
+  }catch{}
+  exitBlessFlow();
+}
+
+function openReceivedBlessing(){
+  if(!pendingBlessGift||!pendingBlessGift.lastPrayer){showToast('Nothing to open');return;}
+  if(pendingBlessGift.senderPrepayExtended){
+    try{localStorage.setItem(RECEIVER_CREDIT_KEY,'1');}catch{}
+    showToast('Sender gift: $1.11 credit applied toward extended prayer or your subscription.');
+  }
+  BLESS.mode='self';
+  const lp=pendingBlessGift.lastPrayer;
+  const m=MINISTERS.find(x=>x.id===lp.ministerId)||MINISTERS[0];
+  go('s-prayer');
+  document.getElementById('loading-area').style.display='none';
+  document.getElementById('prayer-area').style.display='block';
+  const vUrl=(typeof lp.videoUrl==='string'&&/^https:\/\//i.test(lp.videoUrl))?lp.videoUrl:null;
+  showPrayer({verse:lp.verse,verseText:lp.verseText,prayer:lp.prayer,closing:lp.closing},m,vUrl,lp.len||'short');
+  if(pendingBlessGift.senderPrepayExtended){
+    document.getElementById('deeper-nudge').style.display='block';
+  }
+}
+
+function beginBlessSenderPrepay(){
+  const url=(STRIPE_CHECKOUT_URLS&&STRIPE_CHECKOUT_URLS.bless_sender_prepay)||'';
+  if(url)window.open(url,'_blank','noopener,noreferrer');
+  else showToast('Connect Stripe: set STRIPE_CHECKOUT_URLS.bless_sender_prepay for the $1.11 sender prepay.');
+}
+
+async function copyBlessSomeoneLink(){
+  if(!S.lastPrayer){showToast('Complete the blessing first');return;}
+  if(BLESS.mode!=='send'){showToast('Switch to Bless Someone flow to create a gift link');return;}
+  const pack={
+    v:1,
+    created:Date.now(),
+    senderPrepayExtended:!!BLESS.senderPrepayExtended,
+    recipientFirst:BLESS.recipientFirst||'',
+    senderNote:BLESS.senderNote||'',
+    lastPrayer:{...S.lastPrayer}
+  };
+  const src=document.querySelector('#video-wrap video source')?.getAttribute('src');
+  if(src&&/^https:\/\//i.test(src)&&pack.lastPrayer)pack.lastPrayer.videoUrl=src;
+  let id=null;
+  let fromServer=false;
+  try{
+    const r=await fetch(PROXY+'/api/bless/create',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify(pack)
+    });
+    if(r.ok){
+      const d=await r.json();
+      if(d&&d.id){id=d.id;fromServer=true;}
+    }
+  }catch(e){console.warn('Bless create API:',e);}
+  if(!id){
+    id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(36).slice(2,10);
+  }
+  try{localStorage.setItem('pwm.blessGift.'+id,JSON.stringify(pack));}
+  catch(e){if(!fromServer){showToast('Could not save gift — storage may be full');return;}}
+  const u=new URL(window.location.href);
+  u.searchParams.set('bless',id);
+  const link=u.toString();
+  navigator.clipboard.writeText(link).then(()=>{
+    showToast(fromServer?'Bless Someone™ link copied (opens on any device)':'Bless Someone™ link copied (this device only until API is live)');
+  }).catch(()=>{prompt('Copy this link:',link);});
 }
 
 function clearGrid(el){
   el.parentElement.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
 }
 
+function currentMonthKey(){
+  const now=new Date();
+  return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+}
+
+function readUsage(){
+  try{
+    const raw=localStorage.getItem(USAGE_KEY);
+    if(!raw)return {month:currentMonthKey(),used:0};
+    const data=JSON.parse(raw);
+    if(data.month!==currentMonthKey()) return {month:currentMonthKey(),used:0};
+    return {month:data.month,used:Number(data.used)||0};
+  }catch{
+    return {month:currentMonthKey(),used:0};
+  }
+}
+
+function writeUsage(u){
+  localStorage.setItem(USAGE_KEY,JSON.stringify(u));
+}
+
+function freeRemaining(){
+  const usage=readUsage();
+  return Math.max(0,FREE_PRAYER_LIMIT-usage.used);
+}
+
+function hasActiveSubscription(){
+  try{return localStorage.getItem(SUBSCRIPTION_KEY)==='1';}catch{return false;}
+}
+function setActiveSubscription(on){
+  try{if(on)localStorage.setItem(SUBSCRIPTION_KEY,'1');else localStorage.removeItem(SUBSCRIPTION_KEY);}catch{}
+  updateFreeBanner();
+}
+function hasGoDeeperPurchased(){
+  try{return localStorage.getItem(DEEPER_PURCHASE_KEY)==='1';}catch{return false;}
+}
+function hasReceiverBlessCredit(){
+  try{return localStorage.getItem(RECEIVER_CREDIT_KEY)==='1';}catch{return false;}
+}
+function consumeReceiverBlessCredit(){
+  try{localStorage.removeItem(RECEIVER_CREDIT_KEY);}catch{}
+}
+function canDeliverMainPrayer(){
+  return hasActiveSubscription()||freeRemaining()>0;
+}
+function canDeliverExtendedPrayer(){
+  return hasActiveSubscription()||hasGoDeeperPurchased()||hasReceiverBlessCredit();
+}
+function updateFreeBanner(){
+  const countEl=document.getElementById('free-count');
+  if(!countEl)return;
+  if(hasActiveSubscription()){countEl.textContent='Member · unlimited';}
+  else{const rem=freeRemaining();countEl.textContent=`${rem} remaining`;}
+}
+function openPaywall(mode){
+  const root=document.getElementById('paywall-root');
+  const title=document.getElementById('paywall-title');
+  const lead=document.getElementById('paywall-lead');
+  const notice=document.getElementById('paywall-notice');
+  if(notice){notice.style.display='none';notice.textContent='';}
+  if(mode==='extended'){
+    if(title)title.textContent='Extended prayer requires Go Deeper or a subscription';
+    if(lead)lead.textContent='Subscribe for unlimited access, or purchase Go Deeper ($1.11) once checkout is connected.';
+  }else if(mode==='subscribe'){
+    if(title)title.textContent='Choose your plan';
+    if(lead)lead.textContent='Unlock unlimited prayers and support Pray With Me™.';
+  }else{
+    if(title)title.textContent='You have used your free prayer this month';
+    if(lead)lead.textContent='Subscribe for unlimited prayers, or complete Go Deeper for extended blessings when checkout is connected.';
+  }
+  if(root)root.classList.add('open');
+}
+function closePaywall(){
+  const root=document.getElementById('paywall-root');
+  if(root)root.classList.remove('open');
+}
+function beginCheckout(plan){
+  const url=(STRIPE_CHECKOUT_URLS&&STRIPE_CHECKOUT_URLS[plan])||'';
+  const notice=document.getElementById('paywall-notice');
+  if(url){
+    window.open(url,'_blank','noopener,noreferrer');
+    if(notice){notice.style.display='none';notice.textContent='';}
+    return;
+  }
+  if(notice){
+    notice.style.display='block';
+    notice.textContent='Stripe checkout URLs are not configured yet. Add STRIPE_CHECKOUT_URLS in the app script, or contact Baruch Kairos Group to activate your account.';
+  }
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  if(!t)return;
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(showToast._h);
+  showToast._h=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function initSubscriptionFromQuery(){
+  try{
+    const q=new URLSearchParams(window.location.search);
+    if(q.get('sub')==='1'){setActiveSubscription(true);showToast('Member access enabled for this browser.');}
+    if(q.get('sub')==='0'){setActiveSubscription(false);showToast('Member access cleared.');}
+    if(q.get('deeper')==='1'){localStorage.setItem(DEEPER_PURCHASE_KEY,'1');showToast('Go Deeper purchase flag set (dev).');}
+  }catch{}
+}
+
+function consumeFreePrayer(){
+  const usage=readUsage();
+  if(usage.used<FREE_PRAYER_LIMIT){
+    usage.used+=1;
+    writeUsage(usage);
+  }
+  updateFreeBanner();
+}
+
+function isJewishTradition(){
+  return (S.tradition||'').includes('jewish');
+}
+
+function needsRabbiChoice(){
+  return isJewishTradition() || S.title==='Rabbi';
+}
+
+function ministerFormComplete(){
+  if(!(S.title&&S.gender&&S.voice&&S.appearance)) return false;
+  if(needsRabbiChoice() && !S.chosenRabbiId) return false;
+  return true;
+}
+
+function syncJewishTitleToRabbi(){
+  if(!isJewishTradition())return;
+  S.title='Rabbi';
+  const grid=document.getElementById('title-grid');
+  if(!grid)return;
+  grid.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
+  const r=document.getElementById('btn-title-rabbi');
+  if(r)r.classList.add('sel');
+}
+
+function updateRabbiPanel(){
+  const panel=document.getElementById('rabbi-minister-panel');
+  const grid=document.getElementById('rabbi-minister-grid');
+  if(!panel||!grid)return;
+  const show=needsRabbiChoice();
+  panel.style.display=show?'block':'none';
+  if(!show){
+    S.chosenRabbiId=null;
+    grid.innerHTML='';
+    return;
+  }
+  const rabbis=MINISTERS.filter(m=>m.rabbi);
+  if(S.chosenRabbiId && !rabbis.some(m=>m.id===S.chosenRabbiId)) S.chosenRabbiId=null;
+  grid.innerHTML=rabbis.map(m=>{
+    const label=escapeHtml(m.rabbiShort||m.name);
+    const sub=m.rabbiSub?`<span class="sub">${escapeHtml(m.rabbiSub)}</span>`:'';
+    return `<button type="button" class="btn-choice${S.chosenRabbiId===m.id?' sel':''}" onclick="selRabbiMinister(this,${m.id})"><span class="lbl">${label}</span>${sub}</button>`;
+  }).join('');
+}
+
+function selRabbiMinister(btn,id){
+  const grid=document.getElementById('rabbi-minister-grid');
+  if(grid) grid.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  S.chosenRabbiId=id;
+  const bm=document.getElementById('btn-min');
+  if(bm)bm.disabled=!ministerFormComplete();
+}
+
 function selTradition(btn,val){
-  clearGrid(btn);btn.classList.add('sel');S.tradition=val;
+  clearGrid(btn);btn.classList.add('sel');S.tradition=val;S.chosenRabbiId=null;
   document.getElementById('btn-trad').disabled=false;
 }
 
@@ -359,7 +981,9 @@ function selName(btn,key,val){
 
 function selField(btn,key,val){
   clearGrid(btn);btn.classList.add('sel');S[key]=val;
-  document.getElementById('btn-min').disabled=!(S.title&&S.gender&&S.voice&&S.appearance);
+  if(key==='title' && val!=='Rabbi') S.chosenRabbiId=null;
+  updateRabbiPanel();
+  document.getElementById('btn-min').disabled=!ministerFormComplete();
 }
 
 function selTopic(btn,val){
@@ -368,31 +992,56 @@ function selTopic(btn,val){
 
 function checkReq(){
   const v=document.getElementById('prayer-req').value.trim();
-  document.getElementById('btn-req').disabled=v.length<5&&!S.topic;
+  const inCrisis=isCrisisRequest(v);
+  const crisisBox=document.getElementById('crisis-box');
+  crisisBox.style.display=inCrisis?'block':'none';
+  const gated=!canDeliverMainPrayer();
+  document.getElementById('btn-req').disabled=inCrisis||gated||(v.length<5&&!S.topic);
   const w=v.split(/\s+/).filter(Boolean).length;
   const hint=document.getElementById('len-hint');
-  if(w===0&&S.topic) hint.textContent='✦ Your minister will offer a brief blessing — 15 to 30 seconds';
+  if(inCrisis) hint.textContent='✦ Please use immediate support resources now';
+  else if(gated) hint.textContent='✦ Upgrade to continue — your free prayer this month is used';
+  else if(w===0&&S.topic) hint.textContent='✦ Your minister will offer a brief blessing — 15 to 30 seconds';
   else if(w<20) hint.textContent='✦ Your minister will offer a personal prayer — about 1 minute';
   else hint.textContent='✦ Your minister will offer a full extended prayer — 1 to 2 minutes';
 }
 
+function isCrisisRequest(text){
+  const msg=(text||'').trim();
+  if(!msg) return false;
+  return CRISIS_PATTERNS.some(rx=>rx.test(msg));
+}
+
 function nextTradition(){
-  const needs=['catholic','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
+  const needs=['catholic','baptist','methodist','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
   if(needs){if(S.tradition==='messianic-jewish'){S.god='Adonai';S.jesus='Yeshua';}go('s-names');}
   else go('s-minister');
 }
 
 function backMin(){
-  const needs=['catholic','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
+  const needs=['catholic','baptist','methodist','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
   go(needs?'s-names':'s-tradition');
 }
 
 function getBest(){
+  if(S.chosenRabbiId){
+    const pick=MINISTERS.find(m=>m.id===S.chosenRabbiId);
+    if(pick && pick.rabbi) return pick;
+  }
   let pool=[...MINISTERS];
+  if(needsRabbiChoice()){
+    const rabbis=pool.filter(m=>m.rabbi);
+    if(rabbis.length) pool=rabbis;
+  }
   if(S.gender){const f=pool.filter(m=>m.gender===S.gender);if(f.length)pool=f;}
   if(S.appearance){const f=pool.filter(m=>m.appearance===S.appearance);if(f.length)pool=f;}
   if(S.voice){const f=pool.filter(m=>m.style===S.voice||m.style.includes(S.voice));if(f.length)pool=f;}
-  return pool[0]||MINISTERS[0];
+  if(pool.length) return pool[0];
+  if(needsRabbiChoice()){
+    const rabbis=MINISTERS.filter(m=>m.rabbi);
+    if(rabbis.length) return rabbis[0];
+  }
+  return MINISTERS[0];
 }
 
 function getLen(){
@@ -404,6 +1053,22 @@ function getLen(){
 
 async function deliver(){
   const req=document.getElementById('prayer-req').value.trim()||S.topic;
+  if(isCrisisRequest(req)){
+    checkReq();
+    document.getElementById('crisis-box').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(BLESS.mode==='send'){
+    const prepEl=document.getElementById('bless-prepay-extended');
+    BLESS.senderPrepayExtended=!!(prepEl&&prepEl.checked);
+    if(BLESS.senderPrepayExtended)beginBlessSenderPrepay();
+  }
+  if(!canDeliverMainPrayer()){
+    openPaywall('quota');
+    go('s-request');
+    return;
+  }
+  if(!hasActiveSubscription())consumeFreePrayer();
   const len=getLen();const minister=getBest();
   go('s-prayer');
   document.getElementById('loading-area').style.display='block';
@@ -414,12 +1079,24 @@ async function deliver(){
 
 async function deliverExtended(){
   const req=document.getElementById('prayer-req').value.trim()||S.topic;
+  if(isCrisisRequest(req)){
+    checkReq();
+    go('s-request');
+    document.getElementById('crisis-box').scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  if(!canDeliverExtendedPrayer()){
+    openPaywall('extended');
+    return;
+  }
+  const hadReceiverCredit=hasReceiverBlessCredit();
   const minister=getBest();
   go('s-prayer');
   document.getElementById('loading-area').style.display='block';
   document.getElementById('prayer-area').style.display='none';
   document.getElementById('deeper-nudge').style.display='none';
   await runPrayer(req,'extended',minister);
+  if(hadReceiverCredit&&!hasActiveSubscription()&&!hasGoDeeperPurchased())consumeReceiverBlessCredit();
 }
 
 async function runPrayer(req,len,minister){
@@ -455,6 +1132,9 @@ async function runPrayer(req,len,minister){
           vw.style.display='block';
           vw.innerHTML=`<video width="100%" autoplay controls style="border-radius:12px;width:100%;display:block;"><source src="${url}" type="video/mp4"></video>`;
           vw.scrollIntoView({behavior:'smooth',block:'start'});
+          if(S.lastPrayer&&/^https:\/\//i.test(String(url)))S.lastPrayer.videoUrl=url;
+          const vbtn=document.getElementById('btn-bless-recv-video');
+          if(vbtn&&blessReceiveGiftId)vbtn.style.display=S.lastPrayer&&S.lastPrayer.videoUrl?'':'none';
         }
       }).catch(e=>console.warn('Background video error:',e));
       return;
@@ -483,7 +1163,8 @@ function buildSys(len,minister){
     personal:`Write approximately ${words} words. Personal prayer: address God, acknowledge their need, weave scripture, speak blessing, close. 2-3 paragraphs.`,
     extended:`Write approximately ${words} words. Full extended prayer: reverent opening, deep engagement with their need, scripture throughout, building intensity, specific blessings, full benediction. 4-5 paragraphs.`
   }[len];
-  return `You are the most beloved Spirit-filled minister anyone has encountered. Pray with deep sincerity, warmth, and authority. Tradition: ${t}. Voice: ${minister.style}.\n\n${sc}\n\n${depth}\n\nSpoken aloud this runs approximately ${time}.\n\nRespond ONLY with valid JSON:\n{"verse":"Reference","verseText":"Brief paraphrase","prayer":"Full prayer","closing":"Closing"}`;
+  const roleWord=(minister.rabbi || S.title==='Rabbi')?'rabbi':'minister';
+  return `You are the most beloved Spirit-filled ${roleWord} anyone has encountered. Pray with deep sincerity, warmth, and authority. Tradition: ${t}. Voice: ${minister.style}.\n\n${sc}\n\n${depth}\n\nSpoken aloud this runs approximately ${time}.\n\nRespond ONLY with valid JSON:\n{"verse":"Reference","verseText":"Brief paraphrase","prayer":"Full prayer","closing":"Closing"}`;
 }
 
 function buildPrompt(req,len){
@@ -510,13 +1191,26 @@ function showPrayer(p,minister,videoUrl,len){
   document.getElementById('loading-area').style.display='none';
   document.getElementById('prayer-area').style.display='block';
   if(len!=='extended'){setTimeout(()=>{document.getElementById('deeper-nudge').style.display='block';},3500);}
+  const reqEl=document.getElementById('prayer-req');
+  const reqText=reqEl?reqEl.value.trim():'';
+  S.lastPrayer={
+    verse:p.verse,verseText:p.verseText,prayer:p.prayer,closing:p.closing,
+    ministerId:minister.id,len:len||'short',tradition:S.tradition||'',topic:S.topic||'',req:reqText,
+    ...(videoUrl&&/^https:\/\//i.test(String(videoUrl))?{videoUrl:String(videoUrl)}:{})
+  };
+  const copyBlessBtn=document.getElementById('btn-copy-bless-link');
+  if(copyBlessBtn)copyBlessBtn.style.display=(BLESS.mode==='send')?'block':'none';
+  const recvTools=document.getElementById('bless-receiver-tools');
+  if(recvTools)recvTools.style.display=blessReceiveGiftId?'block':'none';
+  const vbtn=document.getElementById('btn-bless-recv-video');
+  if(vbtn)vbtn.style.display=(blessReceiveGiftId&&S.lastPrayer&&S.lastPrayer.videoUrl)?'':'none';
 }
 
 async function genVideo(avatarId,voiceId,script){
   const r=await fetch(PROXY+'/api/heygen/v2/video/generate',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({video_inputs:[{character:{type:'avatar',avatar_id:avatarId,avatar_style:'normal'},voice:{type:'text',input_text:script,voice_id:voiceId},background:{type:'color',value:'#1A1008'}}],dimension:{width:1280,height:720}})
+    body:JSON.stringify({video_inputs:[{character:{type:'avatar',avatar_id:avatarId,avatar_style:'normal'},voice:{type:'text',input_text:script,voice_id:voiceId},background:{type:'color',value:'#070F1E'}}],dimension:{width:1280,height:720}})
   });
   const d=await r.json();
   if(d.error)throw new Error(d.error.message);
@@ -554,22 +1248,137 @@ function getFallback(req,len){
   return {verse:'Philippians 4:6-7',verseText:'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God.',prayer:prayers[len],closing:`In the precious name of ${jesus} — Amen.`};
 }
 
-function copyPrayer(){navigator.clipboard.writeText(document.getElementById('prayer-text').innerText).then(()=>alert('Prayer copied 🙏'));}
+async function downloadBlessGiftVideo(){
+  const url=S.lastPrayer&&S.lastPrayer.videoUrl;
+  if(!url||!/^https:\/\//i.test(String(url))){showToast('No minister video was stored with this gift');return;}
+  const videoUrl=String(url).trim();
+  const giftId=blessReceiveGiftId;
+
+  if(giftId){
+    try{
+      const r=await fetch(PROXY+'/api/bless/video-download',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'video/mp4,application/octet-stream,*/*'},
+        body:JSON.stringify({giftId,videoUrl})
+      });
+      const ct=(r.headers.get('content-type')||'').toLowerCase();
+      if(r.ok&&!ct.includes('application/json')){
+        const blob=await r.blob();
+        if(!blob.size){
+          showToast('Empty response — opening the video to save manually');
+          window.open(videoUrl,'_blank','noopener,noreferrer');
+          return;
+        }
+        const o=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=o;
+        a.download='pray-with-me-minister-prayer.mp4';
+        a.rel='noopener';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(o);
+        showToast('Video download started');
+        return;
+      }
+      if(ct.includes('application/json')){
+        const j=await r.json().catch(()=>({}));
+        if(j&&j.error)console.warn('[bless/video-download]',r.status,j.error);
+      }
+    }catch(e){console.warn('Bless proxy video:',e);}
+  }
+
+  try{
+    const r=await fetch(videoUrl,{mode:'cors'});
+    if(r.ok){
+      const blob=await r.blob();
+      const o=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=o;
+      a.download='pray-with-me-minister-prayer.mp4';
+      a.rel='noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(o);
+      showToast('Video download started');
+      return;
+    }
+  }catch(e){console.warn('Bless direct video fetch:',e);}
+  window.open(videoUrl,'_blank','noopener,noreferrer');
+  showToast('Opened the video — use your browser’s Save if download did not start');
+}
+
+function downloadBlessGiftAsText(){
+  const el=document.getElementById('prayer-text');
+  if(!el||!el.innerText.trim()){showToast('Nothing to save yet');return;}
+  const closing=(document.getElementById('prayer-close')&&document.getElementById('prayer-close').textContent)||'';
+  const blob=new Blob([el.innerText+'\n\n'+closing+'\n\n— Optional transcript for personal use · Pray With Me™ / Bless Someone™\n'],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='bless-someone-prayer-transcript.txt';
+  a.rel='noopener';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(a.href);
+  showToast('Transcript file saved');
+}
+
+async function deleteBlessGiftFromServer(){
+  if(!blessReceiveGiftId){showToast('No gift to delete');return;}
+  if(!confirm('Delete this gift on the server? The link will stop working for everyone who has it. (Anyone with the link can do this.)'))return;
+  const id=blessReceiveGiftId;
+  let ok=false;
+  try{
+    const r=await fetch(PROXY+'/api/bless/'+encodeURIComponent(id),{method:'DELETE'});
+    if(r.ok||r.status===204)ok=true;
+    else if(r.status===404)ok=true;
+  }catch{}
+  if(ok){
+    try{localStorage.removeItem('pwm.blessGift.'+id);}catch{}
+    showToast('Gift removed');
+    blessReceiveGiftId=null;
+    const recv=document.getElementById('bless-receiver-tools');
+    if(recv)recv.style.display='none';
+    startOver();
+  }else showToast('Could not delete — check connection or try again');
+}
+
+function copyPrayer(){
+  navigator.clipboard.writeText(document.getElementById('prayer-text').innerText).then(()=>showToast('Prayer copied to clipboard')).catch(()=>showToast('Copy failed — select and copy manually'));
+}
 function sharePrayer(){const t=document.getElementById('prayer-text').innerText;if(navigator.share)navigator.share({title:'Pray With Me',text:t,url:window.location.href});else copyPrayer();}
 function toggleSub(){const b=document.getElementById('sub-box');b.style.display=b.style.display==='none'?'block':'none';}
 
 function startOver(){
-  S.tradition='';S.title='';S.gender='';S.voice='';S.appearance='';S.topic='';
+  blessReceiveGiftId=null;
+  S.tradition='';S.title='';S.gender='';S.voice='';S.appearance='';S.topic='';S.lastPrayer=null;S.chosenRabbiId=null;
+  BLESS.mode='self';BLESS.recipientFirst='';BLESS.senderNote='';BLESS.senderPrepayExtended=false;
   document.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
   document.getElementById('prayer-req').value='';
+  const prep=document.getElementById('bless-prepay-extended');
+  if(prep)prep.checked=false;
+  const bp=document.getElementById('bless-gift-panel');
+  if(bp)bp.style.display='none';
+  const bm=document.getElementById('bless-mode-banner');
+  if(bm)bm.style.display='none';
+  const copyBlessBtn=document.getElementById('btn-copy-bless-link');
+  if(copyBlessBtn)copyBlessBtn.style.display='none';
+  const recvTools=document.getElementById('bless-receiver-tools');
+  if(recvTools)recvTools.style.display='none';
   document.getElementById('sub-box').style.display='none';
   document.getElementById('video-wrap').style.display='none';
   document.getElementById('video-wrap').innerHTML='';
   document.getElementById('deeper-nudge').style.display='none';
   document.getElementById('btn-trad').disabled=true;
   document.getElementById('btn-min').disabled=true;
+  updateFreeBanner();
   go('s-tradition');
 }
+initBlessFromUrl();
+initSubscriptionFromQuery();
+updateFreeBanner();
 </script>
 </body>
 </html>
