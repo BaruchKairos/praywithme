@@ -218,7 +218,9 @@ header{width:100%;text-align:center;padding:0 0 14px;position:relative}
 .welcome-panel{width:100%;max-width:920px;margin:0 auto;padding:12px 16px 8px;text-align:center}
 .welcome-avatar-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 10px;max-width:680px;margin:0 auto 18px;padding:10px 0 4px}
 @media(min-width:560px){.welcome-avatar-grid{grid-template-columns:repeat(5,minmax(0,1fr));max-width:820px;gap:14px 12px}}
-.welcome-thumb{width:100%;max-width:148px;margin:0 auto;aspect-ratio:1;border-radius:14px;overflow:hidden;border:1px solid rgba(232,213,163,.6);box-shadow:0 8px 24px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,240,210,.12);background:rgba(10,22,40,.75);position:relative}
+.welcome-thumb{width:100%;max-width:148px;margin:0 auto;aspect-ratio:1;border-radius:14px;overflow:hidden;border:1px solid rgba(232,213,163,.6);box-shadow:0 8px 24px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,240,210,.12);background:rgba(10,22,40,.75);position:relative;cursor:pointer;transition:border-color .2s,box-shadow .2s,transform .15s}
+.welcome-thumb:hover{border-color:rgba(232,213,163,.85);transform:translateY(-2px)}
+.welcome-thumb.sel{border-color:var(--gold);box-shadow:0 0 22px rgba(201,168,76,.28),inset 0 0 0 1px rgba(255,240,210,.18)}
 .welcome-thumb img{width:100%;height:100%;object-fit:cover;display:block;object-position:center top}
 .welcome-thumb-fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:2rem;background:linear-gradient(145deg,rgba(201,168,76,.4),rgba(10,22,40,.92))}
 .welcome-lead{font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.55;color:var(--cream);margin-bottom:8px;max-width:640px;margin-left:auto;margin-right:auto}
@@ -329,7 +331,6 @@ body.locale-ar,body.locale-ar .screen,body.locale-ar .btn-choice,body.locale-ar 
   </div>
   <div class="divider"></div>
   <div class="welcome-panel" id="welcome-panel">
-    <div class="welcome-avatar-grid" id="welcome-avatar-strip" aria-hidden="true"></div>
     <p class="welcome-lead" data-i18n="welcomeLead">Welcome to Pray With Me. Please begin by selecting your religious affiliation below.</p>
     <p class="welcome-bless" data-i18n="welcomeBless">May God Bless You with Peace along your journey.</p>
     <div class="locale-bar">
@@ -403,6 +404,15 @@ body.locale-ar,body.locale-ar .screen,body.locale-ar .btn-choice,body.locale-ar 
   <button class="btn-primary" id="btn-trad" disabled onclick="nextTradition()" data-i18n="continue">CONTINUE</button>
 </div>
 
+<!-- AVATAR (after tradition; pool is Jewish rabbis only vs non-Jewish ministers) -->
+<div class="screen" id="s-avatar">
+  <div class="sec-title" data-i18n="pickFaceTitle">Choose your minister</div>
+  <div class="sec-sub" data-i18n="pickFaceSub">Tap the face you would like to pray with you.</div>
+  <div class="welcome-avatar-grid" id="avatar-pick-grid" role="group" aria-label="Minister faces"></div>
+  <button class="btn-primary" id="btn-avatar-next" disabled onclick="nextFromAvatarPick()" data-i18n="continue">CONTINUE</button>
+  <button class="btn-back" onclick="go('s-tradition')" data-i18n="back">← Back</button>
+</div>
+
 <!-- NAMES -->
 <div class="screen" id="s-names">
   <div class="sec-title" data-i18n="sacredTitle">Sacred Names</div>
@@ -426,7 +436,7 @@ body.locale-ar,body.locale-ar .screen,body.locale-ar .btn-choice,body.locale-ar 
     <button class="btn-choice" onclick="selName(this,'jesus','Yeshua HaMashiach')"><span class="lbl">Yeshua HaMashiach</span></button>
   </div>
   <button class="btn-primary" id="btn-names" disabled onclick="go('s-minister')" data-i18n="continue">CONTINUE</button>
-  <button class="btn-back" onclick="go('s-tradition')" data-i18n="back">← Back</button>
+  <button class="btn-back" onclick="go('s-avatar')" data-i18n="back">← Back</button>
 </div>
 
 <!-- MINISTER -->
@@ -632,7 +642,7 @@ const CRISIS_PATTERNS=[
   /\bkill\s*myself\b/i
 ];
 
-const S={tradition:'',god:'God',jesus:'Jesus',title:'',gender:'',voice:'',appearance:'',topic:'',lastPrayer:null,chosenRabbiId:null};
+const S={tradition:'',god:'God',jesus:'Jesus',title:'',gender:'',voice:'',appearance:'',topic:'',lastPrayer:null,chosenRabbiId:null,pickedMinisterId:null};
 
 const MINISTERS=[
   // Powerful & Bold — male deep authoritative voices
@@ -750,6 +760,8 @@ const STR_I18N={
     reqPlaceholder:'Tell your minister what\'s on your heart…',
     heroTitle:'PRAY WITH ME',
     heroTag:'a sacred space, personalized for you',
+    pickFaceTitle:'Choose your minister',
+    pickFaceSub:'Tap the face you would like to pray with you.',
     lenHint:'✦ Your minister will offer a brief blessing — about 15 to 30 seconds when words are few',
     lenCrisis:'✦ Please use the immediate support resources now',
     lenGated:'✦ Upgrade to continue — your free prayer this month is used',
@@ -796,6 +808,8 @@ const STR_I18N={
     reqPlaceholder:'Расскажите служителю то, что лежит у вас на сердце…',
     heroTitle:'PRAY WITH ME',
     heroTag:'святое пространство, созданное для вас',
+    pickFaceTitle:'Выберите служителя',
+    pickFaceSub:'Нажмите на лицо, с которым хотите помолиться.',
     lenHint:'✦ Краткое благословение — примерно 15–30 секунд, если слов немного',
     lenCrisis:'✦ Сейчас воспользуйтесь экстренными контактами ниже',
     lenGated:'✦ Продолжите с подпиской — бесплатная молитва на этот месяц израсходована',
@@ -842,6 +856,8 @@ const STR_I18N={
     reqPlaceholder:'ספרו למשרת מה על לבכם…',
     heroTitle:'PRAY WITH ME',
     heroTag:'מרחב קדוש, מותאם אישית לכם',
+    pickFaceTitle:'בחרו את המשרת',
+    pickFaceSub:'לחצו על הפנים שאיתם תרצו להתפלל.',
     lenHint:'✦ המשרת יעניק ברכה קצרה — בערך 15–30 שניות כשיש מעט מילים',
     lenCrisis:'✦ נא לפנות למוקדי הסיוע המיידי למטה',
     lenGated:'✦ הירשמו כדי להמשיך — ניצלתם את תפילת החינם לחודש',
@@ -1104,37 +1120,66 @@ async function heygenPortraitIfAvailable(avatarId){
     return(typeof u==='string'&&/^https?:/i.test(u))?u.trim():null;
   }catch{return null;}
 }
-function initWelcomeStrip(){
-  const strip=document.getElementById('welcome-avatar-strip');
-  if(!strip)return;
-  strip.innerHTML='';
-  const seen=new Set();
-  const picks=[];
-  for(const m of MINISTERS){
-    if(seen.has(m.avatarId))continue;
-    seen.add(m.avatarId);
-    picks.push(m);
-    if(picks.length>=30)break;
+function avatarPoolForTradition(){
+  if(isJewishTradition()){
+    let r=MINISTERS.filter(m=>m.rabbi);
+    if(!r.length) r=MINISTERS.filter(m=>RABBI_MINISTER_IDS.includes(m.id));
+    return r;
   }
-  for(const m of picks){
+  return MINISTERS.filter(m=>!m.rabbi&&!RABBI_MINISTER_IDS.includes(m.id));
+}
+function renderAvatarPickGrid(){
+  const grid=document.getElementById('avatar-pick-grid');
+  const btn=document.getElementById('btn-avatar-next');
+  if(!grid)return;
+  grid.innerHTML='';
+  const pool=avatarPoolForTradition();
+  pool.forEach(m=>{
     const d=document.createElement('div');
-    d.className='welcome-thumb';
-    d.title=m.rabbiShort||m.name||'';
+    d.className='welcome-thumb'+(S.pickedMinisterId===m.id?' sel':'');
+    d.setAttribute('role','button');
+    d.setAttribute('tabindex','0');
+    d.dataset.ministerId=String(m.id);
+    d.title=(m.rabbiShort||m.name||'').split('—')[0].trim();
+    d.onclick=function(){selPickAvatar(d,m.id);};
+    d.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();selPickAvatar(d,m.id);}};
     const emoji=m.gender==='female'?'👩':'👨';
     const src=m.portraitUrl||randomUserPortraitUrl(m);
     d.innerHTML='<img class="welcome-portrait-img" data-avatar-id="'+encodeURIComponent(m.avatarId)+'" src="'+src+'" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display=\'none\';var f=this.parentElement.querySelector(\'.welcome-thumb-fallback\');if(f)f.style.display=\'flex\';"><div class="welcome-thumb-fallback" style="display:none;">'+emoji+'</div>';
-    strip.appendChild(d);
-  }
-  hydrateWelcomeHeygenPortraits();
+    grid.appendChild(d);
+  });
+  if(btn)btn.disabled=!S.pickedMinisterId;
+  hydrateAvatarPickPortraits();
 }
-async function hydrateWelcomeHeygenPortraits(){
-  const imgs=document.querySelectorAll('.welcome-portrait-img[data-avatar-id]');
+function selPickAvatar(cell,ministerId){
+  const grid=document.getElementById('avatar-pick-grid');
+  if(grid)grid.querySelectorAll('.welcome-thumb').forEach(n=>n.classList.remove('sel'));
+  cell.classList.add('sel');
+  S.pickedMinisterId=ministerId;
+  const pick=MINISTERS.find(mm=>mm.id===ministerId);
+  if(isJewishTradition()&&pick&&(pick.rabbi||RABBI_MINISTER_IDS.includes(pick.id)))S.chosenRabbiId=ministerId;
+  else S.chosenRabbiId=null;
+  const b=document.getElementById('btn-avatar-next');
+  if(b)b.disabled=false;
+}
+async function hydrateAvatarPickPortraits(){
+  const root=document.getElementById('avatar-pick-grid');
+  if(!root)return;
+  const imgs=root.querySelectorAll('.welcome-portrait-img[data-avatar-id]');
   for(const img of imgs){
     const id=decodeURIComponent(img.getAttribute('data-avatar-id')||'');
     if(!id)continue;
     const u=await heygenPortraitIfAvailable(id);
     if(u){img.src=u;img.removeAttribute('data-avatar-id');}
   }
+}
+function nextFromAvatarPick(){
+  if(!S.pickedMinisterId)return;
+  const needsNames=['catholic','baptist','methodist','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
+  if(needsNames){
+    if(S.tradition==='messianic-jewish'){S.god='Adonai';S.jesus='Yeshua';}
+    go('s-names');
+  }else go('s-minister');
 }
 function initLocaleFromStorage(){
   try{
@@ -1157,6 +1202,9 @@ function go(id){
   if(id==='s-tradition'){
     const b=document.getElementById('bless-mode-banner');
     if(b)b.style.display=(BLESS.mode==='send')?'block':'none';
+  }
+  if(id==='s-avatar'){
+    renderAvatarPickGrid();
   }
   if(id==='s-minister'){
     syncJewishTitleToRabbi();
@@ -1450,10 +1498,11 @@ function isJewishTradition(){
 }
 
 function needsRabbiChoice(){
-  return isJewishTradition() || S.title==='Rabbi';
+  return isJewishTradition();
 }
 
 function ministerFormComplete(){
+  if(!S.pickedMinisterId)return false;
   if(!(S.title&&S.gender&&S.voice&&S.appearance)) return false;
   if(needsRabbiChoice() && !S.chosenRabbiId) return false;
   return true;
@@ -1473,11 +1522,11 @@ function updateRabbiPanel(){
   const panel=document.getElementById('rabbi-minister-panel');
   const grid=document.getElementById('rabbi-minister-grid');
   if(!panel||!grid)return;
-  const show=needsRabbiChoice();
+  const show=needsRabbiChoice()&&!S.pickedMinisterId;
   panel.style.display=show?'block':'none';
   if(!show){
-    S.chosenRabbiId=null;
     grid.innerHTML='';
+    if(!S.pickedMinisterId)S.chosenRabbiId=null;
     return;
   }
   let rabbis=MINISTERS.filter(m=>m.rabbi);
@@ -1485,8 +1534,7 @@ function updateRabbiPanel(){
   if(S.chosenRabbiId && !rabbis.some(m=>m.id===S.chosenRabbiId)) S.chosenRabbiId=null;
   grid.innerHTML=rabbis.map(m=>{
     const label=escapeHtml(m.rabbiShort||m.name);
-    const sub=m.rabbiSub?`<span class="sub">${escapeHtml(m.rabbiSub)}</span>`:'';
-    return `<button type="button" class="btn-choice${S.chosenRabbiId===m.id?' sel':''}" onclick="selRabbiMinister(this,${m.id})"><span class="lbl">${label}</span>${sub}</button>`;
+    return `<button type="button" class="btn-choice${S.chosenRabbiId===m.id?' sel':''}" onclick="selRabbiMinister(this,${m.id})"><span class="lbl">${label}</span></button>`;
   }).join('');
 }
 
@@ -1495,12 +1543,13 @@ function selRabbiMinister(btn,id){
   if(grid) grid.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   S.chosenRabbiId=id;
+  S.pickedMinisterId=id;
   const bm=document.getElementById('btn-min');
   if(bm)bm.disabled=!ministerFormComplete();
 }
 
 function selTradition(btn,val){
-  clearGrid(btn);btn.classList.add('sel');S.tradition=val;S.chosenRabbiId=null;
+  clearGrid(btn);btn.classList.add('sel');S.tradition=val;S.chosenRabbiId=null;S.pickedMinisterId=null;
   document.getElementById('btn-trad').disabled=false;
 }
 
@@ -1545,17 +1594,26 @@ function isCrisisRequest(text){
 }
 
 function nextTradition(){
-  const needs=['catholic','baptist','methodist','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
-  if(needs){if(S.tradition==='messianic-jewish'){S.god='Adonai';S.jesus='Yeshua';}go('s-names');}
-  else go('s-minister');
+  S.pickedMinisterId=null;
+  S.chosenRabbiId=null;
+  go('s-avatar');
 }
 
 function backMin(){
-  const needs=['catholic','baptist','methodist','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
-  go(needs?'s-names':'s-tradition');
+  const needsNames=['catholic','baptist','methodist','protestant','evangelical','orthodox-christian','messianic-jewish','nondenominational','other'].includes(S.tradition);
+  if(needsNames)go('s-names');
+  else go('s-avatar');
 }
 
 function getBest(){
+  if(S.pickedMinisterId){
+    const pick=MINISTERS.find(m=>m.id===S.pickedMinisterId);
+    if(pick){
+      if(isJewishTradition()){
+        if(pick.rabbi||RABBI_MINISTER_IDS.includes(pick.id))return pick;
+      }else if(!pick.rabbi&&!RABBI_MINISTER_IDS.includes(pick.id))return pick;
+    }
+  }
   if(S.chosenRabbiId){
     const pick=MINISTERS.find(m=>m.id===S.chosenRabbiId);
     if(pick && pick.rabbi) return pick;
@@ -1909,7 +1967,7 @@ function toggleSub(){const b=document.getElementById('sub-box');b.style.display=
 
 function startOver(){
   blessReceiveGiftId=null;
-  S.tradition='';S.title='';S.gender='';S.voice='';S.appearance='';S.topic='';S.lastPrayer=null;S.chosenRabbiId=null;
+  S.tradition='';S.title='';S.gender='';S.voice='';S.appearance='';S.topic='';S.lastPrayer=null;S.chosenRabbiId=null;S.pickedMinisterId=null;
   BLESS.mode='self';BLESS.recipientFirst='';BLESS.senderNote='';BLESS.senderPrepayExtended=false;
   document.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
   document.getElementById('prayer-req').value='';
@@ -1933,7 +1991,6 @@ function startOver(){
   go('s-tradition');
 }
 initLocalePicker();
-initWelcomeStrip();
 initLocaleFromStorage();
 initBlessFromUrl();
 initSubscriptionFromQuery();
