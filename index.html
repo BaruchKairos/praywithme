@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pray With Me</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400&family=EB+Garamond:wght@500;600&family=Merriweather:wght@700&family=Vollkorn:wght@500;600&family=Oswald:wght@500;600&family=Playfair+Display:wght@500;600&family=Frank+Ruhl+Libre:wght@500;600&family=Inter:wght@300;400&family=Lora:ital,wght@1,500&family=Noto+Sans+Hebrew:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&family=Lato:wght@300;400&family=EB+Garamond:wght@500;600&family=Merriweather:wght@700&family=Vollkorn:wght@500;600&family=Oswald:wght@500;600&family=Playfair+Display:wght@500;600&family=Frank+Ruhl+Libre:wght@500;600&family=Inter:wght@300;400&family=Lora:ital,wght@1,500&family=Noto+Sans+Hebrew:wght@300;400;500&family=Noto+Sans+Arabic:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link rel="preconnect" href="https://randomuser.me" crossorigin>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--gold:#C9A84C;--gold-light:#E8D5A3;--gold-dark:#8B6914;--cream:#FAF0E0;--deep:#0A1628;--stone:#6B5E4E}
@@ -15,10 +17,29 @@ header{width:100%;text-align:center;padding:0 0 14px;position:relative}
 .hero{
   position:relative;
   width:100%;
-  min-height:280px;
+  min-height:min(52vw,340px);
   overflow:hidden;
-  background:linear-gradient(180deg,#070E1E 0%,#132B4D 36%,#6F5A35 64%,#F0D890 100%);
+  background:#0a1428;
 }
+.hero-photo-layer{
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=86') center 42%/cover no-repeat;
+  filter:saturate(1.08) contrast(1.05);
+}
+.hero-sunrise-tint{
+  position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(188deg,rgba(255,120,55,.42) 0%,rgba(255,190,110,.22) 22%,rgba(70,95,140,.35) 48%,rgba(12,22,42,.82) 72%,rgba(6,10,20,.96) 100%);
+  mix-blend-mode:soft-light;
+}
+.hero-olives{position:absolute;bottom:0;width:min(38%,420px);height:min(42vw,200px);pointer-events:none;opacity:.88;z-index:2}
+.hero-olives-left{left:-2%;transform:scaleX(1)}
+.hero-olives-right{right:-2%;transform:scaleX(-1)}
+.hero-olives svg{width:100%;height:100%;display:block;filter:drop-shadow(0 -2px 12px rgba(0,0,0,.45))}
+.hero-doves{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.hero-dove{position:absolute;fill:rgba(255,252,245,.94);filter:drop-shadow(0 2px 8px rgba(0,0,0,.25));animation:doveFloat 9s ease-in-out infinite}
+.hero-dove.d2{animation-duration:11s;animation-delay:-2s;opacity:.92}
+.hero-dove.d3{animation-duration:13s;animation-delay:-5s;opacity:.88}
+@keyframes doveFloat{0%,100%{transform:translate(0,0) scale(1)}35%{transform:translate(18px,-10px) scale(1.03)}70%{transform:translate(-12px,6px) scale(.98)}}
 .hero-glow{
   position:absolute;
   left:50%;
@@ -27,10 +48,11 @@ header{width:100%;text-align:center;padding:0 0 14px;position:relative}
   height:260px;
   transform:translateX(-50%);
   border-radius:50%;
-  background:radial-gradient(ellipse at center,rgba(255,240,192,.95) 0%,rgba(245,200,96,.65) 42%,rgba(245,200,96,.2) 70%,rgba(245,200,96,0) 100%);
-  filter:blur(2px);
+  background:radial-gradient(ellipse at center,rgba(255,240,192,.88) 0%,rgba(245,200,96,.5) 42%,rgba(245,200,96,.12) 70%,rgba(245,200,96,0) 100%);
+  filter:blur(3px);
+  opacity:.85;
 }
-.glory-rays{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.glory-rays{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.55}
 .ray{fill:url(#rayGrad);transform-origin:50% 80%;animation:rayPulse 4s ease-in-out infinite}
 .ray.soft{opacity:.18}
 .ray.mid{opacity:.26}
@@ -61,9 +83,9 @@ header{width:100%;text-align:center;padding:0 0 14px;position:relative}
 }
 .tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:#E8D0A0;opacity:.65;margin-top:6px}
 @keyframes titlePulse{0%,100%{opacity:.9}50%{opacity:1}}
-.mountain-back,.mountain-front{position:absolute;left:0;right:0;width:100%}
-.mountain-back{bottom:42px;height:118px;fill:#122741;opacity:.96}
-.mountain-front{bottom:0;height:98px;fill:#0A1628}
+.mountain-back,.mountain-front{position:absolute;left:0;right:0;width:100%;mix-blend-mode:multiply;opacity:.72}
+.mountain-back{bottom:42px;height:118px;fill:#0d1a32;opacity:.88}
+.mountain-front{bottom:0;height:98px;fill:#050a14;opacity:.94}
 .ridge-symbols{
   position:absolute;
   bottom:68px;
@@ -194,19 +216,31 @@ header{width:100%;text-align:center;padding:0 0 14px;position:relative}
 .btn-deeper:hover{background-position:100%;box-shadow:0 8px 40px rgba(201,168,76,.4);transform:translateY(-2px)}
 .btn-no-thanks{background:none;border:none;color:rgba(201,168,76,.35);font-family:'Lato',sans-serif;font-size:.78rem;cursor:pointer;width:100%;text-align:center;padding:10px}
 .welcome-panel{width:100%;max-width:920px;margin:0 auto;padding:12px 16px 8px;text-align:center}
-.welcome-avatar-scroller{display:flex;gap:10px;overflow-x:auto;padding:8px 4px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;justify-content:center;flex-wrap:wrap}
-.welcome-thumb{flex:0 0 auto;width:64px;height:64px;border-radius:10px;overflow:hidden;border:1px solid rgba(232,213,163,.55);box-shadow:0 4px 14px rgba(0,0,0,.35);scroll-snap-align:start;background:rgba(10,22,40,.6);position:relative}
-.welcome-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.welcome-thumb-fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:1.5rem;background:linear-gradient(145deg,rgba(201,168,76,.35),rgba(10,22,40,.9))}
+.welcome-avatar-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 10px;max-width:680px;margin:0 auto 18px;padding:10px 0 4px}
+@media(min-width:560px){.welcome-avatar-grid{grid-template-columns:repeat(5,minmax(0,1fr));max-width:820px;gap:14px 12px}}
+.welcome-thumb{width:100%;max-width:148px;margin:0 auto;aspect-ratio:1;border-radius:14px;overflow:hidden;border:1px solid rgba(232,213,163,.6);box-shadow:0 8px 24px rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,240,210,.12);background:rgba(10,22,40,.75);position:relative}
+.welcome-thumb img{width:100%;height:100%;object-fit:cover;display:block;object-position:center top}
+.welcome-thumb-fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:2rem;background:linear-gradient(145deg,rgba(201,168,76,.4),rgba(10,22,40,.92))}
 .welcome-lead{font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.55;color:var(--cream);margin-bottom:8px;max-width:640px;margin-left:auto;margin-right:auto}
 .welcome-bless{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--gold-light);opacity:.9;margin-bottom:12px;max-width:640px;margin-left:auto;margin-right:auto}
-.locale-bar{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:4px;margin-bottom:6px;flex-wrap:wrap}
-.locale-bar label{font-size:.78rem;color:var(--gold-light);letter-spacing:.08em}
-.locale-select{background:rgba(10,22,40,.85);border:1px solid rgba(201,168,76,.45);border-radius:8px;color:var(--cream);font-size:.9rem;padding:8px 14px;min-width:200px;cursor:pointer}
+.locale-bar{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:8px;margin-bottom:8px;width:100%;max-width:520px;margin-left:auto;margin-right:auto}
+.locale-bar label{font-size:.78rem;color:var(--gold-light);letter-spacing:.08em;text-align:center}
+.locale-detect-hint{font-size:.72rem;color:rgba(232,213,163,.55);line-height:1.45;text-align:center;margin:0 4px 4px}
+.locale-row{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap}
+.locale-search{flex:1;min-width:160px;background:rgba(10,22,40,.9);border:1px solid rgba(201,168,76,.45);border-radius:8px;color:var(--cream);font-size:.88rem;padding:10px 12px;outline:none}
+.locale-search:focus{border-color:rgba(232,213,163,.65);box-shadow:0 0 0 2px rgba(201,168,76,.15)}
+.locale-apply{background:linear-gradient(135deg,rgba(201,168,76,.25),rgba(201,168,76,.08));border:1px solid rgba(201,168,76,.5);border-radius:8px;color:var(--gold-light);font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.14em;padding:10px 16px;cursor:pointer;white-space:nowrap}
+.locale-apply:hover{border-color:var(--gold);color:var(--cream)}
+.locale-listbox{display:none;max-height:220px;overflow-y:auto;margin-top:4px;border-radius:10px;border:1px solid rgba(201,168,76,.35);background:rgba(8,14,26,.97);text-align:start;box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.locale-listbox.open{display:block}
+.locale-opt{padding:10px 12px;font-size:.82rem;color:var(--cream);cursor:pointer;border-bottom:1px solid rgba(201,168,76,.08);line-height:1.35}
+.locale-opt:hover,.locale-opt.sel{background:rgba(201,168,76,.14)}
+.locale-opt small{display:block;font-size:.68rem;color:rgba(232,213,163,.45);margin-top:2px}
 body.locale-he,body.locale-he .screen,body.locale-he .btn-choice,body.locale-he .textarea{font-family:'Frank Ruhl Libre','Noto Sans Hebrew','Cormorant Garamond',serif}
+body.locale-ar,body.locale-ar .screen,body.locale-ar .btn-choice,body.locale-ar .textarea{font-family:'Noto Sans Arabic','Cormorant Garamond',serif}
 [dir=rtl] .minister-bar,[dir=rtl] .free-banner{flex-direction:row-reverse}
 [dir=rtl] .action-row,[dir=rtl] .bless-nav-row{direction:rtl}
-[dir=rtl] .welcome-avatar-scroller{direction:rtl}
+[dir=rtl] .welcome-avatar-grid{direction:rtl}
 [dir=rtl] .textarea,[dir=rtl] input[type=text]{text-align:right}
 [dir=rtl] .len-hint{text-align:start}
 @media(max-width:480px){.g3{grid-template-columns:1fr 1fr}.g4{grid-template-columns:1fr 1fr}.action-row{grid-template-columns:1fr}.trad-grid{grid-template-columns:1fr}}
@@ -217,6 +251,33 @@ body.locale-he,body.locale-he .screen,body.locale-he .btn-choice,body.locale-he 
 <div class="app">
 <header>
   <div class="hero">
+    <div class="hero-photo-layer" aria-hidden="true"></div>
+    <div class="hero-sunrise-tint" aria-hidden="true"></div>
+    <div class="hero-olives hero-olives-left" aria-hidden="true">
+      <svg viewBox="0 0 200 220" preserveAspectRatio="xMinYMax meet" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(12,22,38,.92)" d="M0 220 L0 120 Q30 80 55 95 Q75 40 95 55 Q115 20 140 35 Q165 10 200 0 L200 220 Z"/>
+        <g fill="none" stroke="rgba(201,168,76,.35)" stroke-width="1.2">
+          <path d="M40 200 Q55 150 48 110"/><path d="M72 205 Q88 155 78 118"/><path d="M105 210 Q120 165 108 125"/>
+          <ellipse cx="52" cy="98" rx="14" ry="6" transform="rotate(-25 52 98)" fill="rgba(40,62,48,.9)" stroke="rgba(120,140,90,.4)"/>
+          <ellipse cx="88" cy="112" rx="12" ry="5" transform="rotate(15 88 112)" fill="rgba(38,58,44,.9)" stroke="rgba(120,140,90,.35)"/>
+          <ellipse cx="118" cy="88" rx="11" ry="5" transform="rotate(-8 118 88)" fill="rgba(36,54,42,.9)" stroke="rgba(120,140,90,.35)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="hero-olives hero-olives-right" aria-hidden="true">
+      <svg viewBox="0 0 200 220" preserveAspectRatio="xMaxYMax meet" xmlns="http://www.w3.org/2000/svg">
+        <path fill="rgba(12,22,38,.92)" d="M0 220 L0 0 Q35 15 60 38 Q85 22 110 52 Q130 28 155 48 Q180 105 200 120 L200 220 Z"/>
+        <g fill="none" stroke="rgba(201,168,76,.32)" stroke-width="1.2">
+          <path d="M130 200 Q145 148 138 108"/><path d="M158 208 Q172 158 162 118"/><path d="M95 212 Q110 168 100 128"/>
+          <ellipse cx="142" cy="102" rx="13" ry="6" transform="rotate(18 142 102)" fill="rgba(38,56,42,.9)" stroke="rgba(120,140,90,.35)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="hero-doves" aria-hidden="true">
+      <svg class="hero-dove" style="left:8%;top:22%;width:42px;height:42px" viewBox="0 0 48 48"><path d="M24 20c-8-6-16-4-20 2 4-2 10 0 14 4-3-6-2-12 6-14 8 2 14 10 6 14 4-4 10-6 14-4-4-6-12-8-20-2z"/><ellipse cx="24" cy="28" rx="10" ry="5" fill="rgba(255,252,245,.85)"/></svg>
+      <svg class="hero-dove d2" style="left:78%;top:18%;width:36px;height:36px" viewBox="0 0 48 48"><path d="M24 20c-7-5-14-3-18 2 3-2 9 0 12 3-2-5-2-10 5-12 7 2 12 8 5 12 3-3 9-5 12-3-4-5-11-7-18-2z"/></svg>
+      <svg class="hero-dove d3" style="left:62%;top:38%;width:28px;height:28px" viewBox="0 0 48 48"><path d="M24 22c-6-4-12-2-15 2 3-1 8 0 10 2-2-4-1-9 4-10 6 1 10 7 4 10 2-2 7-4 10-2-3-4-9-6-15-2z"/></svg>
+    </div>
     <div class="hero-glow"></div>
     <svg class="glory-rays" viewBox="0 0 1200 360" preserveAspectRatio="none" aria-hidden="true">
       <defs>
@@ -268,16 +329,18 @@ body.locale-he,body.locale-he .screen,body.locale-he .btn-choice,body.locale-he 
   </div>
   <div class="divider"></div>
   <div class="welcome-panel" id="welcome-panel">
-    <div class="welcome-avatar-scroller" id="welcome-avatar-strip" aria-hidden="true"></div>
+    <div class="welcome-avatar-grid" id="welcome-avatar-strip" aria-hidden="true"></div>
     <p class="welcome-lead" data-i18n="welcomeLead">Welcome to Pray With Me. Please begin by selecting your religious affiliation below.</p>
     <p class="welcome-bless" data-i18n="welcomeBless">May God Bless You with Peace along your journey.</p>
     <div class="locale-bar">
-      <label for="locale-select" data-i18n="langLabel">Language</label>
-      <select id="locale-select" class="locale-select" onchange="onLocaleChange(this.value)" aria-label="Language">
-        <option value="en">English</option>
-        <option value="ru">Русский (Cyrillic)</option>
-        <option value="he">עברית (Hebrew, RTL)</option>
-      </select>
+      <label for="locale-search" data-i18n="langLabel">Language</label>
+      <p class="locale-detect-hint" data-i18n="langDetectHint">We detect your device language when you first open the app. Type a language or code, then pick from the list.</p>
+      <div class="locale-row">
+        <input type="text" id="locale-search" class="locale-search" data-i18n-placeholder="langSearchPh" placeholder="Search: Español, 日本語, Deutsch, ar…" autocomplete="off" spellcheck="false" aria-autocomplete="list" aria-controls="locale-listbox" aria-expanded="false">
+        <input type="hidden" id="locale-value" value="en">
+        <button type="button" class="locale-apply" id="locale-apply" data-i18n="localeApply" onclick="applyLocaleFromPicker()">SET LANGUAGE</button>
+      </div>
+      <div id="locale-listbox" class="locale-listbox" role="listbox" aria-label="Language matches"></div>
     </div>
   </div>
   <div class="bless-nav-row">
@@ -644,6 +707,15 @@ const MINISTERS=[
   {id:35,avatarId:'77d77b293e7047a3994b52eaa729c189',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'tan',            style:'warm',        name:'Alternate Female Hispanic'},
 ];
 
+function escapeHtml(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+const RABBI_MINISTER_IDS=[8,15,21];
+
+const PWM_LOCALE_CODES=[...new Set(`aa ab ae af ak am an ar ar-SA ar-EG ar-MA as ast av az ba be bg bh bi bm bn bo br bs ca ce co cs cv cy da de dv dz ee el en en-US en-GB en-AU en-CA en-NZ en-IE eo es es-MX es-AR et eu fa ff fi fil fo fr fr-CA fy ga gd gl gn gu gv ha haw he hi ho hr ht hu hy ia id ig ii io is it iu ja jv ka ke kg kk km kn ko kok ks ku kw ky lb lg li ln lo lt lu lv mer mg mi mk ml mn mr ms mt my nb nd ne nl nn no nus oc om or os pa pl prg ps pt pt-BR qu ro ru rw sa sat sc sd se sg si sk sl sm sn so sq sr ss su sv sw ta te tg th ti tk tl tn to tr tt tw ug uk ur uz vi vo vun wo xh yi yo yue zh zh-CN zh-TW zu ceb cgg ckb dsb ff ha jgo jv km ku lo lrc mas mfe mgo mni nds nqo oc os qu rm rw sah scn shi sid ccp`.split(/\s+/))];
+const RTL_LANG=new Set(['ar','dv','fa','ha','he','ckb','ks','ku','ps','sd','ug','ur','yi','ff','wo','nqo','bal','snd']);
+let _pwmLangRows=null;
+
 const PWM_LOCALE_KEY='pwm.locale.v1';
 let currentLocale='en';
 const STR_I18N={
@@ -651,6 +723,9 @@ const STR_I18N={
     welcomeLead:'Welcome to Pray With Me. Please begin by selecting your religious affiliation below.',
     welcomeBless:'May God bless you with peace along your journey.',
     langLabel:'Language',
+    langDetectHint:'We detect your device language when you first open the app. Type a language or code, then pick from the list.',
+    langSearchPh:'Search: Español, 日本語, Deutsch, ar…',
+    localeApply:'SET LANGUAGE',
     blessNav:'✦ BLESS SOMEONE™ — SEND A PRAYER',
     blessBanner:'<strong>BLESS SOMEONE™</strong> — You\'re creating a gift. Complete the steps, then copy the link to send.',
     freeBannerLbl:'✦ 1 FREE PRAYER THIS MONTH',
@@ -694,6 +769,9 @@ const STR_I18N={
     welcomeLead:'Добро пожаловать в Pray With Me. Начните с выбора вашей религиозной принадлежности ниже.',
     welcomeBless:'Да благословит вас Бог миром на всём пути.',
     langLabel:'Язык',
+    langDetectHint:'При первом открытии подбираем язык устройства. Введите язык или код и выберите из списка.',
+    langSearchPh:'Поиск: Español, 日本語, ar…',
+    localeApply:'ПРИМЕНИТЬ',
     blessNav:'✦ BLESS SOMEONE™ — ОТПРАВИТЬ МОЛИТВУ',
     blessBanner:'<strong>BLESS SOMEONE™</strong> — Вы создаёте дар. Пройдите шаги, затем скопируйте ссылку, чтобы отправить.',
     freeBannerLbl:'✦ 1 БЕСПЛАТНАЯ МОЛИТВА В ЭТОМ МЕСЯЦЕ',
@@ -737,6 +815,9 @@ const STR_I18N={
     welcomeLead:'ברוכים הבאים ל־Pray With Me. אנא התחילו בבחירת העדה או הזרם הדתי שלכם למטה.',
     welcomeBless:'שהאל יברך אתכם בשלום לאורך הדרך.',
     langLabel:'שפה',
+    langDetectHint:'בפתיחה ראשונה ננסה להתאים לשפת המכשיר. הקלידו שפה או קוד ובחרו מהרשימה.',
+    langSearchPh:'חיפוש: Español, Deutsch, ar…',
+    localeApply:'החלה',
     blessNav:'✦ BLESS SOMEONE™ — לשלוח תפילה',
     blessBanner:'<strong>BLESS SOMEONE™</strong> — אתם יוצרים מתנה. השלימו את השלבים, ואז העתיקו את הקישור לשליחה.',
     freeBannerLbl:'✦ תפילה אחת חינם החודש',
@@ -792,12 +873,68 @@ const TOPIC_LBL={
   ru:{'Healing & Health':'Исцеление','Grief & Loss':'Скорбь','Anxiety & Peace':'Тревога и мир','Guidance & Decisions':'Наставление','Relationships & Family':'Семья','Gratitude & Praise':'Благодарность','Financial Hardship':'Снабжение','Strength & Courage':'Сила','Spiritual Growth':'Духовный рост'},
   he:{'Healing & Health':'ריפוי','Grief & Loss':'אבל','Anxiety & Peace':'חרדה ושלום','Guidance & Decisions':'הכוונה','Relationships & Family':'משפחה','Gratitude & Praise':'הודיה','Financial Hardship':'פרנסה','Strength & Courage':'כוח','Spiritual Growth':'צמיחה רוחנית'}
 };
-function t(key){const pack=STR_I18N[currentLocale]||STR_I18N.en;return(pack&&pack[key])||STR_I18N.en[key]||key;}
-function dirForLocale(lc){return lc==='he'?'rtl':'ltr';}
+function uiLocaleKey(){
+  if(STR_I18N[currentLocale])return currentLocale;
+  const b=(currentLocale||'en').split('-')[0].toLowerCase();
+  if(STR_I18N[b])return b;
+  return'en';
+}
+function uiTradKey(){const u=uiLocaleKey();return TRAD_LBL[u]?u:'en';}
+function t(key){
+  const pack=STR_I18N[uiLocaleKey()]||STR_I18N.en;
+  return(pack&&pack[key])||STR_I18N.en[key]||key;
+}
+function getLangRows(){
+  if(_pwmLangRows)return _pwmLangRows;
+  let dn,dnr;
+  try{dn=new Intl.DisplayNames(['en'],{type:'language'});}catch{dn={of:function(x){return x;}};}
+  try{dnr=new Intl.DisplayNames(['en'],{type:'region'});}catch{dnr=null;}
+  _pwmLangRows=[];
+  for(const c of PWM_LOCALE_CODES){
+    const parts=c.split('-');
+    const base=parts[0].toLowerCase();
+    let line=c;
+    try{
+      const name=dn.of(base)||base;
+      if(parts[1]&&dnr){
+        const R=parts[1].length===2?parts[1].toUpperCase():parts[1];
+        try{line=name+' · '+dnr.of(R);}catch{line=name+' ('+c+')';}
+      }else line=name;
+    }catch{line=c;}
+    let native='';
+    try{const dnN=new Intl.DisplayNames([base],{type:'language'});native=dnN.of(base)||'';}catch{native='';}
+    const search=(c+' '+line+' '+(native||'')+' '+base).toLowerCase();
+    const rtl=RTL_LANG.has(base);
+    _pwmLangRows.push({c,line,native,search,rtl});
+  }
+  _pwmLangRows.sort(function(a,b){return a.line.localeCompare(b.line);});
+  return _pwmLangRows;
+}
+function langRowByCode(code){
+  if(!code)return null;
+  const low=String(code).toLowerCase();
+  const rows=getLangRows();
+  return rows.find(function(r){return r.c.toLowerCase()===low;})||rows.find(function(r){return r.c.split('-')[0].toLowerCase()===low;})||null;
+}
+function detectBrowserLocale(){
+  const prefs=(navigator.languages&&navigator.languages.length)?Array.from(navigator.languages):[navigator.language||'en'];
+  const codes=new Set(getLangRows().map(function(r){return r.c.toLowerCase();}));
+  for(const raw of prefs){
+    const p=String(raw).replace(/_/g,'-');
+    const low=p.toLowerCase();
+    if(codes.has(low))return getLangRows().find(function(r){return r.c.toLowerCase()===low;}).c;
+    const base=p.split('-')[0].toLowerCase();
+    if(codes.has(base))return getLangRows().find(function(r){return r.c.toLowerCase()===base;}).c;
+    const hit=getLangRows().find(function(r){return r.c.split('-')[0].toLowerCase()===base;});
+    if(hit)return hit.c;
+  }
+  return'en';
+}
 function outputLanguageInstruction(){
-  if(currentLocale==='he')return'OUTPUT LANGUAGE: The JSON string values for "verse", "verseText", "prayer", and "closing" must be in modern Israeli Hebrew (עברית ישראלית מודרנית), natural contemporary style suitable for speech.';
-  if(currentLocale==='ru')return'OUTPUT LANGUAGE: The JSON string values for "verse", "verseText", "prayer", and "closing" must be in Russian using Cyrillic.';
-  return'OUTPUT LANGUAGE: The JSON string values for "verse", "verseText", "prayer", and "closing" must be in English.';
+  const row=langRowByCode(currentLocale)||langRowByCode('en');
+  const label=row.native&&row.line?row.native+' — '+row.line:row.line;
+  const rtlNote=row.rtl?' Use the correct right-to-left script and punctuation where applicable.':'';
+  return'OUTPUT LANGUAGE: Write the JSON string values for "verse", "verseText", "prayer", and "closing" in '+label+' (BCP-47 locale: '+row.c+'). Use a natural contemporary spoken-prayer register.'+rtlNote;
 }
 function localizedRoleWord(role){
   const r=String(role||'minister').toLowerCase();
@@ -807,34 +944,37 @@ function localizedRoleWord(role){
 }
 function loadingRolePhrase(){
   const rw=localizedRoleWord(clergyRoleLabel());
-  if(currentLocale==='he')return'המלווה הרוחני שלכם';
-  if(currentLocale==='ru')return'Ваш '+rw;
+  const ui=uiLocaleKey();
+  if(/^he/i.test(currentLocale)||ui==='he')return'המלווה הרוחני שלכם';
+  if(/^ru/i.test(currentLocale)||ui==='ru')return'Ваш '+rw;
   return'Your '+rw;
 }
 function fillLoadTpl(key){
   return t(key).replace(/\{\{role\}\}/g,loadingRolePhrase());
 }
 function applyLocale(lc){
-  if(!STR_I18N[lc])lc='en';
-  currentLocale=lc;
-  try{localStorage.setItem(PWM_LOCALE_KEY,lc);}catch{}
+  const row=langRowByCode(lc)||langRowByCode('en');
+  if(!row)return;
+  currentLocale=row.c;
+  try{localStorage.setItem(PWM_LOCALE_KEY,currentLocale);}catch{}
   const html=document.documentElement;
-  html.setAttribute('lang',lc==='he'?'he':lc==='ru'?'ru':'en');
-  html.setAttribute('dir',dirForLocale(lc));
-  document.body.classList.toggle('locale-he',lc==='he');
-  const sel=document.getElementById('locale-select');
-  if(sel)sel.value=lc;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
+  html.setAttribute('lang',currentLocale);
+  html.setAttribute('dir',row.rtl?'rtl':'ltr');
+  document.body.classList.toggle('locale-he',row.c.split('-')[0].toLowerCase()==='he');
+  document.body.classList.toggle('locale-ar',row.c.split('-')[0].toLowerCase()==='ar');
+  const hid=document.getElementById('locale-value');
+  if(hid)hid.value=currentLocale;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
     const k=el.getAttribute('data-i18n');
     if(!k)return;
     el.textContent=t(k);
   });
-  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el){
     const k=el.getAttribute('data-i18n-html');
     if(!k)return;
     el.innerHTML=t(k);
   });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el){
     const k=el.getAttribute('data-i18n-placeholder');
     if(k)el.setAttribute('placeholder',t(k));
   });
@@ -847,13 +987,86 @@ function applyLocale(lc){
   refreshTraditionLabels();
   refreshTopicLabels();
   updateFreeBanner();
+  try{if(typeof updateRabbiPanel==='function')updateRabbiPanel();}catch{}
+  syncLocalePickerFromState();
   try{if(typeof checkReq==='function')checkReq();}catch{}
 }
-function onLocaleChange(v){applyLocale(v);}
+let _localeFilterTimer=null;
+function renderLocaleFilter(q){
+  const box=document.getElementById('locale-listbox');
+  if(!box)return;
+  const qq=(q||'').trim().toLowerCase();
+  const rows=getLangRows();
+  let list=qq?rows.filter(function(r){return r.search.includes(qq);}):rows.slice(0,28);
+  if(list.length>72)list=list.slice(0,72);
+  box.innerHTML=list.map(function(r){
+    return'<div class="locale-opt" role="option" tabindex="0" data-code="'+escapeHtml(r.c)+'"><strong>'+escapeHtml(r.line)+'</strong>'+
+      (r.native&&r.native!==r.line?'<small>'+escapeHtml(r.native)+'</small>':'')+
+      '<small>'+escapeHtml(r.c)+(r.rtl?' · RTL':'')+'</small></div>';
+  }).join('');
+  box.classList.toggle('open',list.length>0);
+}
+function pickFirstLocaleOrApply(){
+  const first=document.querySelector('#locale-listbox .locale-opt');
+  if(first){
+    const c=first.getAttribute('data-code');
+    if(c)applyLocale(c);
+  }else applyLocaleFromTypedCode();
+  syncLocalePickerFromState();
+  const box=document.getElementById('locale-listbox');
+  if(box)box.classList.remove('open');
+  const inp=document.getElementById('locale-search');
+  if(inp)inp.setAttribute('aria-expanded','false');
+}
+function applyLocaleFromPicker(){pickFirstLocaleOrApply();}
+function applyLocaleFromTypedCode(){
+  const raw=(document.getElementById('locale-search')&&document.getElementById('locale-search').value.trim())||'';
+  const low=raw.toLowerCase();
+  const rows=getLangRows();
+  let hit=rows.find(function(r){return r.c.toLowerCase()===low;});
+  if(!hit)hit=rows.find(function(r){return r.line.toLowerCase()===low;});
+  if(!hit)hit=rows.find(function(r){return r.native&&r.native.toLowerCase()===low;});
+  if(!hit&&low.length===2)hit=rows.find(function(r){return r.c.split('-')[0].toLowerCase()===low;});
+  if(hit)applyLocale(hit.c);
+  else showToast('Language not found — try another spelling or pick from the list.');
+}
+function syncLocalePickerFromState(){
+  const inp=document.getElementById('locale-search');
+  const row=langRowByCode(currentLocale);
+  if(inp&&row)inp.value=row.line+' ('+row.c+')';
+}
+function initLocalePicker(){
+  const inp=document.getElementById('locale-search');
+  const box=document.getElementById('locale-listbox');
+  if(!inp||!box)return;
+  inp.addEventListener('input',function(){
+    clearTimeout(_localeFilterTimer);
+    _localeFilterTimer=setTimeout(function(){renderLocaleFilter(inp.value);},45);
+  });
+  inp.addEventListener('focus',function(){
+    renderLocaleFilter(inp.value);
+    box.classList.add('open');
+    inp.setAttribute('aria-expanded','true');
+  });
+  inp.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){e.preventDefault();pickFirstLocaleOrApply();}
+    if(e.key==='Escape'){box.classList.remove('open');inp.setAttribute('aria-expanded','false');}
+  });
+  box.addEventListener('click',function(e){
+    const opt=e.target.closest('.locale-opt');
+    if(!opt)return;
+    const code=opt.getAttribute('data-code');
+    if(code){applyLocale(code);syncLocalePickerFromState();box.classList.remove('open');inp.setAttribute('aria-expanded','false');}
+  });
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('.locale-bar')){box.classList.remove('open');if(inp)inp.setAttribute('aria-expanded','false');}
+  });
+}
 function refreshTraditionLabels(){
-  const pack=(TRAD_LBL[currentLocale]||TRAD_LBL.en);
-  const subPack=(TRAD_SUB[currentLocale]||TRAD_SUB.en);
-  document.querySelectorAll('[data-trad]').forEach(btn=>{
+  const tk=uiTradKey();
+  const pack=(TRAD_LBL[tk]||TRAD_LBL.en);
+  const subPack=(TRAD_SUB[tk]||TRAD_SUB.en);
+  document.querySelectorAll('[data-trad]').forEach(function(btn){
     const k=btn.getAttribute('data-trad');
     const lbl=btn.querySelector('.lbl');
     const sub=btn.querySelector('.sub');
@@ -866,15 +1079,30 @@ function refreshTraditionLabels(){
   });
 }
 function refreshTopicLabels(){
-  const pack=(TOPIC_LBL[currentLocale]||TOPIC_LBL.en);
-  document.querySelectorAll('#topic-grid .btn-choice[data-topic]').forEach(btn=>{
+  const tk=uiTradKey();
+  const pack=(TOPIC_LBL[tk]||TOPIC_LBL.en);
+  document.querySelectorAll('#topic-grid .btn-choice[data-topic]').forEach(function(btn){
     const topic=btn.getAttribute('data-topic');
     const lbl=btn.querySelector('.lbl');
     if(lbl&&pack[topic])lbl.textContent=pack[topic];
   });
 }
-function welcomeAvatarThumbUrl(avatarId){
-  return'https://api.dicebear.com/7.x/avataaars/png?seed='+encodeURIComponent(avatarId)+'&size=128';
+function randomUserPortraitUrl(m){
+  let h=0;const id=m.avatarId||String(m.id||'');
+  for(let i=0;i<id.length;i++)h=(h*31+id.charCodeAt(i))>>>0;
+  const g=m.gender==='female'?'women':'men';
+  const n=h%99;
+  return'https://randomuser.me/api/portraits/'+g+'/'+n+'.jpg';
+}
+async function heygenPortraitIfAvailable(avatarId){
+  try{
+    const r=await fetch(PROXY+'/api/heygen/v2/avatar/'+encodeURIComponent(avatarId)+'/details');
+    if(!r.ok)return null;
+    const j=await r.json();
+    const d=j&&j.data;
+    const u=d&&(d.preview_image_url||d.image_url||d.default_image_url);
+    return(typeof u==='string'&&/^https?:/i.test(u))?u.trim():null;
+  }catch{return null;}
 }
 function initWelcomeStrip(){
   const strip=document.getElementById('welcome-avatar-strip');
@@ -886,23 +1114,35 @@ function initWelcomeStrip(){
     if(seen.has(m.avatarId))continue;
     seen.add(m.avatarId);
     picks.push(m);
-    if(picks.length>=16)break;
+    if(picks.length>=30)break;
   }
   for(const m of picks){
     const d=document.createElement('div');
     d.className='welcome-thumb';
     d.title=m.rabbiShort||m.name||'';
     const emoji=m.gender==='female'?'👩':'👨';
-    d.innerHTML='<img src="'+welcomeAvatarThumbUrl(m.avatarId)+'" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display=\'none\';var f=this.parentElement.querySelector(\'.welcome-thumb-fallback\');if(f)f.style.display=\'flex\';"><div class="welcome-thumb-fallback" style="display:none;">'+emoji+'</div>';
+    const src=m.portraitUrl||randomUserPortraitUrl(m);
+    d.innerHTML='<img class="welcome-portrait-img" data-avatar-id="'+encodeURIComponent(m.avatarId)+'" src="'+src+'" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display=\'none\';var f=this.parentElement.querySelector(\'.welcome-thumb-fallback\');if(f)f.style.display=\'flex\';"><div class="welcome-thumb-fallback" style="display:none;">'+emoji+'</div>';
     strip.appendChild(d);
+  }
+  hydrateWelcomeHeygenPortraits();
+}
+async function hydrateWelcomeHeygenPortraits(){
+  const imgs=document.querySelectorAll('.welcome-portrait-img[data-avatar-id]');
+  for(const img of imgs){
+    const id=decodeURIComponent(img.getAttribute('data-avatar-id')||'');
+    if(!id)continue;
+    const u=await heygenPortraitIfAvailable(id);
+    if(u){img.src=u;img.removeAttribute('data-avatar-id');}
   }
 }
 function initLocaleFromStorage(){
   try{
     const s=localStorage.getItem(PWM_LOCALE_KEY);
-    if(s&&STR_I18N[s])applyLocale(s);
-    else applyLocale('en');
+    if(s&&langRowByCode(s))applyLocale(s);
+    else applyLocale(detectBrowserLocale());
   }catch{applyLocale('en');}
+  syncLocalePickerFromState();
 }
 
 function go(id){
@@ -924,10 +1164,6 @@ function go(id){
     const bm=document.getElementById('btn-min');
     if(bm)bm.disabled=!ministerFormComplete();
   }
-}
-
-function escapeHtml(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function goBlessIntro(){
@@ -1244,7 +1480,8 @@ function updateRabbiPanel(){
     grid.innerHTML='';
     return;
   }
-  const rabbis=MINISTERS.filter(m=>m.rabbi);
+  let rabbis=MINISTERS.filter(m=>m.rabbi);
+  if(!rabbis.length) rabbis=MINISTERS.filter(m=>RABBI_MINISTER_IDS.includes(m.id));
   if(S.chosenRabbiId && !rabbis.some(m=>m.id===S.chosenRabbiId)) S.chosenRabbiId=null;
   grid.innerHTML=rabbis.map(m=>{
     const label=escapeHtml(m.rabbiShort||m.name);
@@ -1325,7 +1562,8 @@ function getBest(){
   }
   let pool=[...MINISTERS];
   if(needsRabbiChoice()){
-    const rabbis=pool.filter(m=>m.rabbi);
+    let rabbis=pool.filter(m=>m.rabbi);
+    if(!rabbis.length) rabbis=pool.filter(m=>RABBI_MINISTER_IDS.includes(m.id));
     if(rabbis.length) pool=rabbis;
   }
   if(S.gender){const f=pool.filter(m=>m.gender===S.gender);if(f.length)pool=f;}
@@ -1333,7 +1571,8 @@ function getBest(){
   if(S.voice){const f=pool.filter(m=>m.style===S.voice||m.style.includes(S.voice));if(f.length)pool=f;}
   if(pool.length) return pool[0];
   if(needsRabbiChoice()){
-    const rabbis=MINISTERS.filter(m=>m.rabbi);
+    let rabbis=MINISTERS.filter(m=>m.rabbi);
+    if(!rabbis.length) rabbis=MINISTERS.filter(m=>RABBI_MINISTER_IDS.includes(m.id));
     if(rabbis.length) return rabbis[0];
   }
   return MINISTERS[0];
@@ -1693,6 +1932,7 @@ function startOver(){
   updateFreeBanner();
   go('s-tradition');
 }
+initLocalePicker();
 initWelcomeStrip();
 initLocaleFromStorage();
 initBlessFromUrl();
