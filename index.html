@@ -416,7 +416,7 @@ body.locale-ar,body.locale-ar .screen,body.locale-ar .btn-choice,body.locale-ar 
 <!-- NAMES -->
 <div class="screen" id="s-names">
   <div class="sec-title" data-i18n="sacredTitle">Sacred Names</div>
-  <div class="sec-sub" data-i18n="sacredSub">How would you like to address God and Jesus?</div>
+  <div class="sec-sub" id="sacred-names-sub">How would you like to address God and Jesus?</div>
   <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;" data-i18n="referGod">REFER TO GOD AS</div>
   <div class="g3" id="god-grid">
     <button class="btn-choice" onclick="selName(this,'god','God')"><span class="lbl">God</span></button>
@@ -426,14 +426,16 @@ body.locale-ar,body.locale-ar .screen,body.locale-ar .btn-choice,body.locale-ar 
     <button class="btn-choice" onclick="selName(this,'god','The Almighty')"><span class="lbl">The Almighty</span></button>
     <button class="btn-choice" onclick="selName(this,'god','Heavenly Father')"><span class="lbl">Heavenly Father</span></button>
   </div>
-  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;" data-i18n="referJesus">REFER TO JESUS AS</div>
-  <div class="g3" id="jesus-grid">
-    <button class="btn-choice" onclick="selName(this,'jesus','Jesus')"><span class="lbl">Jesus</span></button>
-    <button class="btn-choice" onclick="selName(this,'jesus','Jesus Christ')"><span class="lbl">Jesus Christ</span></button>
-    <button class="btn-choice" onclick="selName(this,'jesus','Yeshua')"><span class="lbl">Yeshua</span></button>
-    <button class="btn-choice" onclick="selName(this,'jesus','The Messiah')"><span class="lbl">The Messiah</span></button>
-    <button class="btn-choice" onclick="selName(this,'jesus','Christ')"><span class="lbl">Christ</span></button>
-    <button class="btn-choice" onclick="selName(this,'jesus','Yeshua HaMashiach')"><span class="lbl">Yeshua HaMashiach</span></button>
+  <div id="sacred-jesus-block">
+    <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;" data-i18n="referJesus">REFER TO JESUS AS</div>
+    <div class="g3" id="jesus-grid">
+      <button class="btn-choice" onclick="selName(this,'jesus','Jesus')"><span class="lbl">Jesus</span></button>
+      <button class="btn-choice" onclick="selName(this,'jesus','Jesus Christ')"><span class="lbl">Jesus Christ</span></button>
+      <button class="btn-choice" onclick="selName(this,'jesus','Yeshua')"><span class="lbl">Yeshua</span></button>
+      <button class="btn-choice" onclick="selName(this,'jesus','The Messiah')"><span class="lbl">The Messiah</span></button>
+      <button class="btn-choice" onclick="selName(this,'jesus','Christ')"><span class="lbl">Christ</span></button>
+      <button class="btn-choice" onclick="selName(this,'jesus','Yeshua HaMashiach')"><span class="lbl">Yeshua HaMashiach</span></button>
+    </div>
   </div>
   <button class="btn-primary" id="btn-names" disabled onclick="go('s-minister')" data-i18n="continue">CONTINUE</button>
   <button class="btn-back" onclick="go('s-avatar')" data-i18n="back">← Back</button>
@@ -745,6 +747,7 @@ const STR_I18N={
     back:'← Back',
     sacredTitle:'Sacred names',
     sacredSub:'How would you like to address God and Jesus?',
+    sacredSubGodOnly:'How would you like to address God in prayer?',
     referGod:'REFER TO GOD AS',
     referJesus:'REFER TO JESUS AS',
     ministerTitle:'Your minister',
@@ -793,6 +796,7 @@ const STR_I18N={
     back:'← Назад',
     sacredTitle:'Священные имена',
     sacredSub:'Как вы хотите обращаться к Богу и ко Христу?',
+    sacredSubGodOnly:'Как вы хотите обращаться к Богу в молитве?',
     referGod:'ОБРАЩЕНИЕ К БОГУ',
     referJesus:'ОБРАЩЕНИЕ К ИИСУСУ',
     ministerTitle:'Ваш служитель',
@@ -841,6 +845,7 @@ const STR_I18N={
     back:'חזרה ←',
     sacredTitle:'שמות קדושים',
     sacredSub:'איך תרצו לפנות לאל ולישוע?',
+    sacredSubGodOnly:'איך תרצו לפנות לאל בתפילה?',
     referGod:'כינוי לאל',
     referJesus:'כינוי לישוע',
     ministerTitle:'המשרת שלכם',
@@ -1006,6 +1011,7 @@ function applyLocale(lc){
   try{if(typeof updateRabbiPanel==='function')updateRabbiPanel();}catch{}
   syncLocalePickerFromState();
   try{if(typeof checkReq==='function')checkReq();}catch{}
+  try{if(typeof syncSacredNamesForTradition==='function')syncSacredNamesForTradition();}catch{}
 }
 let _localeFilterTimer=null;
 function renderLocaleFilter(q){
@@ -1111,45 +1117,97 @@ function randomUserPortraitUrl(m){
   return'https://randomuser.me/api/portraits/'+g+'/'+n+'.jpg';
 }
 async function heygenPortraitIfAvailable(avatarId){
+  if(!avatarId)return null;
   try{
     const r=await fetch(PROXY+'/api/heygen/v2/avatar/'+encodeURIComponent(avatarId)+'/details');
     if(!r.ok)return null;
     const j=await r.json();
     const d=j&&j.data;
-    const u=d&&(d.preview_image_url||d.image_url||d.default_image_url);
+    if(!d||typeof d!=='object')return null;
+    const u=d.preview_image_url||d.preview_image||d.image_url||d.default_image_url||d.thumbnail_url;
     return(typeof u==='string'&&/^https?:/i.test(u))?u.trim():null;
   }catch{return null;}
 }
+function rabbiPlaceholderDataUri(m){
+  const raw=(m.rabbiShort||m.name||'R').replace(/^Rabbi\s+/i,'').trim();
+  const letters=raw.replace(/[^a-zA-Z]/g,'').toUpperCase();
+  const t=(letters.slice(0,2)||'R'+(raw[0]||'R')).slice(0,2);
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256"><rect fill="#152238" width="256" height="256"/><text x="128" y="142" dominant-baseline="middle" text-anchor="middle" fill="#e8d5a3" font-family="Georgia,serif" font-size="76" font-weight="600">'+t+'</text></svg>';
+  return'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+}
 function avatarPoolForTradition(){
   if(isJewishTradition()){
+    const byId=new Map(MINISTERS.map(m=>[m.id,m]));
+    const ordered=RABBI_MINISTER_IDS.map(id=>byId.get(id)).filter(Boolean);
+    if(ordered.length)return ordered;
     let r=MINISTERS.filter(m=>m.rabbi);
     if(!r.length) r=MINISTERS.filter(m=>RABBI_MINISTER_IDS.includes(m.id));
     return r;
   }
   return MINISTERS.filter(m=>!m.rabbi&&!RABBI_MINISTER_IDS.includes(m.id));
 }
-function renderAvatarPickGrid(){
+async function renderAvatarPickGrid(){
   const grid=document.getElementById('avatar-pick-grid');
   const btn=document.getElementById('btn-avatar-next');
   if(!grid)return;
-  grid.innerHTML='';
   const pool=avatarPoolForTradition();
-  pool.forEach(m=>{
-    const d=document.createElement('div');
-    d.className='welcome-thumb'+(S.pickedMinisterId===m.id?' sel':'');
-    d.setAttribute('role','button');
-    d.setAttribute('tabindex','0');
-    d.dataset.ministerId=String(m.id);
-    d.title=(m.rabbiShort||m.name||'').split('—')[0].trim();
-    d.onclick=function(){selPickAvatar(d,m.id);};
-    d.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();selPickAvatar(d,m.id);}};
-    const emoji=m.gender==='female'?'👩':'👨';
-    const src=m.portraitUrl||randomUserPortraitUrl(m);
-    d.innerHTML='<img class="welcome-portrait-img" data-avatar-id="'+encodeURIComponent(m.avatarId)+'" src="'+src+'" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display=\'none\';var f=this.parentElement.querySelector(\'.welcome-thumb-fallback\');if(f)f.style.display=\'flex\';"><div class="welcome-thumb-fallback" style="display:none;">'+emoji+'</div>';
-    grid.appendChild(d);
-  });
+  const jewish=isJewishTradition();
+
+  if(jewish){
+    grid.innerHTML='<div class="avatar-pick-loading" style="text-align:center;padding:28px 16px;opacity:.88;font-size:.95rem;">Loading portraits…</div>';
+    const srcById=new Map();
+    await Promise.all(pool.map(async m=>{
+      if(m.portraitUrl){srcById.set(m.id,m.portraitUrl);return;}
+      const u=await heygenPortraitIfAvailable(m.avatarId);
+      srcById.set(m.id,u||rabbiPlaceholderDataUri(m));
+    }));
+    grid.innerHTML='';
+    pool.forEach(m=>{
+      const d=document.createElement('div');
+      d.className='welcome-thumb'+(S.pickedMinisterId===m.id?' sel':'');
+      d.setAttribute('role','button');
+      d.setAttribute('tabindex','0');
+      d.dataset.ministerId=String(m.id);
+      d.title=(m.rabbiShort||m.name||'').split('—')[0].trim();
+      d.onclick=function(){selPickAvatar(d,m.id);};
+      d.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();selPickAvatar(d,m.id);}};
+      const emoji=m.gender==='female'?'👩':'👨';
+      const src=srcById.get(m.id)||rabbiPlaceholderDataUri(m);
+      const img=document.createElement('img');
+      img.className='welcome-portrait-img';
+      img.src=src;
+      img.alt='';
+      img.loading='lazy';
+      img.decoding='async';
+      img.referrerPolicy='no-referrer';
+      img.onerror=function(){img.onerror=null;img.style.display='none';const f=d.querySelector('.welcome-thumb-fallback');if(f)f.style.display='flex';};
+      const fb=document.createElement('div');
+      fb.className='welcome-thumb-fallback';
+      fb.style.display='none';
+      fb.textContent=emoji;
+      d.appendChild(img);
+      d.appendChild(fb);
+      grid.appendChild(d);
+    });
+  }else{
+    grid.innerHTML='';
+    pool.forEach(m=>{
+      const d=document.createElement('div');
+      d.className='welcome-thumb'+(S.pickedMinisterId===m.id?' sel':'');
+      d.setAttribute('role','button');
+      d.setAttribute('tabindex','0');
+      d.dataset.ministerId=String(m.id);
+      d.title=(m.rabbiShort||m.name||'').split('—')[0].trim();
+      d.onclick=function(){selPickAvatar(d,m.id);};
+      d.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();selPickAvatar(d,m.id);}};
+      const emoji=m.gender==='female'?'👩':'👨';
+      const src=m.portraitUrl||randomUserPortraitUrl(m);
+      d.innerHTML='<img class="welcome-portrait-img" data-avatar-id="'+encodeURIComponent(m.avatarId)+'" src="'+src+'" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.style.display=\'none\';var f=this.parentElement.querySelector(\'.welcome-thumb-fallback\');if(f)f.style.display=\'flex\';"><div class="welcome-thumb-fallback" style="display:none;">'+emoji+'</div>';
+      grid.appendChild(d);
+    });
+    hydrateAvatarPickPortraits();
+  }
   if(btn)btn.disabled=!S.pickedMinisterId;
-  hydrateAvatarPickPortraits();
 }
 function selPickAvatar(cell,ministerId){
   const grid=document.getElementById('avatar-pick-grid');
@@ -1204,7 +1262,10 @@ function go(id){
     if(b)b.style.display=(BLESS.mode==='send')?'block':'none';
   }
   if(id==='s-avatar'){
-    renderAvatarPickGrid();
+    void renderAvatarPickGrid();
+  }
+  if(id==='s-names'){
+    syncSacredNamesForTradition();
   }
   if(id==='s-minister'){
     syncJewishTitleToRabbi();
@@ -1496,6 +1557,29 @@ function consumeFreePrayer(){
 function isJewishTradition(){
   return (S.tradition||'').includes('jewish');
 }
+function isNonMessianicJewishTradition(){
+  const t=S.tradition||'';
+  if(t==='messianic-jewish')return false;
+  return t.includes('jewish');
+}
+function syncSacredNamesForTradition(){
+  const sub=document.getElementById('sacred-names-sub');
+  const jblock=document.getElementById('sacred-jesus-block');
+  if(!sub||!jblock)return;
+  if(isNonMessianicJewishTradition()){
+    jblock.style.display='none';
+    sub.textContent=t('sacredSubGodOnly');
+    S.jesus='';
+    const jg=document.getElementById('jesus-grid');
+    if(jg)jg.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
+  }else{
+    jblock.style.display='';
+    sub.textContent=t('sacredSub');
+    if(!S.jesus)S.jesus='Jesus';
+  }
+  const bn=document.getElementById('btn-names');
+  if(bn)bn.disabled=!(S.god&&(isNonMessianicJewishTradition()||S.jesus));
+}
 
 function needsRabbiChoice(){
   return isJewishTradition();
@@ -1555,7 +1639,8 @@ function selTradition(btn,val){
 
 function selName(btn,key,val){
   clearGrid(btn);btn.classList.add('sel');S[key]=val;
-  document.getElementById('btn-names').disabled=!(S.god&&S.jesus);
+  const bn=document.getElementById('btn-names');
+  if(bn)bn.disabled=!(S.god&&(isNonMessianicJewishTradition()||S.jesus));
 }
 
 function selField(btn,key,val){
@@ -1759,7 +1844,8 @@ function clergyRoleLabel(){
 
 function buildSys(len,minister){
   const t=S.tradition;
-  const isM=t==='messianic-jewish';const isJ=t.includes('jewish')&&!isM;
+  const isM=t==='messianic-jewish';
+  const isJ=isNonMessianicJewishTradition();
   const god=S.god||'God';const jesus=S.jesus||'Jesus';
   const words={short:50,personal:80,extended:150}[len];
   const time={short:'15-20 seconds',personal:'30-40 seconds',extended:'60-75 seconds'}[len];
@@ -1853,7 +1939,17 @@ async function genAudio(voiceId,text){
 }
 
 function getFallback(req,len){
-  const god=S.god||'Lord';const jesus=S.jesus||'Jesus';
+  const god=S.god||'Lord';
+  const jesus=S.jesus||'Jesus';
+  if(isNonMessianicJewishTradition()){
+    const g=god;
+    const prayers={
+      short:`${g}, we lift up Your servant in this moment of need regarding ${req}. May Your peace guard their heart and mind.`,
+      personal:`${g}, we come before You on behalf of Your servant.\n\nYou see the weight they carry regarding ${req}. You know every fear, every hope, every unspoken word.\n\nMay Your peace hold them now. You are faithful from generation to generation.`,
+      extended:`${g}, we come before You on behalf of Your servant.\n\nYou see every dimension of what they carry regarding ${req}. You know the fears they have not spoken aloud. You hold their tomorrow in hands that have never failed.\n\nYour Torah and Prophets declare that You draw near to the brokenhearted. So right now we ask for Your nearness, Your comfort, and Your sustaining strength.\n\nWe ask for peace that endures. We ask for provision in Your time. We ask that Your presence would be unmistakable.\n\nYou are faithful. You have always been faithful. And You will be faithful in this.`
+    };
+    return {verse:'Psalm 121:1-2',verseText:'I lift up my eyes to the mountains—where does my help come from? My help comes from the Lord, the Maker of heaven and earth.',prayer:prayers[len],closing:'Baruch Atah Adonai. Amen.'};
+  }
   const prayers={
     short:`${god}, we lift up Your beloved child right now. Meet them in this moment of need regarding ${req}. Let Your peace guard their heart and mind.`,
     personal:`${god}, we come before You on behalf of Your beloved child.\n\nYou see the weight they carry regarding ${req}. You know every fear, every hope, every unspoken word.\n\nLet Your peace flood their heart right now. You who began a good work will be faithful to complete it.`,
@@ -1967,7 +2063,7 @@ function toggleSub(){const b=document.getElementById('sub-box');b.style.display=
 
 function startOver(){
   blessReceiveGiftId=null;
-  S.tradition='';S.title='';S.gender='';S.voice='';S.appearance='';S.topic='';S.lastPrayer=null;S.chosenRabbiId=null;S.pickedMinisterId=null;
+  S.tradition='';S.god='God';S.jesus='Jesus';S.title='';S.gender='';S.voice='';S.appearance='';S.topic='';S.lastPrayer=null;S.chosenRabbiId=null;S.pickedMinisterId=null;
   BLESS.mode='self';BLESS.recipientFirst='';BLESS.senderNote='';BLESS.senderPrepayExtended=false;
   document.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
   document.getElementById('prayer-req').value='';
