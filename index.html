@@ -661,7 +661,7 @@ const MINISTERS=[
   {id:6, avatarId:'bbcac9d6807f43a0ab5236ea7e6efa0d',voiceId:'b8a9be5dbbb54be5a5d98069904d3668',gender:'male',  appearance:'dark',           style:'warm',        name:'Male Non Denominational'},
   // Warm & Gentle — Hispanic warm male
   {id:7, avatarId:'8c52bb7102784c8d9abb96c87249829b',voiceId:'beac6061ade8472e83bb8edf1f8f943d',gender:'male',  appearance:'tan',            style:'warm',        name:'Male Tan Catholic Hispanic'},
-  {id:8, avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'light',          style:'traditional', name:'Rabbi Mordechi — Orthodox & traditional',rabbi:true,rabbiShort:'Rabbi Mordechi',rabbiSub:'Traditional voice'},
+  {id:8, avatarId:'dc17f13b8ef341c686178de687e3cb0d',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'light',          style:'traditional', name:'Rabbi Mordechi — Orthodox & traditional',rabbi:true,rabbiShort:'Rabbi Mordechi',rabbiSub:'Traditional voice',rabbiSpeakAs:'MOR-deh-chee'},
   // Warm & Gentle — female soothing
   {id:9, avatarId:'b0e8eb5d14904ae885c2af2775866c41',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'light',          style:'warm',        name:'Female Light Non-Denominational'},
   // Traditional & Reverent — female Catholic
@@ -1856,7 +1856,12 @@ function buildSys(len,minister){
     extended:`Write approximately ${words} words. Full extended prayer: reverent opening, deep engagement with their need, scripture throughout, building intensity, specific blessings, full benediction. 4-5 paragraphs.`
   }[len];
   const roleWord=(minister.rabbi || S.title==='Rabbi')?'rabbi':'minister';
-  const rabbiNameHint=(minister.rabbi && (minister.rabbiShort||minister.name))?` Address yourself consistently as ${minister.rabbiShort||minister.name.split('—')[0].trim()} when speaking in the first person.`:'';
+  let rabbiNameHint='';
+  if(minister.rabbi&&(minister.rabbiShort||minister.name)){
+    const nm=minister.rabbiShort||minister.name.split('—')[0].trim();
+    rabbiNameHint=` Address yourself consistently as ${nm} when speaking in the first person.`;
+    if(minister.rabbiSpeakAs)rabbiNameHint+=` Any time you say your own name in the prayer or closing, write it for clear spoken delivery as "Rabbi ${minister.rabbiSpeakAs}" (hyphens mark syllables; stress the syllable before the second hyphen).`;
+  }
   return `You are the most beloved Spirit-filled ${roleWord} anyone has encountered. Pray with deep sincerity, warmth, and authority. Tradition: ${t}. Voice: ${minister.style}.${rabbiNameHint}\n\n${sc}\n\n${depth}\n\nSpoken aloud this runs approximately ${time}.\n\n${outputLanguageInstruction()}\n\nRespond ONLY with valid JSON:\n{"verse":"Reference","verseText":"Brief paraphrase","prayer":"Full prayer","closing":"Closing"}`;
 }
 
