@@ -223,6 +223,12 @@ header{width:100%;text-align:center;padding:0 0 14px;position:relative}
 .welcome-thumb.sel{border-color:var(--gold);box-shadow:0 0 22px rgba(201,168,76,.28),inset 0 0 0 1px rgba(255,240,210,.18)}
 .welcome-thumb img{width:100%;height:100%;object-fit:cover;display:block;object-position:center top}
 .welcome-thumb-fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:2rem;background:linear-gradient(145deg,rgba(201,168,76,.4),rgba(10,22,40,.92))}
+.avatar-filter-bar{max-width:680px;margin:0 auto 16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(201,168,76,.25);background:rgba(10,22,40,.55);text-align:left}
+.avatar-filter-bar .avatar-filter-title{font-size:.72rem;color:var(--gold-light);letter-spacing:.08em;margin-bottom:10px;text-align:center}
+.avatar-filter-row{display:flex;flex-wrap:wrap;gap:10px 14px;justify-content:center;align-items:flex-end}
+.avatar-filter-row label{display:flex;flex-direction:column;gap:4px;font-size:.68rem;color:rgba(232,213,163,.75);min-width:120px}
+.avatar-filter-row select{background:rgba(8,14,26,.95);border:1px solid rgba(201,168,76,.4);border-radius:8px;color:var(--cream);font-size:.82rem;padding:8px 10px;min-width:140px}
+.avatar-empty-msg{text-align:center;padding:16px;color:rgba(232,213,163,.85);font-size:.9rem;margin-bottom:10px}
 .welcome-lead{font-family:'Cormorant Garamond',serif;font-size:1.05rem;line-height:1.55;color:var(--cream);margin-bottom:8px;max-width:640px;margin-left:auto;margin-right:auto}
 .welcome-bless{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--gold-light);opacity:.9;margin-bottom:12px;max-width:640px;margin-left:auto;margin-right:auto}
 .locale-bar{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:8px;margin-bottom:8px;width:100%;max-width:520px;margin-left:auto;margin-right:auto}
@@ -408,6 +414,39 @@ body.locale-ar,body.locale-ar .screen,body.locale-ar .btn-choice,body.locale-ar 
 <div class="screen" id="s-avatar">
   <div class="sec-title" data-i18n="pickFaceTitle">Choose your minister</div>
   <div class="sec-sub" data-i18n="pickFaceSub">Tap the face you would like to pray with you.</div>
+  <div class="avatar-filter-bar" id="avatar-filter-bar">
+    <div class="avatar-filter-title" data-i18n="avatarFilterTitle">Refine faces (optional)</div>
+    <div class="avatar-filter-row">
+      <label><span data-i18n="avatarFilterGenderLbl">Gender</span>
+        <select id="avatar-filter-gender" onchange="onAvatarFilterChange()">
+          <option value="" data-i18n="avatarFilterAny">Any</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </label>
+      <label><span data-i18n="avatarFilterLookLbl">Look</span>
+        <select id="avatar-filter-appearance" onchange="onAvatarFilterChange()">
+          <option value="" data-i18n="avatarFilterAny">Any</option>
+          <option value="light">Light</option>
+          <option value="medium">Medium</option>
+          <option value="tan">Tan</option>
+          <option value="dark">Dark</option>
+          <option value="east-asian">East Asian</option>
+          <option value="south-asian">South Asian</option>
+          <option value="southeast-asian">SE Asian</option>
+          <option value="african">African</option>
+        </select>
+      </label>
+      <label><span data-i18n="avatarFilterAgeLbl">Age</span>
+        <select id="avatar-filter-age" onchange="onAvatarFilterChange()">
+          <option value="" data-i18n="avatarFilterAny">Any</option>
+          <option value="youth" data-i18n="avatarAgeYouth">Younger</option>
+          <option value="adult" data-i18n="avatarAgeAdult">Adult</option>
+          <option value="senior" data-i18n="avatarAgeSenior">Older</option>
+        </select>
+      </label>
+    </div>
+  </div>
   <div class="welcome-avatar-grid" id="avatar-pick-grid" role="group" aria-label="Minister faces"></div>
   <button class="btn-primary" id="btn-avatar-next" disabled onclick="nextFromAvatarPick()" data-i18n="continue">CONTINUE</button>
   <button class="btn-back" onclick="go('s-tradition')" data-i18n="back">← Back</button>
@@ -460,28 +499,30 @@ body.locale-ar,body.locale-ar .screen,body.locale-ar .btn-choice,body.locale-ar 
     <div class="sec-sub" style="margin-top:-6px;margin-bottom:12px;max-width:520px;margin-left:auto;margin-right:auto;" data-i18n="rabbiPickHelp">Select the rabbi avatar who will lead your prayer (HeyGen rabbi-designated roster).</div>
     <div class="g3" id="rabbi-minister-grid"></div>
   </div>
-  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;" data-i18n="genderHeading">GENDER</div>
-  <div class="g2">
-    <button class="btn-choice" onclick="selField(this,'gender','male')"><span class="icon">👨</span><span class="lbl">Male</span></button>
-    <button class="btn-choice" onclick="selField(this,'gender','female')"><span class="icon">👩</span><span class="lbl">Female</span></button>
-  </div>
-  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;" data-i18n="voiceHeading">VOICE STYLE</div>
-  <div class="g2">
-    <button class="btn-choice" onclick="selField(this,'voice','warm')"><span class="icon">🕊️</span><span class="lbl">Warm & Gentle</span></button>
-    <button class="btn-choice" onclick="selField(this,'voice','powerful')"><span class="icon">🔥</span><span class="lbl">Powerful & Bold</span></button>
-    <button class="btn-choice" onclick="selField(this,'voice','traditional')"><span class="icon">📜</span><span class="lbl">Traditional & Reverent</span></button>
-    <button class="btn-choice" onclick="selField(this,'voice','contemporary')"><span class="icon">✨</span><span class="lbl">Contemporary</span></button>
-  </div>
-  <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;" data-i18n="appearanceHeading">APPEARANCE</div>
-  <div class="g3">
-    <button class="btn-choice" onclick="selField(this,'appearance','light')"><span class="icon">👤</span><span class="sub">Light</span></button>
-    <button class="btn-choice" onclick="selField(this,'appearance','medium')"><span class="icon">👤</span><span class="sub">Medium</span></button>
-    <button class="btn-choice" onclick="selField(this,'appearance','tan')"><span class="icon">👤</span><span class="sub">Tan</span></button>
-    <button class="btn-choice" onclick="selField(this,'appearance','dark')"><span class="icon">👤</span><span class="sub">Dark</span></button>
-    <button class="btn-choice" onclick="selField(this,'appearance','east-asian')"><span class="icon">👤</span><span class="sub">East Asian</span></button>
-    <button class="btn-choice" onclick="selField(this,'appearance','south-asian')"><span class="icon">👤</span><span class="sub">South Asian</span></button>
-    <button class="btn-choice" onclick="selField(this,'appearance','southeast-asian')"><span class="icon">👤</span><span class="sub">SE Asian</span></button>
-    <button class="btn-choice" onclick="selField(this,'appearance','african')"><span class="icon">👤</span><span class="sub">African</span></button>
+  <div id="minister-traits-panel">
+    <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;" data-i18n="genderHeading">GENDER</div>
+    <div class="g2" id="minister-gender-grid">
+      <button class="btn-choice" onclick="selField(this,'gender','male')"><span class="icon">👨</span><span class="lbl">Male</span></button>
+      <button class="btn-choice" onclick="selField(this,'gender','female')"><span class="icon">👩</span><span class="lbl">Female</span></button>
+    </div>
+    <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;" data-i18n="voiceHeading">VOICE STYLE</div>
+    <div class="g2" id="minister-voice-grid">
+      <button class="btn-choice" onclick="selField(this,'voice','warm')"><span class="icon">🕊️</span><span class="lbl">Warm & Gentle</span></button>
+      <button class="btn-choice" onclick="selField(this,'voice','powerful')"><span class="icon">🔥</span><span class="lbl">Powerful & Bold</span></button>
+      <button class="btn-choice" onclick="selField(this,'voice','traditional')"><span class="icon">📜</span><span class="lbl">Traditional & Reverent</span></button>
+      <button class="btn-choice" onclick="selField(this,'voice','contemporary')"><span class="icon">✨</span><span class="lbl">Contemporary</span></button>
+    </div>
+    <div class="sec-title" style="font-size:.72rem;margin-bottom:8px;" data-i18n="appearanceHeading">APPEARANCE</div>
+    <div class="g3" id="minister-appearance-grid">
+      <button class="btn-choice" onclick="selField(this,'appearance','light')"><span class="icon">👤</span><span class="sub">Light</span></button>
+      <button class="btn-choice" onclick="selField(this,'appearance','medium')"><span class="icon">👤</span><span class="sub">Medium</span></button>
+      <button class="btn-choice" onclick="selField(this,'appearance','tan')"><span class="icon">👤</span><span class="sub">Tan</span></button>
+      <button class="btn-choice" onclick="selField(this,'appearance','dark')"><span class="icon">👤</span><span class="sub">Dark</span></button>
+      <button class="btn-choice" onclick="selField(this,'appearance','east-asian')"><span class="icon">👤</span><span class="sub">East Asian</span></button>
+      <button class="btn-choice" onclick="selField(this,'appearance','south-asian')"><span class="icon">👤</span><span class="sub">South Asian</span></button>
+      <button class="btn-choice" onclick="selField(this,'appearance','southeast-asian')"><span class="icon">👤</span><span class="sub">SE Asian</span></button>
+      <button class="btn-choice" onclick="selField(this,'appearance','african')"><span class="icon">👤</span><span class="sub">African</span></button>
+    </div>
   </div>
   <button class="btn-primary" id="btn-min" disabled onclick="go('s-request')" data-i18n="continue">CONTINUE</button>
   <button class="btn-back" onclick="backMin()" data-i18n="back">← Back</button>
@@ -646,6 +687,7 @@ const CRISIS_PATTERNS=[
 
 const S={tradition:'',god:'God',jesus:'Jesus',title:'',gender:'',voice:'',appearance:'',topic:'',lastPrayer:null,chosenRabbiId:null,pickedMinisterId:null};
 
+/* Rabbi roster checklist — repeat for every new rabbi: MINISTERS row (rabbi:true, avatarId, voiceId, rabbiShort; optional rabbiSpeakAs for TTS), RABBI_MINISTER_IDS order, prayer-library TRADITION_MINISTERS if tied to a tradition slug. */
 const MINISTERS=[
   // Powerful & Bold — male deep authoritative voices
   {id:1, avatarId:'60b80b8ca51b4c8f8fc0521c0704f560',voiceId:'88bb9ee1c81b466eb2a08fdde86d3619',gender:'male',  appearance:'light',          style:'powerful',    name:'Bold Male Charismatic'},
@@ -762,6 +804,16 @@ const STR_I18N={
     heroTag:'a sacred space, personalized for you',
     pickFaceTitle:'Choose your minister',
     pickFaceSub:'Tap the face you would like to pray with you.',
+    avatarFilterTitle:'Refine faces (optional)',
+    avatarFilterGenderLbl:'Gender',
+    avatarFilterLookLbl:'Look',
+    avatarFilterAgeLbl:'Age',
+    avatarFilterAny:'Any',
+    avatarAgeYouth:'Younger',
+    avatarAgeAdult:'Adult',
+    avatarAgeSenior:'Older',
+    avatarNoMatch:'No ministers match these filters.',
+    avatarClearFilters:'Clear filters',
     lenHint:'✦ Your minister will offer a brief blessing — about 15 to 30 seconds when words are few',
     lenCrisis:'✦ Please use the immediate support resources now',
     lenGated:'✦ Upgrade to continue — your free prayer this month is used',
@@ -811,6 +863,16 @@ const STR_I18N={
     heroTag:'святое пространство, созданное для вас',
     pickFaceTitle:'Выберите служителя',
     pickFaceSub:'Нажмите на лицо, с которым хотите помолиться.',
+    avatarFilterTitle:'Уточнить лица (необязательно)',
+    avatarFilterGenderLbl:'Пол',
+    avatarFilterLookLbl:'Облик',
+    avatarFilterAgeLbl:'Возраст',
+    avatarFilterAny:'Любой',
+    avatarAgeYouth:'Моложе',
+    avatarAgeAdult:'Взрослый',
+    avatarAgeSenior:'Старше',
+    avatarNoMatch:'Нет служителей с такими фильтрами.',
+    avatarClearFilters:'Сбросить фильтры',
     lenHint:'✦ Краткое благословение — примерно 15–30 секунд, если слов немного',
     lenCrisis:'✦ Сейчас воспользуйтесь экстренными контактами ниже',
     lenGated:'✦ Продолжите с подпиской — бесплатная молитва на этот месяц израсходована',
@@ -860,6 +922,16 @@ const STR_I18N={
     heroTag:'מרחב קדוש, מותאם אישית לכם',
     pickFaceTitle:'בחרו את המשרת',
     pickFaceSub:'לחצו על הפנים שאיתם תרצו להתפלל.',
+    avatarFilterTitle:'צמצום פנים (רשות)',
+    avatarFilterGenderLbl:'מגדר',
+    avatarFilterLookLbl:'מראה',
+    avatarFilterAgeLbl:'גיל',
+    avatarFilterAny:'כל',
+    avatarAgeYouth:'צעיר יותר',
+    avatarAgeAdult:'בוגר',
+    avatarAgeSenior:'מבוגר יותר',
+    avatarNoMatch:'אין משרתים התואמים למסננים.',
+    avatarClearFilters:'נקה מסננים',
     lenHint:'✦ המשרת יעניק ברכה קצרה — בערך 15–30 שניות כשיש מעט מילים',
     lenCrisis:'✦ נא לפנות למוקדי הסיוע המיידי למטה',
     lenGated:'✦ הירשמו כדי להמשיך — ניצלתם את תפילת החינם לחודש',
@@ -1132,6 +1204,68 @@ function rabbiPlaceholderDataUri(m){
   const svg='<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256"><rect fill="#152238" width="256" height="256"/><text x="128" y="142" dominant-baseline="middle" text-anchor="middle" fill="#e8d5a3" font-family="Georgia,serif" font-size="76" font-weight="600">'+t+'</text></svg>';
   return'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
 }
+function ministerPresentingAge(m){
+  const n=(m.name||'').toLowerCase();
+  if(/senior/.test(n))return'senior';
+  if(/youth|young american|youth african|youth asian/.test(n))return'youth';
+  return'adult';
+}
+function applyAvatarRefineFilters(pool){
+  const ge=document.getElementById('avatar-filter-gender');
+  const ap=document.getElementById('avatar-filter-appearance');
+  const ag=document.getElementById('avatar-filter-age');
+  const g=(ge&&ge.value)||'';
+  const a=(ap&&ap.value)||'';
+  const age=(ag&&ag.value)||'';
+  if(!g&&!a&&!age)return pool;
+  return pool.filter(function(m){
+    if(g&&m.gender!==g)return false;
+    if(a&&m.appearance!==a)return false;
+    if(age&&ministerPresentingAge(m)!==age)return false;
+    return true;
+  });
+}
+function resetAvatarFilters(){
+  const ge=document.getElementById('avatar-filter-gender');
+  const ap=document.getElementById('avatar-filter-appearance');
+  const ag=document.getElementById('avatar-filter-age');
+  if(ge)ge.value='';
+  if(ap)ap.value='';
+  if(ag)ag.value='';
+}
+function onAvatarFilterChange(){
+  S.pickedMinisterId=null;
+  S.chosenRabbiId=null;
+  void renderAvatarPickGrid();
+}
+function clearAvatarFiltersAndRefresh(){
+  resetAvatarFilters();
+  S.pickedMinisterId=null;
+  S.chosenRabbiId=null;
+  void renderAvatarPickGrid();
+}
+function voiceUiKeyFromMinisterStyle(style){
+  const s=String(style||'').toLowerCase();
+  if(s.indexOf('charismatic')>=0)return'contemporary';
+  if(s.indexOf('powerful')>=0)return'powerful';
+  if(s.indexOf('traditional')>=0)return'traditional';
+  if(s.indexOf('warm')>=0)return'warm';
+  if(s.indexOf('contemporary')>=0)return'contemporary';
+  return'warm';
+}
+function syncTraitsFromPickedMinister(){
+  if(!S.pickedMinisterId)return;
+  const m=MINISTERS.find(function(x){return x.id===S.pickedMinisterId;});
+  if(!m)return;
+  S.gender=m.gender||'';
+  S.appearance=m.appearance||'';
+  S.voice=voiceUiKeyFromMinisterStyle(m.style);
+}
+function updateMinisterTraitsPanelVisibility(){
+  const p=document.getElementById('minister-traits-panel');
+  if(!p)return;
+  p.style.display=S.pickedMinisterId?'none':'';
+}
 function avatarPoolForTradition(){
   if(isJewishTradition()){
     const byId=new Map(MINISTERS.map(m=>[m.id,m]));
@@ -1147,8 +1281,16 @@ async function renderAvatarPickGrid(){
   const grid=document.getElementById('avatar-pick-grid');
   const btn=document.getElementById('btn-avatar-next');
   if(!grid)return;
-  const pool=avatarPoolForTradition();
+  const base=avatarPoolForTradition();
+  let pool=applyAvatarRefineFilters(base);
   const jewish=isJewishTradition();
+
+  if(!pool.length){
+    grid.innerHTML='<p class="avatar-empty-msg">'+escapeHtml(t('avatarNoMatch'))+'</p>'+
+      '<div style="text-align:center"><button type="button" class="btn-sec" onclick="clearAvatarFiltersAndRefresh()">'+escapeHtml(t('avatarClearFilters'))+'</button></div>';
+    if(btn)btn.disabled=true;
+    return;
+  }
 
   if(jewish){
     grid.innerHTML='<div class="avatar-pick-loading" style="text-align:center;padding:28px 16px;opacity:.88;font-size:.95rem;">Loading portraits…</div>';
@@ -1214,6 +1356,7 @@ function selPickAvatar(cell,ministerId){
   const pick=MINISTERS.find(mm=>mm.id===ministerId);
   if(isJewishTradition()&&pick&&(pick.rabbi||RABBI_MINISTER_IDS.includes(pick.id)))S.chosenRabbiId=ministerId;
   else S.chosenRabbiId=null;
+  syncTraitsFromPickedMinister();
   const b=document.getElementById('btn-avatar-next');
   if(b)b.disabled=false;
 }
@@ -1264,9 +1407,14 @@ function go(id){
   if(id==='s-names'){
     syncSacredNamesForTradition();
   }
+  if(id==='s-request'){
+    checkReq();
+  }
   if(id==='s-minister'){
     syncJewishTitleToRabbi();
     updateRabbiPanel();
+    syncTraitsFromPickedMinister();
+    updateMinisterTraitsPanelVisibility();
     const bm=document.getElementById('btn-min');
     if(bm)bm.disabled=!ministerFormComplete();
   }
@@ -1584,6 +1732,7 @@ function needsRabbiChoice(){
 
 function ministerFormComplete(){
   if(!S.pickedMinisterId)return false;
+  syncTraitsFromPickedMinister();
   if(!(S.title&&S.gender&&S.voice&&S.appearance)) return false;
   if(needsRabbiChoice() && !S.chosenRabbiId) return false;
   return true;
@@ -1631,6 +1780,7 @@ function selRabbiMinister(btn,id){
 
 function selTradition(btn,val){
   clearGrid(btn);btn.classList.add('sel');S.tradition=val;S.chosenRabbiId=null;S.pickedMinisterId=null;
+  resetAvatarFilters();
   document.getElementById('btn-trad').disabled=false;
 }
 
@@ -1678,6 +1828,7 @@ function isCrisisRequest(text){
 function nextTradition(){
   S.pickedMinisterId=null;
   S.chosenRabbiId=null;
+  resetAvatarFilters();
   go('s-avatar');
 }
 
@@ -2066,6 +2217,7 @@ function toggleSub(){const b=document.getElementById('sub-box');b.style.display=
 function startOver(){
   blessReceiveGiftId=null;
   S.tradition='';S.god='God';S.jesus='Jesus';S.title='';S.gender='';S.voice='';S.appearance='';S.topic='';S.lastPrayer=null;S.chosenRabbiId=null;S.pickedMinisterId=null;
+  resetAvatarFilters();
   BLESS.mode='self';BLESS.recipientFirst='';BLESS.senderNote='';BLESS.senderPrepayExtended=false;
   document.querySelectorAll('.btn-choice').forEach(b=>b.classList.remove('sel'));
   document.getElementById('prayer-req').value='';
