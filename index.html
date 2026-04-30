@@ -687,7 +687,7 @@ const CRISIS_PATTERNS=[
 
 const S={tradition:'',god:'God',jesus:'Jesus',title:'',gender:'',voice:'',appearance:'',topic:'',lastPrayer:null,chosenRabbiId:null,pickedMinisterId:null};
 
-/* Rabbi roster checklist — repeat for every new rabbi: MINISTERS row (rabbi:true, avatarId, voiceId, rabbiShort; optional rabbiSpeakAs for TTS), RABBI_MINISTER_IDS order, prayer-library TRADITION_MINISTERS if tied to a tradition slug. */
+/* Rabbi roster checklist — repeat for every new rabbi: MINISTERS row (rabbi:true, avatarId, voiceId, rabbiShort; optional rabbiSpeakAs for TTS), RABBI_MINISTER_IDS order (append a 4th id when you add a fourth rabbi), prayer-library TRADITION_MINISTERS if tied to a tradition slug. All Jewish traditions share the same rabbi face pool. */
 const MINISTERS=[
   // Powerful & Bold — male deep authoritative voices
   {id:1, avatarId:'60b80b8ca51b4c8f8fc0521c0704f560',voiceId:'88bb9ee1c81b466eb2a08fdde86d3619',gender:'male',  appearance:'light',          style:'powerful',    name:'Bold Male Charismatic'},
@@ -716,7 +716,7 @@ const MINISTERS=[
   {id:13,avatarId:'861136f1f71645ed9c3b15fd8e867ce0',voiceId:'b6313bbadeff44cda4bcc995015a0045',gender:'female',appearance:'dark',           style:'powerful',    name:'Female Dark Non Denominational'},
   // Warm & Gentle — female dark warm
   {id:14,avatarId:'629ff000d2894223be515c91c9674a75',voiceId:'bcc3ba4423af4d9d8de8fbf93e7b7cf8',gender:'female',appearance:'dark',           style:'warm',        name:'Female Dark Baptist'},
-  {id:15,avatarId:'9b89ddb07b484233914ccd13de63103c',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'southeast-asian',style:'traditional', name:'Rabbi Joshua — Messianic Jewish',rabbi:true,rabbiShort:'Rabbi Joshua',rabbiSub:'Messianic / Yeshua tradition'},
+  {id:15,avatarId:'4218e454350648a2aa6c8c0fd495d8ec',voiceId:'6c0f29c88e4541e39cf5f0bbb2745f4d',gender:'male',  appearance:'light',          style:'traditional', name:'Rabbi Joshua — Messianic Jewish',rabbi:true,rabbiShort:'Rabbi Joshua',rabbiSub:'Messianic / Yeshua tradition'},
   // Contemporary — female tan bridge builder
   {id:16,avatarId:'a34fab9e9e814cd781b3fd7e766fdd5d',voiceId:'662f98eef6fd4ff89faf9bc2485659eb',gender:'female',appearance:'tan',            style:'contemporary',name:'Female Tan Non Denominational'},
   // Warm & Gentle — East Asian male
